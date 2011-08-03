@@ -7,7 +7,8 @@
  * @global BOOL_DEBUG
  * @global BOOL_EXECUTE
  */
-abstract class ROCKETS_ConfigurableObject {
+abstract class ROCKETS_ConfigurableObject
+{
 
     /**
      * If true, feedback will be displayed. Default: false
@@ -24,17 +25,15 @@ abstract class ROCKETS_ConfigurableObject {
      * @var array
      */
     protected static $REQUEST = array();
-
     /** If false, script runs indefinitely
      * @var boolean */
     protected static $TIMERSET = true;
-
     /**
      * set this to a number to kill execution at X iterations. Useful mainly for debugging purposes
      * @var int
      */
     protected static $LIMIT = null;
-    
+
     /**
      * ROCKETS_ConfigurableObject
      *
@@ -45,18 +44,24 @@ abstract class ROCKETS_ConfigurableObject {
      * @param boolean $ar['timerset'] if true, cron job timer is set, and script dies after X seconds
      * @param Array $ar['request'] request array
      */
-    function __construct($ar = array(null)) {
-	set_error_handler(array("ROCKETS_ConfigurableObject", "errorHandler"), E_ALL);
-	$this->loadClassProperties($ar);
-	
-	if($ar) {
-	    /** static properties must be set manually */
-	    if(array_key_exists("debug",$ar)) self::$DEBUG = $ar['debug'];
-	    if(array_key_exists("execute",$ar)) self::$EXECUTE = $ar['execute'];
-	    if(array_key_exists("timerset", $ar)) self::$TIMERSET = $ar['timerset'];
-	    if(array_key_exists("request", $ar)) $this->loadQueryValues($ar['request']);
-	}
-	$this->checkUnsetProperties();
+    function __construct($ar = array(null))
+    {
+        set_error_handler(array("ROCKETS_ConfigurableObject", "errorHandler"), E_ALL);
+        $this->loadClassProperties($ar);
+
+        if ($ar)
+        {
+            /** static properties must be set manually */
+            if (array_key_exists("debug", $ar))
+                self::$DEBUG = $ar['debug'];
+            if (array_key_exists("execute", $ar))
+                self::$EXECUTE = $ar['execute'];
+            if (array_key_exists("timerset", $ar))
+                self::$TIMERSET = $ar['timerset'];
+            if (array_key_exists("request", $ar))
+                $this->loadQueryValues($ar['request']);
+        }
+        $this->checkUnsetProperties();
     }
 
     /**
@@ -67,16 +72,15 @@ abstract class ROCKETS_ConfigurableObject {
      *
      * @param array $ar
      */
-    private function loadClassProperties($ar = array(null)) {
-	//var_dump(get_object_vars(get_class($this)));
-	if(!$ar) return; // nothing to load
-	foreach ($ar as $key => $value) {
-	    $this->$key = $value;
-	    //if (is_array($value))
-	//	$this->$key = $value;
-	 //   else
-	//	$this->$key = $value;
-	}
+    private function loadClassProperties($ar = array(null))
+    {
+        //var_dump(get_object_vars(get_class($this)));
+        if (!$ar)
+            return false;
+        foreach ($ar as $key => $value) {
+
+            $this->$key = $value;
+        }
     }
 
     /**
@@ -85,11 +89,14 @@ abstract class ROCKETS_ConfigurableObject {
      *
      * @param <type> $ar
      */
-    private function loadQueryValues($ar = array(null)) {
-	foreach($ar as $key => $value) {
-	    if(is_array($value)) self::$REQUEST[$key] = $value;
-	    else self::$REQUEST[$key] = strtolower($value); // URL parameters are all lower case, so form values need to be set to lower case also
-	}
+    private function loadQueryValues($ar = array(null))
+    {
+        foreach ($ar as $key => $value) {
+            if (is_array($value))
+                self::$REQUEST[$key] = $value;
+            else
+                self::$REQUEST[$key] = strtolower($value); // URL parameters are all lower case, so form values need to be set to lower case also
+        }
     }
 
     /**
@@ -97,31 +104,34 @@ abstract class ROCKETS_ConfigurableObject {
      * We make sure class properties aren't null if an object is constructed to prevent methods that depend on those
      * properties from crashing.
      */
-    protected function checkUnsetProperties() {
-	$ar = get_object_vars($this);
-//	if(self::$DEBUG) {
-//	    echo "Object Vars:" .PHP_EOL;
-//	    var_dump($ar);
-//	    echo "Any null values may trigger an error." .PHP_EOL;
-//	}
-	foreach($ar as $key => $val) {
-	    if(!isset($ar[$key])) {
-		trigger_error("{$key} not set in " .get_class($this) .". Try setting the value in __construct method.");
-	    }
-	}
+    protected function checkUnsetProperties()
+    {
+        $ar = get_object_vars($this);
+        if (self::$DEBUG)
+        {
+            //echo "Object Vars:" .PHP_EOL;
+            //  var_dump(get_object_vars($this));
+        }
+        foreach ($ar as $key => $val) {
+            if (!isset($ar[$key]))
+                trigger_error("{$key} not set in " . get_class($this) . ". Try setting the value in __construct method.");
+        }
     }
 
     /**
      * Loads $_REQUEST into class as class properties. Autoloading simplifies data handling.
      * @param pointerToClassObject &$obj if null, properties will be assigned to the class itself. $obj is useful for classes that manipulates other classes
      */
-    protected function loadRequest($obj=null) {
-	if(!$obj) $target = &$this;
-	else $target = &$obj;
+    protected function loadRequest($obj=null)
+    {
+        if (!$obj)
+            $target = &$this;
+        else
+            $target = &$obj;
 
-	foreach ($_REQUEST as $key => $value) { // load query values
-	    $target->$key = $value;
-	}
+        foreach ($_REQUEST as $key => $value) { // load query values
+            $target->$key = $value;
+        }
     }
 
     /**
@@ -130,14 +140,16 @@ abstract class ROCKETS_ConfigurableObject {
      * 
      * @param pointer $c (e.g. &$c)
      */
-    protected function checkCounter($c) {
-	$c++;
-	if(self::$LIMIT && $c > self::$LIMIT) die("counter exceeded " .self::$LIMIT );
+    protected function checkCounter($c)
+    {
+        $c++;
+        if (self::$LIMIT && $c > self::$LIMIT)
+            die("counter exceeded " . self::$LIMIT);
     }
 
     /**
      * Error handler
-     *
+     * 
      * prints a backtrace of errors
      * 
      * @param <type> $errno
@@ -145,10 +157,11 @@ abstract class ROCKETS_ConfigurableObject {
      * @param <type> $errfile
      * @param <type> $errline
      */
-    public function errorHandler($errno, $errstr, $errfile, $errline) {
-	echo "<h2>Error</h2>" .PHP_EOL;
-	debug_print_backtrace();
-	die('<h2>END OF LINE</h2>');
+    public function errorHandler($errno, $errstr, $errfile, $errline)
+    {
+        echo "<h2>Error</h2>" . PHP_EOL;
+        debug_print_backtrace();
+        die('<h2>END OF LINE</h2>');
     }
 
     /**
@@ -163,12 +176,12 @@ abstract class ROCKETS_ConfigurableObject {
      *
      * @version 1.0 
      */
-    protected static function checkArrayParam($ar, $methodName, $requiredParamKeys) {
-	foreach($requiredParamKeys as $key) {
-	    if(!isset($ar[$key])) {
-		trigger_error($methodName ." requires \$ar['{$key}']", E_USER_ERROR);
-	    }
-	}
+    protected static function checkArrayParam($ar, $methodName, $requiredParamKeys)
+    {
+        foreach ($requiredParamKeys as $key) {
+            if (!isset($ar[$key]))
+                trigger_error($methodName . " requires \$ar['{$key}']", E_USER_ERROR);
+        }
     }
 
     /**
@@ -176,9 +189,12 @@ abstract class ROCKETS_ConfigurableObject {
      *
      * @param <type> $message 
      */
-    protected static function echoDebug($message) {
-	if(self::$DEBUG) echo $message;
+    protected static function echoDebug($message)
+    {
+        if (self::$DEBUG)
+            echo $message;
     }
+
 }
 
 ?>
