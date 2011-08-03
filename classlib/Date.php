@@ -11,6 +11,14 @@
 
 class ROCKETS_Date
 {
+    /**
+     * Date-time Format: July 4, 2011 12:00 am
+     */
+    const FRMT_DATETIME = 0;
+    /**
+     * Date Format: July 4, 2011
+     */
+    const FRMT_DATE = 1;
 
     /**
      *
@@ -19,6 +27,16 @@ class ROCKETS_Date
     public static $days = array("mon" => 0, "tue" => 1, "wed" => 2, "thu" => 3, "fri" => 4, "sat" => 5, "sun" => 6);
     const TIMEZONE = 'America/Los_Angeles';
 
+    /**
+     * Create a date MYSQL likes: "2/4/2011" => "2011/02/04"
+     * @param type $str 
+     */
+    static public function mysql_makeDate($str)
+    {
+        list($month, $date, $year) = explode("/", $str);
+        return "{$year}/{$month}/{$date}";
+    }
+        
     /**
      * takes a string like "06/02/2010" and returns "June 2, 2010"
      */
@@ -30,13 +48,19 @@ class ROCKETS_Date
     }
 
     /**
+     * Take a MYSQL date string and convert it into readable form.
      * @param <type> $datestr e.g. 2010-07-28 17:39:57
      */
-    public static function createDateStrFromMYSQL($datestr)
+    public static function createDateStrFromMYSQL($datestr, $format = self::FRMT_DATETIME)
     {
         list($y, $m, $d, $h, $m, $s) = sscanf($datestr, "%d-%d-%d %d:%d:%d");
         $time = mktime($h, $m, $s, $m, $d, $y);
-        return date("M j, Y g:i A ", $time);
+        if ($format == self::FRMT_DATETIME)
+            return date("M j, Y g:i A ", $time);
+        else if ($format == self::FRMT_DATE)
+            return date("M j, Y", $time);
+        else
+            return null;
     }
 
     /**
