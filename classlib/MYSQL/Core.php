@@ -27,7 +27,7 @@ class ROCKETS_MYSQL_Core {
     /**
      * Connect to MYSQL database
      */
-    public function connect() {
+    static public function connect() {
 	self::$db = mysql_connect(DB_HOST, DB_USER, DB_PASS);
 	mysql_select_db(DB_NAME, self::$db);
 
@@ -35,7 +35,7 @@ class ROCKETS_MYSQL_Core {
     /**
      * Disconnect from MYSQL
      */
-    public function disconnect() {
+    static public function disconnect() {
 	mysql_close(self::$db);
     }
 }
