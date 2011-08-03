@@ -46,7 +46,7 @@ abstract class ROCKETS_MYSQLTable extends ROCKETS_ConfigurableObject {
     function __construct($ar = array(null)) {
 
 	self::$limit = ROCKETS_MYSQLTable::DEFAULT_LIMIT;
-
+ 
 	if (isset($ar['limit'])) {
 	    self::$limit = $ar['limit'];
 	}
