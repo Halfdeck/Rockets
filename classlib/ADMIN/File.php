@@ -2,7 +2,8 @@
 
 /**
  * File class, used to do things like read from file and write to file
- * File is listed under ADMIN because its not intended to run when a user visits a page.
+ *
+ * $ar['deleteAfterMove'] - if true, deletes file after move
  */
 
 class ROCKETS_ADMIN_File extends ROCKETS_ConfigurableObject {
@@ -27,7 +28,7 @@ class ROCKETS_ADMIN_File extends ROCKETS_ConfigurableObject {
 	parent::__construct($ar);
     }
 
-    /**
+     /**
      * Given a directory, loop through each file and process using a callback function.
      *
      * @param string $dir directory name
@@ -41,7 +42,10 @@ class ROCKETS_ADMIN_File extends ROCKETS_ConfigurableObject {
 	
 	self::echoDebug("Directory Listing of " . $dir . "<br/>");
 
-	$c = 0; // a counter
+	/**
+	 * Counter
+	 */
+	$c = 0;
 	
 	while ($file = readdir($dir_handle)) {
 	    if (is_dir($file)) {
@@ -143,19 +147,11 @@ class ROCKETS_ADMIN_File extends ROCKETS_ConfigurableObject {
     }
 
     /**
-     * Generic error handler for opening files
-     * @param <type> $fp
-     */
-    public function errorHandler($fp) {
-	if(!$fp) die("failed to open file.");
-    }
-
-    /**
      * Make directory
      * @param <type> $path - name of path to create
      * @return <type> true if success, false if failed or directory already exists
      */
-    public function makeDir($path) {
+    static public function makeDir($path) {
 	if(!is_dir($path)) return mkdir($path);
 	else return false;
     }
