@@ -2,29 +2,41 @@
 
 /*
  * Generic Date class that deals with date-related functions
+ * 
+ * v1.1
+ * 
+ * Update: added default_time_zone since setting that is required
  *
  */
 
-class ROCKETS_Date {
+class ROCKETS_Date
+{
 
-    public static $days = array("mon"=>0,"tue"=>1,"wed"=>2,"thu"=>3,"fri"=>4,"sat"=>5,"sun"=>6);
+    /**
+     *
+     * @global TIMEZONE - default time zone constant - required
+     */
+    public static $days = array("mon" => 0, "tue" => 1, "wed" => 2, "thu" => 3, "fri" => 4, "sat" => 5, "sun" => 6);
+    const TIMEZONE = 'America/Los_Angeles';
 
     /**
      * takes a string like "06/02/2010" and returns "June 2, 2010"
      */
-    public static function createDateStr($datestr) {
-	list($m,$d,$y) = split("/",$datestr);
-	$time = mktime(0,0,0,$m,$d,$y);
-	return date("M j, Y",$time);
+    public static function createDateStr($datestr)
+    {
+        list($m, $d, $y) = split("/", $datestr);
+        $time = mktime(0, 0, 0, $m, $d, $y);
+        return date("M j, Y", $time);
     }
 
     /**
      * @param <type> $datestr e.g. 2010-07-28 17:39:57
      */
-    public static function createDateStrFromMYSQL($datestr) {
-	list($y,$m,$d,$h,$m,$s) = sscanf($datestr, "%d-%d-%d %d:%d:%d");
-	$time = mktime($h,$m,$s,$m,$d,$y);
-	return date("g:i A M j, Y",$time);
+    public static function createDateStrFromMYSQL($datestr)
+    {
+        list($y, $m, $d, $h, $m, $s) = sscanf($datestr, "%d-%d-%d %d:%d:%d");
+        $time = mktime($h, $m, $s, $m, $d, $y);
+        return date("M j, Y g:i A ", $time);
     }
 
     /**
@@ -32,16 +44,28 @@ class ROCKETS_Date {
      * @param int $offset Days offset (e.g. -1 : yesterday, 1: tomorrow, 0: today)
      * @return date Return today's date
      */
-    public function get($offset = 0) {
-	return mktime(0, 0, 0, date("m")+$offset  , date("d"), date("Y"));
+    static public function get($offset = 0)
+    {
+        return mktime(0, 0, 0, date("m"), date("d") + $offset, date("Y"));
+    }
+
+    /**
+     * Get today's date
+     * @param int $offset Days offset (e.g. -1 : yesterday, 1: tomorrow, 0: today)
+     * @return date Return today's date
+     */
+    public function getTimePlusOffset($offset = 0)
+    {
+        return mktime(0, 0, 0, date("m"), date("d") + $offset, date("Y"));
     }
 
     /**
      * Get now's hour.
      * @return int Returns the current time's hour (e.g. if current time is 8:24pm, returns 8)
      */
-    public function getHour() {
-	return $hour = date("G");
+    public function getHour()
+    {
+        return $hour = date("G");
     }
 
     /**
@@ -50,18 +74,19 @@ class ROCKETS_Date {
      * @param string $ar['date'] - date string
      * @return date returns date
      */
-    public function createDateFromStr($ar) {
-	switch($ar['format']) {
-	    case "XX/XX/XXXX":
-		list($m,$d,$y) = explode("/",$ar['date']);
-		return mktime(0, 0, 0, $m, $d, $y);
-		break;
-	    case "XXXXXXXX":
-		return mktime(0,0,0, substr($ar['date'],0,2),substr($ar['date'],2,2),substr($ar['date'],4,4));
-		break;
-	    default:
-		break;
-	}
+    public function createDateFromStr($ar)
+    {
+        switch ($ar['format']) {
+            case "XX/XX/XXXX":
+                list($m, $d, $y) = explode("/", $ar['date']);
+                return mktime(0, 0, 0, $m, $d, $y);
+                break;
+            case "XXXXXXXX":
+                return mktime(0, 0, 0, substr($ar['date'], 0, 2), substr($ar['date'], 2, 2), substr($ar['date'], 4, 4));
+                break;
+            default:
+                break;
+        }
     }
 
     /**
@@ -69,10 +94,11 @@ class ROCKETS_Date {
      * <p>For details, see public $days array.</p>
      * @return int array index 
      */
-    public function getDayOfWeekIndex() {
-	$dayOfWeek = strtolower(date("D"));
-	$offset = self::$days[$dayOfWeek];
-	return $offset;
+    public function getDayOfWeekIndex()
+    {
+        $dayOfWeek = strtolower(date("D"));
+        $offset = self::$days[$dayOfWeek];
+        return $offset;
     }
 
     /**
@@ -84,17 +110,38 @@ class ROCKETS_Date {
      * @param <type> $d2 date 2
      * @return <type> number of days difference
      */
-    public function getDifferenceDays($d1,$d2) {
-	$delta = $d2 - $d1;
-	return ($delta / 86400);
+    public function getDifferenceDays($d1, $d2)
+    {
+        $delta = $d2 - $d1;
+        return ($delta / 86400);
+    }
+
+    /**
+     * Get an array containing the start/end timestamps for today
+     */
+    public static function getTodayMYSQLStartEndTimestamps()
+    {
+        date_default_timezone_set(TIMEZONE);
+        $times['start'] = date("Y-m-d") . " 00:00:00";
+        $times['end'] = date("Y-m-d") . " 23:59:59";
+        return $times;
+    }
+
+    public static function getWeekMYSQLTimestamps()
+    {
+        date_default_timezone_set(TIMEZONE);
+        $times['end'] = date("Y-m-d") . " 23:59:59";
+        $times['start'] = date("Y-m-d", self::getTimePlusOffset(-7)) . " 00:00:00";
+        return $times;
     }
 
     /**
      * Get today's date in long form e.g. "June 20, 2011"
      * @return <type>
      */
-    public static function getLongDate() {
-	return date("M d, Y");
+    public static function getLongDate()
+    {
+        return date("M d, Y");
     }
 
     /**
@@ -103,15 +150,17 @@ class ROCKETS_Date {
      * @param <type> $formatStr "XX/XX/XXXX" (02/01/2011)
      * @return <type>
      */
-    public static function formatDate($formatStr) {
-	switch($formatStr) {
-	    case "XX/XX/XXXX":
-		return date("m/d/Y");
-		break;
-	    default:
-		return false;
-	}
+    public static function formatDate($formatStr)
+    {
+        switch ($formatStr) {
+            case "XX/XX/XXXX":
+                return date("m/d/Y");
+                break;
+            default:
+                return false;
+        }
     }
+
 }
 
 ?>
