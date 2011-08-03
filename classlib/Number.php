@@ -7,7 +7,8 @@
  * @author Halfdeck
  * @version 1.0
  */
-class ROCKETS_Number {
+class ROCKETS_Number
+{
 
     /**
      * <p>Print a number in USD money format (e.g. "$165,200").
@@ -18,13 +19,19 @@ class ROCKETS_Number {
      * @param bool $pennies - if true, we also show pennies
      * @return string e.g $123,461
      */
-    public static function getMoney($x, $pennies = FALSE) {
-	if($pennies) return "$" .number_format($x, 2, ".", ",");
-	else return "$" .number_format($x, 0, ".", ",");
+    public static function getMoney($x, $pennies = FALSE)
+    {
+        if ($pennies)
+            return "$" . number_format($x, 2, ".", ",");
+        else
+            return "$" . number_format($x, 0, ".", ",");
     }
-	public static function numberFormat($x) {
-		return number_format($x, 0, ".", ",");
-	}
+
+    public static function numberFormat($x)
+    {
+        return number_format($x, 0, ".", ",");
+    }
+
 }
 
 ?>
