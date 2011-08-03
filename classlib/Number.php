@@ -22,6 +22,9 @@ class ROCKETS_Number {
 	if($pennies) return "$" .number_format($x, 2, ".", ",");
 	else return "$" .number_format($x, 0, ".", ",");
     }
+	public static function numberFormat($x) {
+		return number_format($x, 0, ".", ",");
+	}
 }
 
 ?>
