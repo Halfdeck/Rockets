@@ -25,8 +25,10 @@ abstract class ROCKETS_MYSQLTable extends ROCKETS_ConfigurableObject {
 	
     /** name of primary key field */
     protected $primary_key_fieldname;
+
     /** fieldnames */
     protected $fieldnames = array();
+
     /** currently loaded mysql row data - saved to issue get_field calls */
     protected $row = false;
     // show query regardless of $DEBUG value
@@ -50,8 +52,8 @@ abstract class ROCKETS_MYSQLTable extends ROCKETS_ConfigurableObject {
 	}
 
 	$this->loadQueryValues($_REQUEST);
-	if (isset($this->tbl))
-	    $this->fieldnames = $this->getTableFields($this->tbl);
+	if(isset($this->tbl)) 
+		$this->fieldnames = $this->getTableFields($this->tbl);
 	parent::__construct($ar);
     }
 
@@ -60,7 +62,8 @@ abstract class ROCKETS_MYSQLTable extends ROCKETS_ConfigurableObject {
 	foreach ($ar as $key => $value) {
 	    if (is_array($value)) {
 		$this->$key = $value;
-	    } else {
+	    }
+	    else {
 		$this->$key = strtolower($value); // URL parameters are all lower case, so form values need to be set to lower case also
 	    }
 	}
@@ -150,9 +153,11 @@ abstract class ROCKETS_MYSQLTable extends ROCKETS_ConfigurableObject {
     }
 
     private function generate_fieldValueInternal($obj = null) {
-	$ar = array();
+	
+	$ar= array();
 	if (!$obj) {
 	    $obj = $_REQUEST;
+
 	}
 	$fieldnames = $this->retrieveTableFields($this->tbl);
 
@@ -163,7 +168,7 @@ abstract class ROCKETS_MYSQLTable extends ROCKETS_ConfigurableObject {
 	return $ar;
     }
 
-    /**
+     /**
      * <p>Magically inserts a new record, given $this->fieldnames
      * If sending $_REQUEST, just call ->insert()
      * 
@@ -443,20 +448,17 @@ abstract class ROCKETS_MYSQLTable extends ROCKETS_ConfigurableObject {
      */
     protected function getTableFields($tableName) {
 
-	$tableFields = mysql_query("SHOW COLUMNS FROM {$tableName}");
+	$tableFields = self::read("SHOW COLUMNS FROM {$tableName}");
 
 	while ($field = mysql_fetch_assoc($tableFields)) {
 
 	    $field_array[] = $field['Field'];
 	    if ($field['Key'] == 'PRI')
 		$this->primary_key_fieldname = $field['Field']; // set primary key
-
-
-
-
 	}
 	if (BOOL_DEBUG) {
-	    print_r($field_array);
+	    print_r($field_array); 
+		
 	}
 	return $field_array;
     }
@@ -486,6 +488,7 @@ abstract class ROCKETS_MYSQLTable extends ROCKETS_ConfigurableObject {
 	/**
 	 * @todo [mvc] check the field value to make sure something really needs to be modified.
 	 */
+
 	foreach ($newFields as $field => $setting) {
 	    echo PHP_EOL;
 	    echo "[{$field}] [{$setting}]";
