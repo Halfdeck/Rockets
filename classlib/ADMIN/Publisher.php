@@ -68,7 +68,6 @@ class ROCKETS_ADMIN_Publisher extends ROCKETS_ADMIN_File {
      */
     public static function setGlobal($row) {
 	$GLOBALS['publisher_row'] = $row;
-	echo "SET GLOBAL CALLED!";
     }
 
     /**
