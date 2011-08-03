@@ -119,9 +119,9 @@ abstract class ROCKETS_Email extends ROCKETS_ConfigurableObject {
      * @return string
      */
     protected function getHeader($ar = null) {
-	$header = "From: {$this->headerFromName} <{$this->addr_from}>\r\n"
-		. "Reply-To: {$this->addr_reply}\r\n"
-		. "Content-Type: text/html\r\n";
+	$header = "From: {$this->headerFromName} <{$this->addr_from}>" .PHP_EOL
+		. "Reply-To: {$this->addr_reply}" .PHP_EOL
+		. "Content-Type: text/html" .PHP_EOL;
 	return $header;
     }
 
