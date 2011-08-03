@@ -6,9 +6,9 @@
  * @author Halfdeck
  */
 class ROCKETS_CSV extends ROCKETS_String {
-
+    
     const CSV_DEFAULT_SEPARATOR = "|";
-
+    
     public static function cleanLine($line) {
 	$line = str_replace("\r\n", "", $line);
 	$line = trim($line);
@@ -27,7 +27,7 @@ class ROCKETS_CSV extends ROCKETS_String {
 	if(self::isEmptyLine($data)) return NULL;
 	else return $data;
     }
-
+    
     /**
      * Determine if the CSV line data is empty.
      * If the field count is less than 2, we assume its empty.
@@ -42,7 +42,7 @@ class ROCKETS_CSV extends ROCKETS_String {
 	}
 	else return false;
     }
-
+    
     /**
      * Takes a record of rows and turns it into a CSV.
      *
@@ -65,5 +65,37 @@ class ROCKETS_CSV extends ROCKETS_String {
 	$content .= PHP_EOL;
 	return $content;
     }
+    
+    /**
+     * Takes a file pointer and MYSQL result - then sends a CSV
+     * 
+     * @param MYSQL result $result
+     * @param filePointer $fp
+     * @return type 
+     */
+    public static function constructCSVMYSQLRes($result, $fp) {
+        $count = 0; // used to write fieldnames on line 1
+        
+        while($row = mysql_fetch_assoc($result)) {
+            if($count == 0) { // first row scan - get fieldnames
+                fputcsv($fp, array_keys($row));
+            }
+            fputcsv($fp, array_values($row));
+            $count++;
+        }
+    }
+    
+    /**
+     * Create CSV line given an array
+     * 
+     * @param type $array
+     * @param type $delimiter default = ","
+     * @return type 
+     */
+    public static function createLine($array, $delimiter = ",") {
+        return implode($delimiter, $array) ."\n";
+    }
+    
 }
+
 ?>
