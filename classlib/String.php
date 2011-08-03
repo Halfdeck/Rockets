@@ -6,6 +6,16 @@
 
 Class ROCKETS_String {
 
+	/**
+	 * Alias for ucwords - turns "jill hill" into "Jill Hill"
+	 * 
+	 * @param type $str
+	 * @return type 
+	 */
+	static public function capitalizeName($str) {
+		return ucwords($str);
+	}
+	
     /**
      * <p>Gets rid of extra spaces in between words and at the end/beginning of string.</p>
      * @param string $str any string
@@ -39,6 +49,7 @@ Class ROCKETS_String {
 
     /**
      * Clean phone number string entered by user.
+	 * Given "(111) 111-1111
      * @param <type> $string
      * @return string
      */
@@ -49,6 +60,56 @@ Class ROCKETS_String {
 	$string = substr($string, 0, 3) . "-" . substr($string, 3, 3) . "-" . substr($string, 6, 4);
 	return $string;
     }
+    
+     /**
+         * reduce any phone number into numbers, e.g. (123) 234-1234 => 12342341234
+         * @param <type> $string
+         * @return string
+         */
+    public static function stripPhone($string) {
+    	$string = str_replace(" ", "", $string);
+    	$string = str_replace("-", "", $string);
+    	$string = str_replace(array("(", ")"), "", $string);
+    	return $string;
+    }
+	
+	/**
+	* pad zip code when its an integer
+	*/
+	
+	public static function padZip($str) {
+		return str_pad($str, 6, "0", STR_PAD_LEFT);	
+	}
+	
+	/**
+	* takes a 6 digit zip 95123 and extension 1234 => combine into 95123-1234
+	**/
+	public static function mergeZip($zip,$ext) {
+		if($ext=="") return $zip;
+		else return $zip ."-" .$ext;
+	}
+    
+    
+    /**
+     * Split phone number into 3 components
+     */
+     
+     public static function splitPhone($string) {
+     	$string = self::stripPhone($string);
+     	$ar[0] = substr($string, 0, 3);
+     	$ar[1] = substr($string, 3,3);
+     	$ar[2] = substr($string, 6, 4);
+     	return $ar;
+     }
+     
+     /**
+     * merge 3 variables into a phone number string
+     * used to handle phone input from forms that splits up # into 3 parts.
+     */
+     
+     public static function mergePhone($ar = array(null)) {
+     	return implode($ar);
+     }
 
     /**
      * Add a space after every comma (e.g. "cookies,sandwiches.." -> "cookies, sandwiches")
