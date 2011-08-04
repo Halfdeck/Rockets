@@ -38,6 +38,7 @@ abstract class ROCKETS_MYSQLTable extends ROCKETS_ConfigurableObject {
 
     /**
      * Instantiates a MYSQL controller object
+	 * for a custom primary key, set $this->primary_key_field after calling parent::__construct();
      *
      * @param int $ar['limit'] If no limit is specified, limit defaults to 12.
      * @param boolean $ar['debug'] true/false: If no query is specified, $_REQUEST is used to load values.
@@ -373,7 +374,12 @@ abstract class ROCKETS_MYSQLTable extends ROCKETS_ConfigurableObject {
      */
     public STATIC function read($query) {
 	if (BOOL_DEBUG) {
-	    echo "<strong>Query:</strong> {$query} <br><br>\n";
+	    echo ROCKETS_String::mysql_prettify($query);
+		/**
+		 * Following has to be called from within the Model class.. or we lose class and method names
+		 * @todo we still want an echo statement in a model class.
+		 */
+		echo "<strong>CLASS:</strong> " .get_called_class() ."<br><br>" .PHP_EOL;
 	}
 	$result = mysql_query($query);
 	self::issueError(array("continue" => true, "query" => $query));

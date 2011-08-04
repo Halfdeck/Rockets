@@ -157,11 +157,20 @@ abstract class ROCKETS_ConfigurableObject
      * @param <type> $errfile
      * @param <type> $errline
      */
-    public function errorHandler($errno, $errstr, $errfile, $errline)
+    public function errorHandler()
     {
-        echo "<h2>Error</h2>" . PHP_EOL;
-        debug_print_backtrace();
-        die('<h2>END OF LINE</h2>');
+		/**
+		 * changelog
+		 * 
+		 * Modified to print a readable debug backtrace
+		 * @todo use a template to encapsulate this
+		 * @todo the debug backtrace filepath could be installation specific ?!
+		 * @todo committing this will break other apps until their template file is set up correctly.
+		 */
+		
+		$ar = debug_backtrace();
+		eval('?>' . file_get_contents(PATH_TEMPLATES ."/" .FILE_TEMPLATE_DEBUG_BACKTRACE) . '<?');
+		die();
     }
 
     /**
