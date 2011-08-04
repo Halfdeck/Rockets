@@ -1,11 +1,9 @@
 <?php
 
-/*
-  MYSQL table controller.
-
-  - Uses $_REQUEST to build queries
+/**
+ * MYSQL table controller.
+ * Uses $_REQUEST to build queries
  */
-
 abstract class ROCKETS_MYSQLTable extends ROCKETS_ConfigurableObject {
     /**
      * @global BOOL_EXECUTE
