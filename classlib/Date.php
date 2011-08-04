@@ -53,8 +53,8 @@ class ROCKETS_Date
      */
     public static function createDateStrFromMYSQL($datestr, $format = self::FRMT_DATETIME)
     {
-        list($y, $m, $d, $h, $m, $s) = sscanf($datestr, "%d-%d-%d %d:%d:%d");
-        $time = mktime($h, $m, $s, $m, $d, $y);
+        list($y, $m, $d, $h, $min, $s) = sscanf($datestr, "%d-%d-%d %d:%d:%d");
+        $time = mktime($h, $min, $s, $m, $d, $y);
         if ($format == self::FRMT_DATETIME)
             return date("M j, Y g:i A ", $time);
         else if ($format == self::FRMT_DATE)
