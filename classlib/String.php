@@ -177,19 +177,18 @@ Class ROCKETS_String
      */
     static public function mysql_prettify($subject)
     {
-		/**
-		 * @todo different types of joins don't work cleanly.
-		 * 
-		 */
+        /**
+         * @todo different types of joins don't work cleanly.
+         * 
+         */
         $subject = preg_replace("/FROM/", PHP_EOL . "<br>FROM", $subject);
-		$subject = preg_replace("/JOIN/", PHP_EOL . "<br>JOIN", $subject);
-        $subject = preg_replace("/LEFT/", PHP_EOL . "<br>LEFT", $subject);
-		$subject = preg_replace("/AND/", PHP_EOL . "<br>AND", $subject);
-		$subject = preg_replace("/OR/", PHP_EOL . "<br>OR", $subject);
+        $subject = preg_replace("/(LEFT JOIN|JOIN|LEFT OUTER JOIN|INNER JOIN|RIGHT JOIN)/", PHP_EOL ."<br>$1", $subject);
+        $subject = preg_replace("/AND/", PHP_EOL . "<br>AND", $subject);
+        $subject = preg_replace("/OR/", PHP_EOL . "<br>OR", $subject);
         $subject = preg_replace("/WHERE/", PHP_EOL . "<br>WHERE", $subject);
         $subject = preg_replace("/ORDER BY/", PHP_EOL . "<br>ORDER BY", $subject);
-		$subject = preg_replace("/GROUP BY/", PHP_EOL . "<br>GROUP BY", $subject);
-		$subject = preg_replace("/LIMIT/", PHP_EOL . "<br>LIMIT", $subject);
+        $subject = preg_replace("/GROUP BY/", PHP_EOL . "<br>GROUP BY", $subject);
+        $subject = preg_replace("/LIMIT/", PHP_EOL . "<br>LIMIT", $subject);
         $subject = "<h2>Query</h2>" . $subject . "<br><br>";
         return $subject;
     }
@@ -251,7 +250,8 @@ Class ROCKETS_String
     {
         $singular_phrase = "";
         $words = explode(" ", $subject); // in case there are more than one word in $subject
-        foreach ($words as $word) {
+        foreach ($words as $word)
+        {
             $word = preg_replace("/ies$/i", "y", $word); // companies => company
             $word = preg_replace("/([^iaou])s$/i", "$1", $word); // roles => role / status => status
             $singular_phrase .= $word;
@@ -293,18 +293,18 @@ Class ROCKETS_String
 
         return $str;
     }
-	
-	/**
-	 * do a formatted print_r, so contents look formatted on the screen.
-	 * 
-	 * @param array $ar 
-	 */
-	static public function echo_array_formatted($ar)
-	{
-		echo "<pre>";
-		print_r($ar);
-		echo "</pre>";
-	}
+
+    /**
+     * do a formatted print_r, so contents look formatted on the screen.
+     * 
+     * @param array $ar 
+     */
+    static public function echo_array_formatted($ar)
+    {
+        echo "<pre>";
+        print_r($ar);
+        echo "</pre>";
+    }
 
 //    public static function splitFullName($str) {
 //	$ar = array();
