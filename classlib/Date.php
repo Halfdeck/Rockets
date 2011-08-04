@@ -19,6 +19,10 @@ class ROCKETS_Date
      * Date Format: July 4, 2011
      */
     const FRMT_DATE = 1;
+    /**
+     * Date Format: 8/1/2011
+     */
+    const FRMT_DATE_SLASHES = 2;
 
     /**
      *
@@ -29,6 +33,8 @@ class ROCKETS_Date
 
     /**
      * Create a date MYSQL likes: "2/4/2011" => "2011/02/04"
+     * Issue: date could also be Aug 11, 2011?? which throws an error
+     * 
      * @param type $str 
      */
     static public function mysql_makeDate($str)
@@ -59,6 +65,8 @@ class ROCKETS_Date
             return date("M j, Y g:i A ", $time);
         else if ($format == self::FRMT_DATE)
             return date("M j, Y", $time);
+        else if ($format == self::FRMT_DATE_SLASHES)
+            return date("m/j/Y", $time);
         else
             return null;
     }
