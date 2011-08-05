@@ -298,9 +298,11 @@ Class ROCKETS_String
      * do a formatted print_r, so contents look formatted on the screen.
      * 
      * @param array $ar 
+	 * @param string $title (optiona) title to say what $ar is
      */
-    static public function echo_array_formatted($ar)
+    static public function echo_array_formatted($ar, $title = "")
     {
+		echo "<h2>{$title}</h2>";
         echo "<pre>";
         print_r($ar);
         echo "</pre>";
