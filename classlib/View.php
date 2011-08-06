@@ -103,19 +103,6 @@ class ROCKETS_View
          */
         return mysql_fetch_object($result, get_called_class());
     }
-
-    /**
-     * Allows me to set protected property
-     * This method is necessary when loading protected property values from MYSQL
-     * 
-     * @param <type> $name
-     * @param <type> $value
-     */
-    public function __set($name, $value)
-    {
-        $this->$name = $value;
-    }
-
 }
 
 ?>
