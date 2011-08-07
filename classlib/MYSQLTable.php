@@ -18,6 +18,17 @@ abstract class ROCKETS_MYSQLTable extends ROCKETS_ConfigurableObject {
     const DB_NAME = DB_NAME;
     const DEFAULT_LIMIT = 12;   // default MYSQL LIMIT value
 
+    /**
+     * BETWEEN query type
+     * e.g WHERE usertable.age BETWEEN '1' AND '56'
+     */
+    const QUERY_TYPE_BETWEEN = 1;
+    /**
+     * IN query type
+     * e.g. WHERE usertable.age IN ('1','2','4','5')
+     */
+    const QUERY_TYPE_IN = 2;
+    
     /** name of this table */
     protected $tbl;
 	
@@ -699,11 +710,11 @@ abstract class ROCKETS_MYSQLTable extends ROCKETS_ConfigurableObject {
      */
     static protected function get_query_type($condition)
     {
-        if (strstr($condition, " BETWEEN ") != false)
+        if (strstr($condition, " BETWEEN "))
         {
             return self::QUERY_TYPE_BETWEEN;
         }
-        else if (strstr($condition, " IN ") != false)
+        else if (strstr($condition, " IN "))
         {
             return self::QUERY_TYPE_IN;
         }
@@ -711,6 +722,106 @@ abstract class ROCKETS_MYSQLTable extends ROCKETS_ConfigurableObject {
         {
             return null;
         }
+    }
+    
+        /**
+     * Handles BETWEEN and IN statements
+     * @param type $filter_name String or array. Array structure:
+     * <code>
+     * $filter = array(
+     * 		'name' => array('minimum_age','maximum_age)
+     * )
+     * </code>
+     * 	like array("1","10") is used for a BETWEEN statement
+     * @param string $checked (optional) if this is set to a value, then use that instead of looking inside $_REQUEST
+     * <code>
+     * 'checked' => 1 // uses 1 instead of $_REQUEST value
+     * 'checked' => array(array(0,1),array(1,2)...) // uses array to generate BETWEEN statements separated by ORs
+     * </code>
+     * @param type $condition
+     * @return type 
+     */
+    protected function auto_construct_condition($filter_name, $condition = "[[filter_value]]", $checked = null)
+    {
+        $str = "";
+
+        /**
+         * Get query type
+         */
+        $query_type = self::get_query_type($condition);
+         /**
+         * if "checked" key is set, use that value and ignore $_REQUEST.
+         * This is useful when you want to force generate a WHERE clause even if $_REQUEST value isn't set
+         */
+        if($checked) $_REQUEST[$filter_name] = $checked;
+        
+        if ($query_type == self::QUERY_TYPE_BETWEEN)
+        {
+            /**
+             * If $filter_name is an array, create a BETWEEEN statement
+             * for example, "name" => array("max_income","min_income")
+             */
+            if (is_array($filter_name))
+            {
+                $str = "'{$_REQUEST[$filter_name[0]]}' AND '{$_REQUEST[$filter_name[1]]}'";
+            }
+            /**
+             * The values are in $_REQUEST
+             * e.g. $_REQUEST['state_ranges'] = array(array(1,2),array(2,3)...)
+             */
+            else if (!empty($_REQUEST[$filter_name]) && is_array($_REQUEST[$filter_name]))
+            {
+                $first = true;
+
+                foreach ($_REQUEST[$filter_name] as $item)
+                {
+                    $clause = "'{$item[0]}' AND '{$item[1]}'";
+
+                    $clause = str_replace("[[filter_value]]", $clause, $condition);
+
+                    if (!$first)
+                        $str .= "OR ";
+                    $str .= "({$clause})";
+                    $first = false;
+                }
+                /**
+                 * in this case, we don't want to apply the final $str = str_replace("[[filter_value]]", $str, $condition);
+                 * which creates something like  AND national_account_Asa.zip5 BETWEEN (national_account_Asa.zip5 BETWEEN
+                 */
+                $str = str_replace("[[table_name]]", $this->tbl, $str);
+                return $str;
+            }
+        }
+
+        /**
+         * $_REQUEST value is empty and nothing is "checked", so exit - don't generate a WHERE clause
+         */
+        else if (empty($_REQUEST[$filter_name]))
+        {
+            return null;
+        }
+        else if ($query_type == self::QUERY_TYPE_IN)
+        {
+            /**
+             * if filter value is an array, create an "IN (x,y,z)" mysql clause
+             * e.g. $_REQUEST['zip_codes'] = array(1,2,3,4,5....)
+             */
+            if (is_array($_REQUEST[$filter_name]))
+            {
+                $str = "(" . JOB_EXTENSION_String::mysql_get_in_list($_REQUEST[$filter_name]) . ")";
+            }
+        }
+        else
+        {
+            /**
+             * Regular query
+             */
+            $str = $_REQUEST[$filter_name];
+        }
+
+        $str = str_replace("[[filter_value]]", $str, $condition);
+        $str = str_replace("[[table_name]]", $this->tbl, $str);
+        return $str;
     }
 
 
