@@ -182,7 +182,7 @@ Class ROCKETS_String
          * 
          */
         $subject = preg_replace("/FROM/", PHP_EOL . "<br>FROM", $subject);
-        $subject = preg_replace("/(LEFT JOIN|JOIN|LEFT OUTER JOIN|INNER JOIN|RIGHT JOIN)/", PHP_EOL ."<br>$1", $subject);
+        $subject = preg_replace("/(LEFT JOIN|JOIN|LEFT OUTER JOIN|INNER JOIN|RIGHT JOIN)/", PHP_EOL . "<br>$1", $subject);
         $subject = preg_replace("/AND/", PHP_EOL . "<br>AND", $subject);
         $subject = preg_replace("/OR/", PHP_EOL . "<br>OR", $subject);
         $subject = preg_replace("/WHERE/", PHP_EOL . "<br>WHERE", $subject);
@@ -283,10 +283,12 @@ Class ROCKETS_String
         if ($len == 7)
         { // xxx-xxxx
             $str = preg_replace('/([0-9]{3})([0-9]{4})/', '$1-$2', $str);
-        } elseif ($len == 10)
+        }
+        elseif ($len == 10)
         { // (xxx) xxx-xxxx
             $str = preg_replace('/([0-9]{3})([0-9]{3})([0-9]{4})/', '($1) $2-$3', $str);
-        } elseif ($len == 13)
+        }
+        elseif ($len == 13)
         { // (xxx) xxx-xxxx ext xxx
             $str = preg_replace('/([0-9]{3})([0-9]{3})([0-9]{4})([0-9]{3})/', '($1) $2-$3 ext $4', $str);
         }
@@ -298,21 +300,50 @@ Class ROCKETS_String
      * do a formatted print_r, so contents look formatted on the screen.
      * 
      * @param array $ar 
-	 * @param string $title (optiona) title to say what $ar is
+     * @param string $title (optiona) title to say what $ar is
      */
     static public function echo_array_formatted($ar, $title = "")
     {
-		echo "<h2>{$title}</h2>";
+        echo "<h2>{$title}</h2>";
         echo "<pre>";
         print_r($ar);
         echo "</pre>";
     }
 
-//    public static function splitFullName($str) {
-//	$ar = array();
-//	list($ar['first'],$ar['last']) = explode(" ", $str);
-//	return $ar;
-//    }
+    /**
+     * <p>Create a string of items in quotes to use in a mysql IN statement
+     * 
+     * <code>
+     * $array = array("apple","orange","pear");
+     * $str = JOB_LTC_String::mysql_get_in_list($array);
+     * </code>
+     * 
+     * $str would equal "'apple','orange','pear'" which can be used in a MYSQL query like
+     * <code>
+     * WHERE fruit IN ('apple','orange','pear')
+     * </code>
+     * 
+     * Without the quotes, the query would break.
+     * </p>
+     * 
+     * @param array $ar
+     * @return type 
+     */
+    static public function mysql_get_in_list(Array $ar)
+    {
+        $str = "";
+        $first = true;
+
+        foreach ($ar as $item)
+        {
+            if ($first == false)
+                $str .= ",";
+            $str .= "'" . mysql_real_escape_string($item) . "'";
+            $first = false;
+        }
+        return $str;
+    }
+
 }
 
 ?>
