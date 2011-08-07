@@ -84,6 +84,7 @@ class ROCKETS_View
      */
     static public function load_object($id)
     {
+        if($id == null) return null;
         /**
          * Find the MODEL classname for an HTML class object
          */
