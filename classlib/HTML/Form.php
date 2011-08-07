@@ -52,7 +52,7 @@ class ROCKETS_HTML_Form
       name
       value
      * */
-    public function draw_searchbox($ar = array(null))
+    static public function draw_searchbox($ar = array(null))
     {
         echo "<input type='text' name='{$ar['name']}' size='{$ar['size']}' value='{$ar['value']}'>";
     }
