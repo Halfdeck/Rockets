@@ -688,6 +688,31 @@ abstract class ROCKETS_MYSQLTable extends ROCKETS_ConfigurableObject {
 	$query = "DROP TABLE IF EXISTS {$this->tbl}";
 	$this->exec($query);
     }
+    
+    /**
+     * 
+     * Detect query type (between or in) given a condition in an conditionset, like
+     * "[[tablename]].userid BETWEEN [[filter_value]]"
+     * 
+     * @param type $condition
+     * @return type QUERY_TYPE or null if no match.
+     */
+    static protected function get_query_type($condition)
+    {
+        if (strstr($condition, " BETWEEN ") != false)
+        {
+            return self::QUERY_TYPE_BETWEEN;
+        }
+        else if (strstr($condition, " IN ") != false)
+        {
+            return self::QUERY_TYPE_IN;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
 
 }
 
