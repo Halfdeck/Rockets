@@ -808,7 +808,7 @@ abstract class ROCKETS_MYSQLTable extends ROCKETS_ConfigurableObject {
              */
             if (is_array($_REQUEST[$filter_name]))
             {
-                $str = "(" . JOB_EXTENSION_String::mysql_get_in_list($_REQUEST[$filter_name]) . ")";
+                $str = "(" . ROCKETS_String::mysql_get_in_list($_REQUEST[$filter_name]) . ")";
             }
         }
         else
@@ -822,6 +822,30 @@ abstract class ROCKETS_MYSQLTable extends ROCKETS_ConfigurableObject {
         $str = str_replace("[[filter_value]]", $str, $condition);
         $str = str_replace("[[table_name]]", $this->tbl, $str);
         return $str;
+    }
+    
+    /**
+     * Construct WHERE clause using arrays
+     * @param type $ar
+     * @return string
+     */
+    public function get_where_clause($ar)
+    {
+        $where_clause = "";
+
+        foreach ($ar['conditionset'] as $conditionset)
+        {
+            /**
+             * Check if $conditionset['name'] is an array in case BETWEEN statement is getting sent in
+             * if its an array !empty(.. will break.
+             */
+            if (is_array($conditionset['name']) || !empty($_REQUEST[$conditionset['name']]))
+            {
+                $checked = (empty($conditionset['checked'])) ? null : $conditionset['checked']; // make sure value is set in array
+                $where_clause .= " AND " . $this->auto_construct_condition($conditionset['name'], $conditionset['condition'], $checked);
+            }
+        }
+        return $where_clause;
     }
 
 
