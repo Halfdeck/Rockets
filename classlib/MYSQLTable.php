@@ -832,14 +832,18 @@ abstract class ROCKETS_MYSQLTable extends ROCKETS_ConfigurableObject {
     public function get_where_clause($ar)
     {
         $where_clause = "";
-
+		
+		if(BOOL_DEBUG) ROCKETS_String::echo_array_formatted($ar, "WHERE AR");
+		
+		
         foreach ($ar['conditionset'] as $conditionset)
         {
+			if(BOOL_DEBUG) ROCKETS_String::echo_array_formatted($conditionset, "conditionset");
             /**
              * Check if $conditionset['name'] is an array in case BETWEEN statement is getting sent in
              * if its an array !empty(.. will break.
              */
-            if (is_array($conditionset['name']) || !empty($_REQUEST[$conditionset['name']]))
+            if (is_array($conditionset['name']) || !empty($_REQUEST[$conditionset['name']]) || isset($conditionset['checked']))
             {
                 $checked = (empty($conditionset['checked'])) ? null : $conditionset['checked']; // make sure value is set in array
                 $where_clause .= " AND " . $this->auto_construct_condition($conditionset['name'], $conditionset['condition'], $checked);
