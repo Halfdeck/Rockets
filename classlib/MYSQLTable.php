@@ -757,12 +757,17 @@ abstract class ROCKETS_MYSQLTable extends ROCKETS_ConfigurableObject {
         
         if ($query_type == self::QUERY_TYPE_BETWEEN)
         {
+			if(BOOL_DEBUG) echo "<h1>ROCKETS BETWEEN CHECK</h1>";
             /**
              * If $filter_name is an array, create a BETWEEEN statement
              * for example, "name" => array("max_income","min_income")
              */
-            if (is_array($filter_name))
+            if (is_array($filter_name) && !empty($_REQUEST[$filter_name[0]])  && !empty($_REQUEST[$filter_name[1]]))
             {
+				if(BOOL_DEBUG) {
+					echo "REQUEST 0: [{$_REQUEST[$filter_name[0]]}]" .PHP_EOL;
+					echo "REQUEST 0: [{$_REQUEST[$filter_name[1]]}]" .PHP_EOL;
+				}
                 $str = "'{$_REQUEST[$filter_name[0]]}' AND '{$_REQUEST[$filter_name[1]]}'";
             }
             /**
@@ -846,7 +851,7 @@ abstract class ROCKETS_MYSQLTable extends ROCKETS_ConfigurableObject {
             if (is_array($conditionset['name']) || !empty($_REQUEST[$conditionset['name']]) || isset($conditionset['checked']))
             {
                 $checked = (empty($conditionset['checked'])) ? null : $conditionset['checked']; // make sure value is set in array
-                $where_clause .= " AND " . $this->auto_construct_condition($conditionset['name'], $conditionset['condition'], $checked);
+                $where_clause .= $this->auto_construct_condition($conditionset['name'], $conditionset['condition'], $checked);
             }
         }
         return $where_clause;
