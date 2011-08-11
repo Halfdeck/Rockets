@@ -430,7 +430,6 @@ abstract class ROCKETS_MYSQLTable extends ROCKETS_ConfigurableObject
              * Following has to be called from within the Model class.. or we lose class and method names
              * @todo we still want an echo statement in a model class.
              */
-            echo "<strong>CLASS:</strong> " . get_called_class() . "<br><br>" . PHP_EOL;
         }
         $result = mysql_query($query);
         self::issueError(array("continue" => true, "query" => $query));
