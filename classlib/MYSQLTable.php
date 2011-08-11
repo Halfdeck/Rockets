@@ -519,10 +519,6 @@ abstract class ROCKETS_MYSQLTable extends ROCKETS_ConfigurableObject
             if ($field['Key'] == 'PRI')
                 $this->primary_key_fieldname = $field['Field']; // set primary key
         }
-        if (BOOL_DEBUG)
-        {
-            print_r($field_array);
-        }
         return $field_array;
     }
 
