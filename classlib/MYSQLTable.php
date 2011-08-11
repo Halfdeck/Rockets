@@ -4,7 +4,8 @@
  * MYSQL table controller.
  * Uses $_REQUEST to build queries
  */
-abstract class ROCKETS_MYSQLTable extends ROCKETS_ConfigurableObject {
+abstract class ROCKETS_MYSQLTable extends ROCKETS_ConfigurableObject
+{
     /**
      * @global BOOL_EXECUTE
      * @global BOOL_DEBUG
@@ -28,16 +29,13 @@ abstract class ROCKETS_MYSQLTable extends ROCKETS_ConfigurableObject {
      * e.g. WHERE usertable.age IN ('1','2','4','5')
      */
     const QUERY_TYPE_IN = 2;
-    
+
     /** name of this table */
     protected $tbl;
-	
     /** name of primary key field */
     protected $primary_key_fieldname;
-
     /** fieldnames */
     protected $fieldnames = array();
-
     /** currently loaded mysql row data - saved to issue get_field calls */
     protected $row = false;
     // show query regardless of $DEBUG value
@@ -47,36 +45,42 @@ abstract class ROCKETS_MYSQLTable extends ROCKETS_ConfigurableObject {
 
     /**
      * Instantiates a MYSQL controller object
-	 * for a custom primary key, set $this->primary_key_field after calling parent::__construct();
+     * for a custom primary key, set $this->primary_key_field after calling parent::__construct();
      *
      * @param int $ar['limit'] If no limit is specified, limit defaults to 12.
      * @param boolean $ar['debug'] true/false: If no query is specified, $_REQUEST is used to load values.
      * @param boolean $ar['execute'] true/false: if false, queries are not executed.
      */
-    function __construct($ar = array(null)) {
+    function __construct($ar = array(null))
+    {
 
-	self::$limit = ROCKETS_MYSQLTable::DEFAULT_LIMIT;
- 
-	if (isset($ar['limit'])) {
-	    self::$limit = $ar['limit'];
-	}
+        self::$limit = ROCKETS_MYSQLTable::DEFAULT_LIMIT;
 
-	$this->loadQueryValues($_REQUEST);
-	if(isset($this->tbl)) 
-		$this->fieldnames = $this->getTableFields($this->tbl);
-	parent::__construct($ar);
+        if (isset($ar['limit']))
+        {
+            self::$limit = $ar['limit'];
+        }
+
+        $this->loadQueryValues($_REQUEST);
+        if (isset($this->tbl))
+            $this->fieldnames = $this->getTableFields($this->tbl);
+        parent::__construct($ar);
     }
 
     // load queryvalues
-    protected function loadQueryValues($ar = array(null)) {
-	foreach ($ar as $key => $value) {
-	    if (is_array($value)) {
-		$this->$key = $value;
-	    }
-	    else {
-		$this->$key = strtolower($value); // URL parameters are all lower case, so form values need to be set to lower case also
-	    }
-	}
+    protected function loadQueryValues($ar = array(null))
+    {
+        foreach ($ar as $key => $value)
+        {
+            if (is_array($value))
+            {
+                $this->$key = $value;
+            }
+            else
+            {
+                $this->$key = strtolower($value); // URL parameters are all lower case, so form values need to be set to lower case also
+            }
+        }
     }
 
     /**
@@ -86,12 +90,14 @@ abstract class ROCKETS_MYSQLTable extends ROCKETS_ConfigurableObject {
      *
      * $verbose - set to true to see number of rows returned by a select statement
      */
-    protected function countRows($verbose = false) {
-	$countResult = mysql_fetch_assoc(mysql_query("SELECT FOUND_ROWS()"));
-	$this->rowCount = $countResult['FOUND_ROWS()'];
-	if ($verbose) {
-	    echo "Found rows: {$this->rowCount}<br>";
-	}
+    protected function countRows($verbose = false)
+    {
+        $countResult = mysql_fetch_assoc(mysql_query("SELECT FOUND_ROWS()"));
+        $this->rowCount = $countResult['FOUND_ROWS()'];
+        if ($verbose)
+        {
+            echo "Found rows: {$this->rowCount}<br>";
+        }
     }
 
     /**
@@ -106,31 +112,34 @@ abstract class ROCKETS_MYSQLTable extends ROCKETS_ConfigurableObject {
      * @param <type> $ar
      * @return <type>
      */
-    public function delete($ar = array(null)) {
-	if (array_key_exists("index_value", $ar))
-	    $index_value = $ar['index_value'];
-	if (!$index_value)
-	    return false;
+    public function delete($ar = array(null))
+    {
+        if (array_key_exists("index_value", $ar))
+            $index_value = $ar['index_value'];
+        if (!$index_value)
+            return false;
 
-	$query = "DELETE FROM {$this->tbl} WHERE {$this->primary_key_fieldname}='{$index_value}'";
-	mysql_query($query);
+        $query = "DELETE FROM {$this->tbl} WHERE {$this->primary_key_fieldname}='{$index_value}'";
+        mysql_query($query);
     }
 
-    public function get_row($ar = array(null)) {
-	$query = $this->createQuery();
-	$result = mysql_query($query);
-	if (!$result)
-	    return false;
-	$row = mysql_fetch_assoc($result);
-	$this->row = $row;
+    public function get_row($ar = array(null))
+    {
+        $query = $this->createQuery();
+        $result = mysql_query($query);
+        if (!$result)
+            return false;
+        $row = mysql_fetch_assoc($result);
+        $this->row = $row;
     }
 
     /*
       Return number of returned rows
      */
 
-    public function get_rowCount() {
-	return $this->rowCount;
+    public function get_rowCount()
+    {
+        return $this->rowCount;
     }
 
     /**
@@ -139,10 +148,11 @@ abstract class ROCKETS_MYSQLTable extends ROCKETS_ConfigurableObject {
 
       case "username":return $this->row['custom_username'];
      * */
-    public function get_field($fn) {
-	switch ($fn) {
-	    default:return $this->row[$fn];
-	}
+    public function get_field($fn)
+    {
+        switch ($fn) {
+            default:return $this->row[$fn];
+        }
     }
 
     /**
@@ -150,35 +160,39 @@ abstract class ROCKETS_MYSQLTable extends ROCKETS_ConfigurableObject {
      * @param array $obj send a class object as an array to scan instead of $_REQUEST. if $obj is null, then $_REQUEST is used.
      * @return array an array of table-relevant fields.
      */
-    private function generate_fieldValue($obj = null) {
-	$ar = array();
-	if (!$obj)
-	    $obj = $_REQUEST;
-	print_r($obj);
-	foreach ($this->fieldnames as $field) {
-	    if (isset($obj[$field]))
-		$ar[$field] = $obj[$field];
-	}
-	return $ar;
+    private function generate_fieldValue($obj = null)
+    {
+        $ar = array();
+        if (!$obj)
+            $obj = $_REQUEST;
+        print_r($obj);
+        foreach ($this->fieldnames as $field)
+        {
+            if (isset($obj[$field]))
+                $ar[$field] = $obj[$field];
+        }
+        return $ar;
     }
 
-    private function generate_fieldValueInternal($obj = null) {
-	
-	$ar= array();
-	if (!$obj) {
-	    $obj = $_REQUEST;
+    private function generate_fieldValueInternal($obj = null)
+    {
 
-	}
-	$fieldnames = $this->retrieveTableFields($this->tbl);
+        $ar = array();
+        if (!$obj)
+        {
+            $obj = $_REQUEST;
+        }
+        $fieldnames = $this->retrieveTableFields($this->tbl);
 
-	foreach ($fieldnames as $field) {
-	    if (isset($obj[$field]))
-		$ar[$field] = $obj[$field];
-	}
-	return $ar;
+        foreach ($fieldnames as $field)
+        {
+            if (isset($obj[$field]))
+                $ar[$field] = $obj[$field];
+        }
+        return $ar;
     }
 
-     /**
+    /**
      * <p>Magically inserts a new record, given $this->fieldnames
      * If sending $_REQUEST, just call ->insert()
      * 
@@ -197,56 +211,69 @@ abstract class ROCKETS_MYSQLTable extends ROCKETS_ConfigurableObject {
      *
      * @todo check for empty values and fail smoothly, so code calling this method can be dumber
      */
-    public function insert($ar = array(null)) {
+    public function insert($ar = array(null))
+    {
 
-	if (isset($ar['data'])) {
-	    $ar = $ar['data']; // load data array
-	} else if (isset($ar['obj'])) {
-	    $ar = $this->generate_fieldValue((array) $ar['obj']); // load an object instead of a data array
-	} else if (isset($ar['row'])) {
-	    $ar = $this->generate_fieldValueInternal($ar['row']); // automatically fetch table fieldnames and link with MYSQL row array data
-	} else {
-	    //    $ar = $this->generate_fieldValue(); // load $_REQUEST
-	    $ar = $this->generate_fieldValueInternal(); // automatically fetch table fieldnames and link with $_REQUEST
-	}
+        if (isset($ar['data']))
+        {
+            $ar = $ar['data']; // load data array
+        }
+        else if (isset($ar['obj']))
+        {
+            $ar = $this->generate_fieldValue((array) $ar['obj']); // load an object instead of a data array
+        }
+        else if (isset($ar['row']))
+        {
+            $ar = $this->generate_fieldValueInternal($ar['row']); // automatically fetch table fieldnames and link with MYSQL row array data
+        }
+        else
+        {
+            //    $ar = $this->generate_fieldValue(); // load $_REQUEST
+            $ar = $this->generate_fieldValueInternal(); // automatically fetch table fieldnames and link with $_REQUEST
+        }
 
-	$mysql_fields = "";
-	$mysql_vals = "";
-	$mysql_update = "";
-	$c = 0; // counter for insert
-	$d = 0; // counter for update
+        $mysql_fields = "";
+        $mysql_vals = "";
+        $mysql_update = "";
+        $c = 0; // counter for insert
+        $d = 0; // counter for update
 
-	foreach ($ar as $key => $value) {
+        foreach ($ar as $key => $value)
+        {
 
-	    if (!$value)
-		continue;
+            if (!$value)
+                continue;
 
-	    $value = mysql_real_escape_string($value); // add slashes to prevent MYSQL errors
+            $value = mysql_real_escape_string($value); // add slashes to prevent MYSQL errors
 
-	    if (self::$DEBUG)
-		echo "[$c] KEY [{$key}] VALUE [{$value}] INDEX: [{$this->primary_key_fieldname}]<br>";
+            if (self::$DEBUG)
+                echo "[$c] KEY [{$key}] VALUE [{$value}] INDEX: [{$this->primary_key_fieldname}]<br>";
 
-	    if ($c > 0) {
-		$mysql_fields .= ", ";
-		$mysql_vals .= ", ";
-	    }
-	    if ($d > 0) {
-		if ($key != $this->primary_key_fieldname) {
-		    $mysql_update .= ", ";
-		}
-	    }
+            if ($c > 0)
+            {
+                $mysql_fields .= ", ";
+                $mysql_vals .= ", ";
+            }
+            if ($d > 0)
+            {
+                if ($key != $this->primary_key_fieldname)
+                {
+                    $mysql_update .= ", ";
+                }
+            }
 
-	    $mysql_fields .= "{$key}";
-	    $mysql_vals .= "\"{$value}\"";
-	    $c++;
+            $mysql_fields .= "{$key}";
+            $mysql_vals .= "\"{$value}\"";
+            $c++;
 
-	    if ($key != $this->primary_key_fieldname) {
-		$mysql_update .= "{$key}=\"{$value}\"";
-		$d++;
-	    }
-	}
-	$query = "INSERT INTO {$this->tbl} ({$mysql_fields}) VALUES ({$mysql_vals}) ON DUPLICATE KEY UPDATE {$mysql_update}";
-	self::exec($query);
+            if ($key != $this->primary_key_fieldname)
+            {
+                $mysql_update .= "{$key}=\"{$value}\"";
+                $d++;
+            }
+        }
+        $query = "INSERT INTO {$this->tbl} ({$mysql_fields}) VALUES ({$mysql_vals}) ON DUPLICATE KEY UPDATE {$mysql_update}";
+        self::exec($query);
     }
 
     /**
@@ -264,48 +291,55 @@ abstract class ROCKETS_MYSQLTable extends ROCKETS_ConfigurableObject {
      *
      * @param MYSQLresult $result contains field/value pairs; otherwise generate_fieldValue() is used to autogenerate $ar from $_REQUEST
      */
-    public function massInsert($result) {
+    public function massInsert($result)
+    {
 
-	$mysql_fields = "";
-	$mysql_vals = "";
-	$d = 0; // number of records
+        $mysql_fields = "";
+        $mysql_vals = "";
+        $d = 0; // number of records
 
-	while ($row = mysql_fetch_assoc($result)) {
-	    $c = 0; // counter for insert
-	    $ar = $this->generate_fieldValueInternal($row); // automatically fetch table fieldnames and link with $_REQUEST
-	    // generate $fields string
+        while ($row = mysql_fetch_assoc($result))
+        {
+            $c = 0; // counter for insert
+            $ar = $this->generate_fieldValueInternal($row); // automatically fetch table fieldnames and link with $_REQUEST
+            // generate $fields string
 
-	    if ($d == 0) {
-		foreach ($ar as $key => $value) {
-		    if ($c > 0) {
-			$mysql_fields .= ", ";
-		    }
-		    $mysql_fields .= "{$key}";
-		    $c++;
-		}
-	    }
+            if ($d == 0)
+            {
+                foreach ($ar as $key => $value)
+                {
+                    if ($c > 0)
+                    {
+                        $mysql_fields .= ", ";
+                    }
+                    $mysql_fields .= "{$key}";
+                    $c++;
+                }
+            }
 
-	    $c = 0; // reset counter
-	    // generate $value string
-	    if ($d > 0)
-		$mysql_vals .= ",";
-	    $mysql_vals .= "(";
-	    foreach ($ar as $key => $value) {
-		if (BOOL_DEBUG)
-		    echo "[$c] KEY [{$key}] INDEX: [{$this->primary_key_fieldname}]<br>";
+            $c = 0; // reset counter
+            // generate $value string
+            if ($d > 0)
+                $mysql_vals .= ",";
+            $mysql_vals .= "(";
+            foreach ($ar as $key => $value)
+            {
+                if (BOOL_DEBUG)
+                    echo "[$c] KEY [{$key}] INDEX: [{$this->primary_key_fieldname}]<br>";
 
-		if ($c > 0) {
-		    $mysql_vals .= ", ";
-		}
-		$mysql_vals .= "\"" . addslashes($value) . "\"";
-		$c++;
-	    }
-	    $mysql_vals .= ")";
-	    $d++;
-	}
+                if ($c > 0)
+                {
+                    $mysql_vals .= ", ";
+                }
+                $mysql_vals .= "\"" . addslashes($value) . "\"";
+                $c++;
+            }
+            $mysql_vals .= ")";
+            $d++;
+        }
 
-	$query = "INSERT INTO {$this->tbl} ({$mysql_fields}) VALUES {$mysql_vals}";
-	self::exec($query);
+        $query = "INSERT INTO {$this->tbl} ({$mysql_fields}) VALUES {$mysql_vals}";
+        self::exec($query);
     }
 
     /**
@@ -322,22 +356,24 @@ abstract class ROCKETS_MYSQLTable extends ROCKETS_ConfigurableObject {
      * @return
      * No return value
      * */
-    static public function createOrModifyTables($ar = null) {
+    static public function createOrModifyTables($ar = null)
+    {
 
-	foreach ($ar['tables'] as $key => $table) {
-	    ob_flush(); // prevent PHP output freezing browser
-	    flush();
-	    $tableName = $key;
-	    if (self::$DEBUG)
-		echo "<h2>Found key: {$tableName}</h2>";
-	    if (self::checkIfTableExists($tableName))
-		self::modifyTable($tableName, $table);
-	    else
-		self::createTable(array(
-			    'tableName' => $tableName,
-			    'fields' => $table
-			));
-	}
+        foreach ($ar['tables'] as $key => $table)
+        {
+            ob_flush(); // prevent PHP output freezing browser
+            flush();
+            $tableName = $key;
+            if (self::$DEBUG)
+                echo "<h2>Found key: {$tableName}</h2>";
+            if (self::checkIfTableExists($tableName))
+                self::modifyTable($tableName, $table);
+            else
+                self::createTable(array(
+                    'tableName' => $tableName,
+                    'fields' => $table
+                ));
+        }
     }
 
     /**
@@ -347,17 +383,19 @@ abstract class ROCKETS_MYSQLTable extends ROCKETS_ConfigurableObject {
      * @param <type> $ar['fields'] An array of fields, defined by $key => $value pairs (e.g. "field1" => "varchar(255)"
      * 
      */
-    public function createTable($ar = null) {
-	$query = "CREATE TABLE IF NOT EXISTS {$ar['tableName']} (";
-	$c = 0;
-	foreach ($ar['fields'] as $key => $value) {
-	    if ($c > 0)
-		$query .= ", ";
-	    $query .= "{$key} {$value}";
-	    $c++;
-	}
-	$query .= ")";
-	self::exec($query);
+    public function createTable($ar = null)
+    {
+        $query = "CREATE TABLE IF NOT EXISTS {$ar['tableName']} (";
+        $c = 0;
+        foreach ($ar['fields'] as $key => $value)
+        {
+            if ($c > 0)
+                $query .= ", ";
+            $query .= "{$key} {$value}";
+            $c++;
+        }
+        $query .= ")";
+        self::exec($query);
     }
 
     /**
@@ -366,14 +404,16 @@ abstract class ROCKETS_MYSQLTable extends ROCKETS_ConfigurableObject {
      *
      * @param string $query - query string
      */
-    public static function exec($query) {
+    public static function exec($query)
+    {
 
-	if (self::$DEBUG)
-	    echo "<strong>Query:</strong> {$query} <br><br>\n";
-	if (self::$EXECUTE) {
-	    mysql_query($query);
-	    self::issueError(array("continue" => false, "query" => $query));
-	}
+        if (self::$DEBUG)
+            echo "<strong>Query:</strong> {$query} <br><br>\n";
+        if (self::$EXECUTE)
+        {
+            mysql_query($query);
+            self::issueError(array("continue" => false, "query" => $query));
+        }
     }
 
     /**
@@ -381,19 +421,21 @@ abstract class ROCKETS_MYSQLTable extends ROCKETS_ConfigurableObject {
      * @param <type> $query
      * @return <type>
      */
-    public STATIC function read($query) {
-	if (BOOL_DEBUG) {
-	    echo ROCKETS_String::mysql_prettify($query);
-		/**
-		 * Following has to be called from within the Model class.. or we lose class and method names
-		 * @todo we still want an echo statement in a model class.
-		 */
-		echo "<strong>CLASS:</strong> " .get_called_class() ."<br><br>" .PHP_EOL;
-	}
-	$result = mysql_query($query);
-	self::issueError(array("continue" => true, "query" => $query));
+    public STATIC function read($query)
+    {
+        if (BOOL_DEBUG)
+        {
+            echo ROCKETS_String::mysql_prettify($query);
+            /**
+             * Following has to be called from within the Model class.. or we lose class and method names
+             * @todo we still want an echo statement in a model class.
+             */
+            echo "<strong>CLASS:</strong> " . get_called_class() . "<br><br>" . PHP_EOL;
+        }
+        $result = mysql_query($query);
+        self::issueError(array("continue" => true, "query" => $query));
 
-	return $result;
+        return $result;
     }
 
     /**
@@ -401,20 +443,21 @@ abstract class ROCKETS_MYSQLTable extends ROCKETS_ConfigurableObject {
      *
      * Return - true if table exists; false otherwise.
      */
-    function checkIfTableExists($tableName) {
+    function checkIfTableExists($tableName)
+    {
 
-	$query = "SELECT COUNT(*) as count
+        $query = "SELECT COUNT(*) as count
 			FROM information_schema.tables 
 			WHERE table_schema = '" . self::DB_NAME . "'
 			AND table_name = '{$tableName}'";
 
-	if (self::$DEBUG || self::$SHOW_QUERY)
-	    echo "Checking if table exists: " . $query . "<br><br>";
-	$row = mysql_fetch_assoc(mysql_query($query));
-	if ($row['count'] == 0)
-	    return false;
-	else
-	    return true;
+        if (self::$DEBUG || self::$SHOW_QUERY)
+            echo "Checking if table exists: " . $query . "<br><br>";
+        $row = mysql_fetch_assoc(mysql_query($query));
+        if ($row['count'] == 0)
+            return false;
+        else
+            return true;
     }
 
     /**
@@ -425,14 +468,15 @@ abstract class ROCKETS_MYSQLTable extends ROCKETS_ConfigurableObject {
      * @param string $constraint
      * @return boolean true if constraint exists
      */
-    public static function existsConstraint($table, $constraint) {
-	$query = "SELECT * FROM information_schema.`TABLE_CONSTRAINTS` WHERE TABLE_CONSTRAINTS.TABLE_NAME = '{$table}' and CONSTRAINT_NAME = '{$constraint}'";
-	$result = mysql_query($query);
-	echo $query . "<br>";
-	if ($result && mysql_num_rows($result) > 0)
-	    return true;
-	else
-	    return false;
+    public static function existsConstraint($table, $constraint)
+    {
+        $query = "SELECT * FROM information_schema.`TABLE_CONSTRAINTS` WHERE TABLE_CONSTRAINTS.TABLE_NAME = '{$table}' and CONSTRAINT_NAME = '{$constraint}'";
+        $result = mysql_query($query);
+        echo $query . "<br>";
+        if ($result && mysql_num_rows($result) > 0)
+            return true;
+        else
+            return false;
     }
 
     /**
@@ -440,20 +484,23 @@ abstract class ROCKETS_MYSQLTable extends ROCKETS_ConfigurableObject {
      * @param string $tableName MYSQL tablename
      * @return <type>
      */
-    public static function retrieveTableFields($tableName) {
+    public static function retrieveTableFields($tableName)
+    {
 
-	$tableFields = mysql_query("SHOW COLUMNS FROM {$tableName}");
+        $tableFields = mysql_query("SHOW COLUMNS FROM {$tableName}");
 
-	while ($field = mysql_fetch_assoc($tableFields)) {
+        while ($field = mysql_fetch_assoc($tableFields))
+        {
 
-	    $field_array[] = $field['Field'];
-	    if ($field['Key'] == 'PRI' && isset($this))
-		$this->primary_key_fieldname = $field['Field']; // set primary key
-	}
-	if (BOOL_DEBUG) {
-	    print_r($field_array);
-	}
-	return $field_array;
+            $field_array[] = $field['Field'];
+            if ($field['Key'] == 'PRI' && isset($this))
+                $this->primary_key_fieldname = $field['Field']; // set primary key
+        }
+        if (BOOL_DEBUG)
+        {
+            print_r($field_array);
+        }
+        return $field_array;
     }
 
     /**
@@ -461,21 +508,23 @@ abstract class ROCKETS_MYSQLTable extends ROCKETS_ConfigurableObject {
      * @param <type> $tableName
      * @return <type>
      */
-    protected function getTableFields($tableName) {
+    protected function getTableFields($tableName)
+    {
 
-	$tableFields = self::read("SHOW COLUMNS FROM {$tableName}");
+        $tableFields = self::read("SHOW COLUMNS FROM {$tableName}");
 
-	while ($field = mysql_fetch_assoc($tableFields)) {
+        while ($field = mysql_fetch_assoc($tableFields))
+        {
 
-	    $field_array[] = $field['Field'];
-	    if ($field['Key'] == 'PRI')
-		$this->primary_key_fieldname = $field['Field']; // set primary key
-	}
-	if (BOOL_DEBUG) {
-	    print_r($field_array); 
-		
-	}
-	return $field_array;
+            $field_array[] = $field['Field'];
+            if ($field['Key'] == 'PRI')
+                $this->primary_key_fieldname = $field['Field']; // set primary key
+        }
+        if (BOOL_DEBUG)
+        {
+            print_r($field_array);
+        }
+        return $field_array;
     }
 
     /**
@@ -483,92 +532,104 @@ abstract class ROCKETS_MYSQLTable extends ROCKETS_ConfigurableObject {
      * @param string $tableName
      * @param array $newFields
      */
-    public function modifyTable($tableName, $newFields) {
+    public function modifyTable($tableName, $newFields)
+    {
 
-	if (self::$DEBUG) {
-	    echo "<h1>Table configuration : {$tableName} </h1>";
-	}
-	$fields = self::retrieveTableFields($tableName);
-	if (self::$DEBUG) {
-	    echo "<h1>Retrieved MYSQL fields</h1>";
-	    print_r($fields);
-	    echo PHP_EOL;
-	}
+        if (self::$DEBUG)
+        {
+            echo "<h1>Table configuration : {$tableName} </h1>";
+        }
+        $fields = self::retrieveTableFields($tableName);
+        if (self::$DEBUG)
+        {
+            echo "<h1>Retrieved MYSQL fields</h1>";
+            print_r($fields);
+            echo PHP_EOL;
+        }
 
-	/**
-	 * Track auto increment field to avoid modifying it - mysql doesn't let you modify and will issue an error
-	 */
-	$auto_increment = "";
+        /**
+         * Track auto increment field to avoid modifying it - mysql doesn't let you modify and will issue an error
+         */
+        $auto_increment = "";
 
-	/**
-	 * @todo [mvc] check the field value to make sure something really needs to be modified.
-	 */
+        /**
+         * @todo [mvc] check the field value to make sure something really needs to be modified.
+         */
+        foreach ($newFields as $field => $setting)
+        {
+            echo PHP_EOL;
+            echo "[{$field}] [{$setting}]";
 
-	foreach ($newFields as $field => $setting) {
-	    echo PHP_EOL;
-	    echo "[{$field}] [{$setting}]";
+            if (stristr($setting, "auto_increment"))
+            {
+                $auto_increment = $field;
+                echo "SAVING AUTO INCREMENT FIELD [{$field}]";
+            }
 
-	    if (stristr($setting, "auto_increment")) {
-		$auto_increment = $field;
-		echo "SAVING AUTO INCREMENT FIELD [{$field}]";
-	    }
+            $modifyQuery = "ALTER TABLE {$tableName} MODIFY {$field} {$setting}";
+            $addQuery = "ALTER TABLE {$tableName} ADD {$field} {$setting}";
 
-	    $modifyQuery = "ALTER TABLE {$tableName} MODIFY {$field} {$setting}";
-	    $addQuery = "ALTER TABLE {$tableName} ADD {$field} {$setting}";
-
-	    /**
-	     * Unique Index - prevent adding dupes
-	     */
-	    if (strcasecmp($field, "unique") == 0) {
-		$query = $addQuery;
-		self::dropIndex(array(
-			    'tableName' => $tableName,
-			    'fieldName' => str_replace(array("(", ")"), "", $setting) // remove parenthesis, if any
-			));
-	    } else if (strcasecmp($field, "primary key") == 0) {
-		echo "PRIMARY KEY SETTING: {$setting}" . PHP_EOL;
-		/**
-		 * if its an auto_increment field, do nothing.
-		 */
-		if (str_replace(array("(", ")"), "", $setting) != $auto_increment) {
-		    $query = $addQuery;
-		    // drop primary key first
-		    self::dropPrimaryKey($tableName);
-		}
-	    } else if (!in_array($field, $fields))
-		$query = $addQuery;
-	    else
-		$query = $modifyQuery;
-	    self::exec($query);
-	}
+            /**
+             * Unique Index - prevent adding dupes
+             */
+            if (strcasecmp($field, "unique") == 0)
+            {
+                $query = $addQuery;
+                self::dropIndex(array(
+                    'tableName' => $tableName,
+                    'fieldName' => str_replace(array("(", ")"), "", $setting) // remove parenthesis, if any
+                ));
+            }
+            else if (strcasecmp($field, "primary key") == 0)
+            {
+                echo "PRIMARY KEY SETTING: {$setting}" . PHP_EOL;
+                /**
+                 * if its an auto_increment field, do nothing.
+                 */
+                if (str_replace(array("(", ")"), "", $setting) != $auto_increment)
+                {
+                    $query = $addQuery;
+                    // drop primary key first
+                    self::dropPrimaryKey($tableName);
+                }
+            }
+            else if (!in_array($field, $fields))
+                $query = $addQuery;
+            else
+                $query = $modifyQuery;
+            self::exec($query);
+        }
     }
 
     /**
      * Drop primary key. This must be done before primary key can be modified
      * @param string $ar['table name'] name of MYSQL table
      */
-    public function dropPrimaryKey($tableName) {
-	$tableName = $tableName;
-	$query = "ALTER TABLE {$tableName} drop primary key";
-	self::exec($query);
+    public function dropPrimaryKey($tableName)
+    {
+        $tableName = $tableName;
+        $query = "ALTER TABLE {$tableName} drop primary key";
+        self::exec($query);
     }
 
     /**
      * Drop primary key. This must be done before primary key can be modified
      * @param string $ar['table name'] name of MYSQL table
      */
-    public function dropIndex($ar = null) {
-	$tableName = $ar['tableName'];
-	$fieldName = $ar['fieldName'];
-	/**
-	 * Check to see if constraint exists to prevent "index doesn't exist" error
-	 */
-	if (!self::existsConstraint($tableName, $fieldName)) {
-	    echo "{$fieldName} doesn't exist!" . PHP_EOL;
-	    return;
-	}
-	$query = "ALTER TABLE {$tableName} drop index {$fieldName}";
-	self::exec($query);
+    public function dropIndex($ar = null)
+    {
+        $tableName = $ar['tableName'];
+        $fieldName = $ar['fieldName'];
+        /**
+         * Check to see if constraint exists to prevent "index doesn't exist" error
+         */
+        if (!self::existsConstraint($tableName, $fieldName))
+        {
+            echo "{$fieldName} doesn't exist!" . PHP_EOL;
+            return;
+        }
+        $query = "ALTER TABLE {$tableName} drop index {$fieldName}";
+        self::exec($query);
     }
 
     /**
@@ -579,14 +640,16 @@ abstract class ROCKETS_MYSQLTable extends ROCKETS_ConfigurableObject {
      *
      * $continue - if false, die.
      */
-    static protected function issueError($ar = null) {
-	if (mysql_errno ()) {
-	    if (isset($ar['query']))
-		echo "<p><strong>Error in query:</strong>{$ar['query']}</p>";
-	    echo mysql_error() . "<br>";
-	    if (array_key_exists("continue", $ar) && $ar['continue'] == false)
-		die();
-	}
+    static protected function issueError($ar = null)
+    {
+        if (mysql_errno())
+        {
+            if (isset($ar['query']))
+                echo "<p><strong>Error in query:</strong>{$ar['query']}</p>";
+            echo mysql_error() . "<br>";
+            if (array_key_exists("continue", $ar) && $ar['continue'] == false)
+                die();
+        }
     }
 
     /**
@@ -594,55 +657,63 @@ abstract class ROCKETS_MYSQLTable extends ROCKETS_ConfigurableObject {
      * @param MYSQLresult $result
      * @return array
      */
-    public static function convertResultToArray($result) {
-	$ar = array();
+    public static function convertResultToArray($result)
+    {
+        $ar = array();
 
-	if (mysql_num_rows($result) == 0)
-	    return null;
+        if (mysql_num_rows($result) == 0)
+            return null;
 
-	while ($row = mysql_fetch_assoc($result)) {
-	    $ar[] = $row;
-	}
-	return $ar;
+        while ($row = mysql_fetch_assoc($result))
+        {
+            $ar[] = $row;
+        }
+        return $ar;
     }
 
-    public function remoteCopyTableStructure($sourceDBName, $targetDBName, $sourceTable, $targetTable, $sourceDBLink, $targetDBLink) {
+    public function remoteCopyTableStructure($sourceDBName, $targetDBName, $sourceTable, $targetTable, $sourceDBLink, $targetDBLink)
+    {
 
-	$results = mysql_query('DESCRIBE ' . $sourceDBName . '.' . $sourceTable, $sourceDBLink);
-	$query = 'DROP TABLE IF EXISTS ' . $targetDBName . '.' . $targetTable;
+        $results = mysql_query('DESCRIBE ' . $sourceDBName . '.' . $sourceTable, $sourceDBLink);
+        $query = 'DROP TABLE IF EXISTS ' . $targetDBName . '.' . $targetTable;
 
-	mysql_query($query, $targetDBLink); // write to remote DB
-	if (mysql_errno ())
-	    echo "<h3>" . mysql_error($targetDB) . "</h3>";
+        mysql_query($query, $targetDBLink); // write to remote DB
+        if (mysql_errno())
+            echo "<h3>" . mysql_error($targetDB) . "</h3>";
 
-	$query = 'CREATE TABLE ' . $targetDBName . '.' . $targetTable . ' (';
+        $query = 'CREATE TABLE ' . $targetDBName . '.' . $targetTable . ' (';
 
-	$tmp = '';
-	while ($row = @mysql_fetch_assoc($results)) {
-	    $query .= '`' . $row['Field'] . '` ' . $row['Type'];
+        $tmp = '';
+        while ($row = @mysql_fetch_assoc($results))
+        {
+            $query .= '`' . $row['Field'] . '` ' . $row['Type'];
 
-	    if ($row['Null'] != 'YES') {
-		$query .= ' NOT NULL';
-	    }
-	    if ($row['Default'] != '') {
-		if ($row['Type'] != 'timestamp')
-		    $query .= " DEFAULT '" . $row['Default'] . "' ";
-	    }
-	    if ($row['Extra']) {
-		$query .= ' ' . strtoupper($row['Extra']);
-	    }
-	    if ($row['Key'] == 'PRI') {
-		$tmp = 'primary key(' . $row['Field'] . ')';
-	    }
-	    $query .= ',';
-	}
+            if ($row['Null'] != 'YES')
+            {
+                $query .= ' NOT NULL';
+            }
+            if ($row['Default'] != '')
+            {
+                if ($row['Type'] != 'timestamp')
+                    $query .= " DEFAULT '" . $row['Default'] . "' ";
+            }
+            if ($row['Extra'])
+            {
+                $query .= ' ' . strtoupper($row['Extra']);
+            }
+            if ($row['Key'] == 'PRI')
+            {
+                $tmp = 'primary key(' . $row['Field'] . ')';
+            }
+            $query .= ',';
+        }
 
-	$query .= $tmp . ')';
-	mysql_query($query, $targetDBLink); // write to remote DB
-	if (mysql_errno ())
-	    echo "<h3>" . mysql_error($targetDBLink) . "</h3>";
+        $query .= $tmp . ')';
+        mysql_query($query, $targetDBLink); // write to remote DB
+        if (mysql_errno())
+            echo "<h3>" . mysql_error($targetDBLink) . "</h3>";
 
-	echo $query . "<br>";
+        echo $query . "<br>";
     }
 
     /**
@@ -656,50 +727,56 @@ abstract class ROCKETS_MYSQLTable extends ROCKETS_ConfigurableObject {
      * @param <type> $sourceDBLink
      * @param <type> $targetDBLink
      */
-    public static function remoteCopyTableData($ar) {
-	// $sourceDBName, $targetDBName, $sourceTable, $targetTable, $sourceDBLink, $targetDBLink) {
+    public static function remoteCopyTableData($ar)
+    {
+        // $sourceDBName, $targetDBName, $sourceTable, $targetTable, $sourceDBLink, $targetDBLink) {
 
-	$results = mysql_query('SELECT * FROM ' . $ar['source']['dbname'] . '.' . $ar['source']['table'], $ar['source']['link']);
-	while ($row = @mysql_fetch_assoc($results)) {
-	    //print_r($row);
-	    //echo "<br>" .PHP_EOL;
-	    $query = 'INSERT INTO ' . $ar['target']['dbname'] . '.' . $ar['target']['table'] . ' (';
-	    $data = Array();
-	    while (list($key, $value) = @each($row)) {
-		$data['keys'][] = $key;
-		$data['values'][] = addslashes($value);
-	    }
-	    $query .= join($data['keys'], ', ') . ')' . 'VALUES (\'' . join($data['values'], '\', \'') . '\')';
+        $results = mysql_query('SELECT * FROM ' . $ar['source']['dbname'] . '.' . $ar['source']['table'], $ar['source']['link']);
+        while ($row = @mysql_fetch_assoc($results))
+        {
+            //print_r($row);
+            //echo "<br>" .PHP_EOL;
+            $query = 'INSERT INTO ' . $ar['target']['dbname'] . '.' . $ar['target']['table'] . ' (';
+            $data = Array();
+            while (list($key, $value) = @each($row))
+            {
+                $data['keys'][] = $key;
+                $data['values'][] = addslashes($value);
+            }
+            $query .= join($data['keys'], ', ') . ')' . 'VALUES (\'' . join($data['values'], '\', \'') . '\')';
 
-	    mysql_query($query, $ar['target']['link']); // writing to remoteDB
-	    if (mysql_errno ())
-		echo "<h3>" . mysql_error($ar['target']['link']) . "</h3>";
-	}
+            mysql_query($query, $ar['target']['link']); // writing to remoteDB
+            if (mysql_errno())
+                echo "<h3>" . mysql_error($ar['target']['link']) . "</h3>";
+        }
     }
 
     /**
      * Connect to ANY mysql database (instead of default)
      */
-    public static function connect($username, $password, $dbname, $host='localhost') {
-	if (!$username || !$password || !$dbname) {
-	    throw new Exception();
-	    return null;
-	}
-	$link = mysql_connect($host, $username, $password);
-	mysql_select_db($dbname, $link);
-	if (mysql_errno ())
-	    echo "<h3>" . mysql_error($link) . "</h3>";
-	return $link;
+    public static function connect($username, $password, $dbname, $host='localhost')
+    {
+        if (!$username || !$password || !$dbname)
+        {
+            throw new Exception();
+            return null;
+        }
+        $link = mysql_connect($host, $username, $password);
+        mysql_select_db($dbname, $link);
+        if (mysql_errno())
+            echo "<h3>" . mysql_error($link) . "</h3>";
+        return $link;
     }
 
     /**
      * Drop MYSQL table
      */
-    public function dropTable() {
-	$query = "DROP TABLE IF EXISTS {$this->tbl}";
-	$this->exec($query);
+    public function dropTable()
+    {
+        $query = "DROP TABLE IF EXISTS {$this->tbl}";
+        $this->exec($query);
     }
-    
+
     /**
      * 
      * Detect query type (between or in) given a condition in an conditionset, like
@@ -723,8 +800,8 @@ abstract class ROCKETS_MYSQLTable extends ROCKETS_ConfigurableObject {
             return null;
         }
     }
-    
-        /**
+
+    /**
      * Handles BETWEEN and IN statements
      * @param type $filter_name String or array. Array structure:
      * <code>
@@ -749,25 +826,30 @@ abstract class ROCKETS_MYSQLTable extends ROCKETS_ConfigurableObject {
          * Get query type
          */
         $query_type = self::get_query_type($condition);
-         /**
+        /**
          * if "checked" key is set, use that value and ignore $_REQUEST.
          * This is useful when you want to force generate a WHERE clause even if $_REQUEST value isn't set
          */
-        if($checked) $_REQUEST[$filter_name] = $checked;
-        
+        if ($checked)
+            $_REQUEST[$filter_name] = $checked;
+
         if ($query_type == self::QUERY_TYPE_BETWEEN)
         {
-			if(BOOL_DEBUG) echo "<h1>ROCKETS BETWEEN CHECK</h1>";
+            if (BOOL_DEBUG)
+                echo "<h1>ROCKETS BETWEEN CHECK</h1>";
             /**
              * If $filter_name is an array, create a BETWEEEN statement
              * for example, "name" => array("max_income","min_income")
              */
-            if (is_array($filter_name) && !empty($_REQUEST[$filter_name[0]])  && !empty($_REQUEST[$filter_name[1]]))
+            if (is_array($filter_name))
             {
-				if(BOOL_DEBUG) {
-					echo "REQUEST 0: [{$_REQUEST[$filter_name[0]]}]" .PHP_EOL;
-					echo "REQUEST 0: [{$_REQUEST[$filter_name[1]]}]" .PHP_EOL;
-				}
+                if(empty($_REQUEST[$filter_name[0]]) || empty($_REQUEST[$filter_name[1]])) return null;
+                
+                if (BOOL_DEBUG)
+                {
+                    echo "REQUEST 0: [{$_REQUEST[$filter_name[0]]}]" . PHP_EOL;
+                    echo "REQUEST 0: [{$_REQUEST[$filter_name[1]]}]" . PHP_EOL;
+                }
                 $str = "'{$_REQUEST[$filter_name[0]]}' AND '{$_REQUEST[$filter_name[1]]}'";
             }
             /**
@@ -777,9 +859,11 @@ abstract class ROCKETS_MYSQLTable extends ROCKETS_ConfigurableObject {
             else if (!empty($_REQUEST[$filter_name]) && is_array($_REQUEST[$filter_name]))
             {
                 $first = true;
-
+                
+               // if(BOOL_DEBUG) ROCKETS_String::echo_array_formatted($_REQUEST[$filter_name], "Item Content");
                 foreach ($_REQUEST[$filter_name] as $item)
                 {
+                 //   if(BOOL_DEBUG) ROCKETS_String::echo_array_formatted($item, "Item Content");
                     $clause = "'{$item[0]}' AND '{$item[1]}'";
 
                     $clause = str_replace("[[filter_value]]", $clause, $condition);
@@ -828,7 +912,7 @@ abstract class ROCKETS_MYSQLTable extends ROCKETS_ConfigurableObject {
         $str = str_replace("[[table_name]]", $this->tbl, $str);
         return $str;
     }
-    
+
     /**
      * Construct WHERE clause using arrays
      * @param type $ar
@@ -837,13 +921,15 @@ abstract class ROCKETS_MYSQLTable extends ROCKETS_ConfigurableObject {
     public function get_where_clause($ar)
     {
         $where_clause = "";
-		
-		if(BOOL_DEBUG) ROCKETS_String::echo_array_formatted($ar, "WHERE AR");
-		
-		
+
+        if (BOOL_DEBUG)
+            ROCKETS_String::echo_array_formatted($ar, "WHERE AR");
+
+
         foreach ($ar['conditionset'] as $conditionset)
         {
-			if(BOOL_DEBUG) ROCKETS_String::echo_array_formatted($conditionset, "conditionset");
+            if (BOOL_DEBUG)
+                ROCKETS_String::echo_array_formatted($conditionset, "conditionset");
             /**
              * Check if $conditionset['name'] is an array in case BETWEEN statement is getting sent in
              * if its an array !empty(.. will break.
@@ -851,12 +937,13 @@ abstract class ROCKETS_MYSQLTable extends ROCKETS_ConfigurableObject {
             if (is_array($conditionset['name']) || !empty($_REQUEST[$conditionset['name']]) || isset($conditionset['checked']))
             {
                 $checked = (empty($conditionset['checked'])) ? null : $conditionset['checked']; // make sure value is set in array
-                $where_clause .= $this->auto_construct_condition($conditionset['name'], $conditionset['condition'], $checked);
+                $auto_condition = $this->auto_construct_condition($conditionset['name'], $conditionset['condition'], $checked);
+                if ($auto_condition)
+                    $where_clause .= " AND {$auto_condition}";
             }
         }
         return $where_clause;
     }
-
 
 }
 
