@@ -172,7 +172,8 @@ Class ROCKETS_String
 
     /**
      * Format MYSQL query for pretty output
-     * @param <type> $subject
+	 * 
+     * @param string $subject MYSQL query string
      * @return <type>
      */
     static public function mysql_prettify($subject)
@@ -186,7 +187,7 @@ Class ROCKETS_String
         $subject = preg_replace("/AND/", PHP_EOL . "<br>AND", $subject);
         $subject = preg_replace("/OR/", PHP_EOL . "<br>OR", $subject);
         $subject = preg_replace("/WHERE/", PHP_EOL . "<br>WHERE", $subject);
-        $subject = preg_replace("/ORDER BY/", PHP_EOL . "<br>ORDER BY", $subject);
+        $subject = preg_replace("/ORDER BY/", PHP_EOL . "ORDER BY", $subject);
         $subject = preg_replace("/GROUP BY/", PHP_EOL . "<br>GROUP BY", $subject);
         $subject = preg_replace("/LIMIT/", PHP_EOL . "<br>LIMIT", $subject);
         $subject = "<h2>Query</h2>" . $subject . "<br><br>";
