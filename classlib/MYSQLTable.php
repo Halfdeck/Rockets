@@ -406,10 +406,9 @@ abstract class ROCKETS_MYSQLTable extends ROCKETS_ConfigurableObject
      */
     public static function exec($query)
     {
-
-        if (self::$DEBUG)
-            echo "<strong>Query:</strong> {$query} <br><br>\n";
-        if (self::$EXECUTE)
+        if (BOOL_DEBUG)
+			echo ROCKETS_String::mysql_prettify ($query);
+        if (BOOL_EXECUTE)
         {
             mysql_query($query);
             self::issueError(array("continue" => false, "query" => $query));
@@ -938,6 +937,15 @@ abstract class ROCKETS_MYSQLTable extends ROCKETS_ConfigurableObject
             }
         }
         return $where_clause;
+    }
+	
+	/**
+     * Alias for mysql_insert_id();
+     * @return type
+     */
+    static public function getLastInsertedID()
+    {
+        return mysql_insert_id();
     }
 
 }
