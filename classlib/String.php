@@ -251,11 +251,14 @@ Class ROCKETS_String
     {
         $singular_phrase = "";
         $words = explode(" ", $subject); // in case there are more than one word in $subject
+		$first = true; // count number of words to put spaces in between
         foreach ($words as $word)
         {
             $word = preg_replace("/ies$/i", "y", $word); // companies => company
-            $word = preg_replace("/([^iaou])s$/i", "$1", $word); // roles => role / status => status
+            $word = preg_replace("/([^iaou])s$/i", "$1", $word); // roles => role,  status => status
+			if(!$first) $singular_phrase .= " "; // ad space between words, so "job type" doesn't turn into "jobtype"
             $singular_phrase .= $word;
+			$first = false;
         }
         return $singular_phrase;
     }

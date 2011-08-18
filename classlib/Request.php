@@ -21,6 +21,16 @@ class ROCKETS_Request {
         if(empty($_REQUEST[$key])) return null;
         else return $_REQUEST[$key];
     }
+	
+   /**
+	 * Load $_REQUEST using an array
+	 * @param array $ar 
+	 */
+	static function load(Array $ar) {
+		foreach($ar as $key => $value) {
+			$_REQUEST[$key] = $value;
+		}
+	}
 }
 
 ?>
