@@ -15,7 +15,8 @@ Class ROCKETS_String
      */
     static public function capitalizeName($str)
     {
-        return ucwords($str);
+		$str = strtolower($str); // WASHINGTON => washington
+        return ucwords($str); //    washington => Washington
     }
 
     /**
