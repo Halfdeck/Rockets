@@ -34,6 +34,11 @@ abstract class ROCKETS_MYSQLTable extends ROCKETS_ConfigurableObject
     protected $tbl;
     /** name of primary key field */
     protected $primary_key_fieldname;
+	/**
+	 * Used to maintain primary key(s) in cases where more than one key is used
+	 * @var Array
+	 */
+	protected $primary_keys = array();
     /** fieldnames */
     protected $fieldnames = array();
     /** currently loaded mysql row data - saved to issue get_field calls */
@@ -492,8 +497,10 @@ abstract class ROCKETS_MYSQLTable extends ROCKETS_ConfigurableObject
         {
 
             $field_array[] = $field['Field'];
-            if ($field['Key'] == 'PRI' && isset($this))
-                $this->primary_key_fieldname = $field['Field']; // set primary key
+            if ($field['Key'] == 'PRI' && isset($this)) {
+				$this->primary_key_fieldname = $field['Field']; // set primary key
+			}
+               
         }
         if (BOOL_DEBUG)
         {
@@ -516,8 +523,10 @@ abstract class ROCKETS_MYSQLTable extends ROCKETS_ConfigurableObject
         {
 
             $field_array[] = $field['Field'];
-            if ($field['Key'] == 'PRI')
+            if ($field['Key'] == 'PRI') {
                 $this->primary_key_fieldname = $field['Field']; // set primary key
+				$this->primary_keys[] = $field['Field'];
+			}
         }
         return $field_array;
     }
