@@ -425,15 +425,11 @@ abstract class ROCKETS_MYSQLTable extends ROCKETS_ConfigurableObject
      * @param <type> $query
      * @return <type>
      */
-    public STATIC function read($query)
+    static public function read($query)
     {
         if (BOOL_DEBUG)
         {
             echo ROCKETS_String::mysql_prettify($query);
-            /**
-             * Following has to be called from within the Model class.. or we lose class and method names
-             * @todo we still want an echo statement in a model class.
-             */
         }
         $result = mysql_query($query);
         self::issueError(array("continue" => true, "query" => $query));

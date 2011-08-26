@@ -53,9 +53,16 @@ class ROCKETS_URL {
 		);
 	}
 
-	public function getBaseFileName()
-	{
-		//print_r($_SERVER);
+	/**
+	 * Given /a/b/c/filename.php => filename.php
+	 * @note pathinfo['basename'] also returns the file extension
+	 * 
+	 * @param type $path
+	 * @return type 
+	 */
+	static public function get_filename_from_path($path) {
+		$ar = pathinfo($path);
+		return $ar['basename'];
 	}
 
 	/**
