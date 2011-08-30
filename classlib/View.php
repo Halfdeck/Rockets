@@ -80,11 +80,14 @@ class ROCKETS_View
      * </p>
      * 
      * @param <type> $id
-     * @return object
+     * @return object if $id is null, return a blank HTML object; otherwise, return the HTML object with values filled in
      */
     static public function load_object($id)
     {
-        if($id == null) return null;
+        if($id == null) {
+			$classname = get_class();
+			return new $classname;
+		}
         /**
          * Find the MODEL classname for an HTML class object
          */
