@@ -50,7 +50,8 @@ class ROCKETS_HTML_Select extends ROCKETS_HTML_Form {
 
         if (isset($ar['first string']))
         {
-            $ar['options'] = array('' => $ar['first string']) + $ar['options'];
+			if($ar['options'] == null) $ar['options'] = array('' => $ar['first string']); // prevent error when input array is empty
+            else $ar['options'] = array('' => $ar['first string']) + $ar['options'];
         }
 
         echo "<select name='{$ar['name']}' {$classStr}>";
