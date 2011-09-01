@@ -81,6 +81,24 @@ class ROCKETS_HTML_Form {
 				break;
 		}
 	}
+	
+	/**
+     * 
+     * Returns an array between min, max numbers (like age), which you can
+     * plug into a Form method to draw UI
+     * 
+     * @param type $min
+     * @param type $max
+     * @return type 
+     */
+    static public function get_numbers($min, $max)
+    {
+        for ($i = $min; $i <= $max; $i++)
+        {
+            $ar[$i] = $i;
+        }
+        return $ar;
+    }
 
 }
 
