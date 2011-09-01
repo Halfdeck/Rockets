@@ -102,6 +102,10 @@ class ROCKETS_View
          * this is a JOB_MYSQLTable method
          */
         $result = $o->get_record_by_id($id);
+		if(!$result || mysql_num_rows($result) == 0) {
+			$classname = get_class();
+			return new $classname;
+		}
         /**
          * Return the record wrapped in this HTML class, so properties can be manipulated
          */
