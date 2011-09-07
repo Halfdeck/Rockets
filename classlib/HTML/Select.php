@@ -28,10 +28,13 @@ class ROCKETS_HTML_Select extends ROCKETS_HTML_Form {
      * @param <type> $ar['name'] INPUT name
      * @param <type> $ar['checked'] checked value
      * @param <type> $ar['options']
+	 * @param <type> $ar['display_condition'] if false, don't display - used for dynamically displaying listboxes
      * 
      */
     static public function draw($ar = array(null))
     {
+		if(isset($ar['display_condition']) && $ar['display_condition'] == FALSE) return;
+		
         if (!isset($_REQUEST[$ar['name']]))
         { // prevent errors
             $_REQUEST[$ar['name']] = "";
