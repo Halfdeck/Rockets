@@ -16,12 +16,14 @@ class ROCKETS_HTML_Textbox extends ROCKETS_HTML_Form
      * @param type $name name of the INPUT
      * @param type $obj object used to retrieve value
 	 * @param boolean $options['read only'] activate read only 
+	 * @param int $options['size'] custom input size
      */
     static public function draw_obj($name, $obj, $options = array(null))
     {
 		$readonly = (isset($options['read only']) && $options['read only'] == TRUE) ? self::STR_READ_ONLY : "";
+		$size = (isset($options['size']) && $options['size'] == TRUE) ? "size='{$options['size']}'" : "";
 		
-        echo "<input type='" .self::$input_type ."' name='{$name}' value='{$obj->$name}' {$readonly}/>";
+        echo "<input type='" .self::$input_type ."' name='{$name}' value='{$obj->$name}' {$readonly} {$size}/>";
     }
 	
 	/**

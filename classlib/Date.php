@@ -38,6 +38,7 @@ class ROCKETS_Date {
 	 */
 	static public function mysql_makeDate($str)
 	{
+		if(empty($str)) return null;
 		list($month, $date, $year) = explode("/", $str);
 		return "{$year}/{$month}/{$date}";
 	}
@@ -59,6 +60,7 @@ class ROCKETS_Date {
 	public static function createDateStrFromMYSQL($datestr, $format = self::FRMT_DATETIME)
 	{
 		list($y, $m, $d, $h, $min, $s) = sscanf($datestr, "%d-%d-%d %d:%d:%d");
+		if($y == 0 && $m == 0 && $d == 0) return null;
 		$time = mktime($h, $min, $s, $m, $d, $y);
 		if ($format == self::FRMT_DATETIME)
 			return date("M j, Y g:i A ", $time);
@@ -211,7 +213,7 @@ class ROCKETS_Date {
 	 */
 	static public function isLate($date)
 	{
-		if (time() > self::date_str_to_unix_timestamp($date))
+		if (strtotime("today") > self::date_str_to_unix_timestamp($date))
 			return true;
 		else
 			return false;
