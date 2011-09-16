@@ -89,14 +89,22 @@ class ROCKETS_HTML_Form {
      * 
      * @param type $min
      * @param type $max
+	 * @param float $increment if 2, then array returns 2,4,6,8..., if .5, then 2, 2.5, 3, 3.5....
      * @return type 
      */
-    static public function get_numbers($min, $max)
+    static public function get_numbers($min, $max, $options = array(null))
     {
-        for ($i = $min; $i <= $max; $i++)
+		$options['increment'] = (isset($options['increment'])) ? $options['increment'] : 1;
+		$options['decimals'] = (isset($options['decimals'])) ? $options['decimals'] : 0;
+
+        for ($i = $min; $i <= $max; $i = $i + $options['increment'])
         {
-            $ar[$i] = $i;
+			/**
+			 * We use quotes here to capture floats correctly
+			 */
+            $ar["{$i}"] = number_format($i, $options['decimals']);
         }
+		
         return $ar;
     }
 
