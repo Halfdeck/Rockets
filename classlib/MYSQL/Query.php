@@ -69,6 +69,24 @@ class ROCKETS_MYSQL_Query extends ROCKETS_MYSQL_Base {
 	}
 	
 	/**
+	 * Gets a record ID, given a field name and value.
+	 * This method assumes that field is a unique field and returns one result
+	 * 
+	 * @param type $field_name
+	 * @param type $value 
+	 */
+	public function get_primary_value_by_unique_field($field_name, $value) 
+	{
+		$result = self::read("SELECT {$this->primary_key_fieldname}
+				FROM {$this->tbl} 
+				WHERE {$field_name} = '{$value}'
+				LIMIT 1
+		");
+		$row = mysql_fetch_assoc($result);
+		return $row[$this->primary_key_fieldname];
+	}
+	
+	/**
 	 * Get a single field value using ID
 	 * e.g. grab a user's phone number using user ID
 	 * 
