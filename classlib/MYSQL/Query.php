@@ -79,7 +79,7 @@ class ROCKETS_MYSQL_Query extends ROCKETS_MYSQL_Base {
 	{
 		$result = self::read("SELECT {$this->primary_key_fieldname}
 				FROM {$this->tbl} 
-				WHERE {$field_name} = '{$value}'
+				WHERE {$field_name} = \"{$value}\"
 				LIMIT 1
 		");
 		$row = mysql_fetch_assoc($result);
