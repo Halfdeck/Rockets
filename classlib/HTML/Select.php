@@ -33,6 +33,8 @@ class ROCKETS_HTML_Select extends ROCKETS_HTML_Form {
      */
     static public function draw($ar = array(null))
     {
+		$select_clause = "";
+		
 		if(isset($ar['display_condition']) && $ar['display_condition'] == FALSE) return;
 		
         if (!isset($_REQUEST[$ar['name']]))
@@ -56,16 +58,24 @@ class ROCKETS_HTML_Select extends ROCKETS_HTML_Form {
 			if($ar['options'] == null) $ar['options'] = array('' => $ar['first string']); // prevent error when input array is empty
             else $ar['options'] = array('' => $ar['first string']) + $ar['options'];
         }
-
-        echo "<select name='{$ar['name']}' {$classStr}>";
+		
+		$select_clause .=  "<select name='{$ar['name']}' {$classStr}>";
         foreach ($ar["options"] as $key => $val)
         {
             $selected = "";
             if ($key == $ar["checked"])
                 $selected = " selected='selected'";
-            echo "		<option value='{$key}' {$selected}>{$val}</option>" .PHP_EOL;
+            $select_clause .= "		<option value='{$key}' {$selected}>{$val}</option>" .PHP_EOL;
         }
-        echo "</select>";
+        $select_clause .= "</select>";
+		if(isset($ar['dl'])) {
+			$html = "<dt>{$ar['label']}</dt><dd>{$select_clause}</dd>";
+		}
+		else {
+			$html = $select_clause;
+		}
+		echo $html;
+		
     }
 }
 
