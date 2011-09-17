@@ -22,6 +22,10 @@ class ROCKETS_Date {
 	 * Date Format: 8/1/2011
 	 */
 	const FRMT_DATE_SLASHES = 2;
+	/**
+	 * Time only: 12:00 pm
+	 */
+	const FRMT_TIME = 3;
 
 	/**
 	 *
@@ -62,14 +66,19 @@ class ROCKETS_Date {
 		list($y, $m, $d, $h, $min, $s) = sscanf($datestr, "%d-%d-%d %d:%d:%d");
 		if($y == 0 && $m == 0 && $d == 0) return null;
 		$time = mktime($h, $min, $s, $m, $d, $y);
-		if ($format == self::FRMT_DATETIME)
-			return date("M j, Y g:i A ", $time);
-		else if ($format == self::FRMT_DATE)
-			return date("M j, Y", $time);
-		else if ($format == self::FRMT_DATE_SLASHES)
-			return date("m/j/Y", $time);
-		else
-			return null;
+		
+		switch($format) {
+			case self::FRMT_DATETIME:
+				return date("M j, Y g:i A ", $time);
+			case self::FRMT_DATE:
+				return date("M j, Y", $time);
+			case self::FRMT_DATE_SLASHES:
+				return date("m/j/Y", $time);
+			case self::FRMT_TIME:
+				return date("g:i A", $time);
+			default:
+				return null;
+		}
 	}
 
 	/**
@@ -218,7 +227,13 @@ class ROCKETS_Date {
 		else
 			return false;
 	}
-
+	
+	static public function get_age($birth_date_string) 
+	{
+		$diff = time()-strtotime($birth_date_string);
+		$age = $diff / 31556926;
+		return floor($age); 
+	}
 }
 
 ?>
