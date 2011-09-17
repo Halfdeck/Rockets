@@ -23,7 +23,7 @@ class ROCKETS_HTML_Textbox extends ROCKETS_HTML_Form
 		$readonly = (isset($options['read only']) && $options['read only'] == TRUE) ? self::STR_READ_ONLY : "";
 		$size = (isset($options['size']) && $options['size'] == TRUE) ? "size='{$options['size']}'" : "";
 		
-        echo "<input type='" .self::$input_type ."' name='{$name}' value='{$obj->$name}' {$readonly} {$size}/>";
+        echo "<input type='" .self::$input_type ."' name='{$name}' value=\"{$obj->$name}\" {$readonly} {$size}/>";
     }
 	
 	/**
