@@ -18,6 +18,7 @@ class ROCKETS_Date {
 	 * Date Format: July 4, 2011
 	 */
 	const FRMT_DATE = 1;
+	
 	/**
 	 * Date Format: 8/1/2011
 	 */
@@ -26,7 +27,10 @@ class ROCKETS_Date {
 	 * Time only: 12:00 pm
 	 */
 	const FRMT_TIME = 3;
-
+	/**
+	 * June 10
+	 */
+	const FRMT_DATE_NO_YEAR = 4;
 	/**
 	 *
 	 * @global TIMEZONE - default time zone constant - required
@@ -76,6 +80,8 @@ class ROCKETS_Date {
 				return date("m/j/Y", $time);
 			case self::FRMT_TIME:
 				return date("g:i A", $time);
+			case self::FRMT_DATE_NO_YEAR:
+				return date("M j", $time);
 			default:
 				return null;
 		}
