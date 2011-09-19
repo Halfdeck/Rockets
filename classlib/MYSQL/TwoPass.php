@@ -157,6 +157,7 @@ class ROCKETS_MYSQL_TwoPass extends ROCKETS_MYSQL_Query {
 		$where_clause = $this->get_where_clause($ar);
 		$group_by_clause = $this->get_group_by_clause_two_pass($select_clause);
 		$sort_order = $this->get_sort_clause($ar);
+		$limit_clause = $this->get_limit_clause($ar);
 
 		/**
 		 * Aliased tbl_users as u to do a nested select, to fish out company_name
@@ -165,7 +166,8 @@ class ROCKETS_MYSQL_TwoPass extends ROCKETS_MYSQL_Query {
 			{$from_clause}
 			WHERE 1 {$where_clause}
 			{$group_by_clause}
-			{$sort_order}");
+			{$sort_order}
+			{$limit_clause}");
 
 		$this->countRows();
 		self::$fieldsMeta = self::getResultFields($result);
