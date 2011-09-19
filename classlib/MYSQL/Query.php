@@ -107,6 +107,22 @@ class ROCKETS_MYSQL_Query extends ROCKETS_MYSQL_Base {
 		}
 		else return null;
 	}
+	
+	public function get_limit_clause($ar = array(null)) 
+	{
+		$clause = "";
+		if(!isset($ar['limit'])) return null;
+		else {
+			if(isset($ar['limit']['max_results'])) {
+				$clause = "LIMIT {$ar['limit']['max_results']}";
+				
+				if(isset($ar['limit']['start'])) {
+					$clause .= ", {$ar['limit']['max_results']}";
+				}
+			}
+		}
+		return $clause;
+	}
 
 	public function get_select_clause($ar = "")
 	{
