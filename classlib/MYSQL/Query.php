@@ -87,6 +87,28 @@ class ROCKETS_MYSQL_Query extends ROCKETS_MYSQL_Base {
 	}
 	
 	/**
+	 * Get count 
+	 * e.g. Users::get_count('job_id', 4) => returns # of users associated with job # 4
+	 * 
+	 * @param type $field_name
+	 * @param type $field_value
+	 * @return type 
+	 */
+	static public function get_count($ar = array(null)) 
+	{
+		$tbl = self::constructTableNameByClassName();
+		
+		$where_clause = "";
+		foreach($ar as $name => $value) {
+			$where_clause .= " AND  {$name} = \"{$value}\"";
+		}
+		
+		$result = self::read("SELECT count(*) as count from {$tbl} WHERE 1 {$where_clause}");
+		$row = mysql_fetch_assoc($result);
+		return $row['count'];
+	}
+	
+	/**
 	 * Get a single field value using ID
 	 * e.g. grab a user's phone number using user ID
 	 * 
@@ -94,13 +116,15 @@ class ROCKETS_MYSQL_Query extends ROCKETS_MYSQL_Base {
 	 * @param type $field_name
 	 * @return type 
 	 */
-	static public function get_field_value_by_id($id, $field_name) 
+	static public function get_field_value_by_id($id, $field_name, $options = array(null)) 
 	{
 		if($id == null) return null;
 		
+		$options['id_name'] = (isset($options['id_name'])) ? $options['id_name'] : "id";
+		
 		$tbl = self::constructTableNameByClassName();
 		
-		$result = self::read("SELECT {$field_name} FROM {$tbl} WHERE id={$id} LIMIT 1");
+		$result = self::read("SELECT {$field_name} FROM {$tbl} WHERE {$options['id_name']}={$id} LIMIT 1");
 		if($result && mysql_num_rows($result)>0) {
 			$row = mysql_fetch_assoc($result);
 			return $row[$field_name];
@@ -111,15 +135,15 @@ class ROCKETS_MYSQL_Query extends ROCKETS_MYSQL_Base {
 	public function get_limit_clause($ar = array(null)) 
 	{
 		$clause = "";
-		if(!isset($ar['limit'])) return null;
+		if(!isset($ar['limit']) || !isset($ar['limit']['max_results'])) return null;
 		else {
-			if(isset($ar['limit']['max_results'])) {
-				$clause = "LIMIT {$ar['limit']['max_results']}";
-				
-				if(isset($ar['limit']['start'])) {
-					$clause .= ", {$ar['limit']['max_results']}";
-				}
+			if(isset($ar['limit']['start'])) {
+				$clause .= "LIMIT " .($ar['limit']['start'] * $ar['limit']['max_results']) .",";
 			}
+			else {
+				$clause .= "LIMIT 0, ";
+			}
+			$clause .= "{$ar['limit']['max_results']}";
 		}
 		return $clause;
 	}
