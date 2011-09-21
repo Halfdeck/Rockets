@@ -42,9 +42,12 @@ class ROCKETS_HTML_Textbox extends ROCKETS_HTML_Form
 	 * 
      * @param type $ar size, name, value
      */
-    static public function draw_searchbox($ar = array(null))
+    static public function draw_searchbox($options = array(null))
     {
-        echo "<input type='" .self::$input_type ."' name='{$ar['name']}' size='{$ar['size']}' value='" .ROCKETS_Request::get($ar['name']) ."'>";
+		$id = (isset($options['id']) && $options['id'] == TRUE) ? "id='{$options['id']}'" : "";
+		$class = (isset($options['class']) && $options['class'] == TRUE) ? "class='{$options['class']}'" : "";
+		
+        echo "<input {$id} {$class} type='" .self::$input_type ."' name='{$options['name']}' size='{$options['size']}' value='" .ROCKETS_Request::get($options['name']) ."'>";
     }
 }
 
