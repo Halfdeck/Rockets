@@ -31,7 +31,7 @@ class ROCKETS_HTML_Pagination
 			echo "<p class='" . self::cssPageCount . "'>No Results Found</p>";
 		}
 		else {
-			echo "<p class='" . self::cssPageCount . "'>Page {($limitStart + 1)} of {$pages}</p>";
+			echo "<p class='" . self::cssPageCount . "'>Page " .$limitStart + 1 ." of {$pages}</p>";
 			
 		}
 	}
@@ -75,7 +75,7 @@ class ROCKETS_HTML_Pagination
 	 */
 	static public function draw($ar = array(null))
 	{
-		$baseURL = self::get_base_url($ar['queryVarName']);
+		$baseURL = self::get_base_url();
 		$pages = ceil($ar['totalRows'] / $ar['resultsPerPage']);
 		
 		self::draw_pagecount($ar['limitStart'], $pages);
@@ -91,17 +91,14 @@ class ROCKETS_HTML_Pagination
 		echo "</div>";
 	}
 	
-	static private function get_base_url($queryVarName)
+	static private function get_base_url()
 	{
-		if (!isset($queryVarName))
-			$queryVarName = 'limitStart';
-
 		$url = new ROCKETS_URL;
 
 		/**
 		 * erase limitStart from query string, since has to be overwritten
 		 */
-		$output = $url->getQueryStringArray(array($queryVarName));
+		$output = $url->getQueryStringArray(array(STR_QUERY_PAGINATION));
 
 		$baseURL = $output[STR_URL_QUERY_STRING] . "?"; // create index root path, e.g. /index.php?
 		$output[STR_URL_QUERY_STRING] = null; // erase the URL part of the query string from query string array
@@ -110,9 +107,9 @@ class ROCKETS_HTML_Pagination
 		$baseURL .= $v['query']; // build up path, attach filter/sort variables if any
 
 		if ($v['count'] == 0)
-			$baseURL .= "{$queryVarName}="; // handle & - if limitStart is first value, don't use & or page will 404
+			$baseURL .= STR_QUERY_PAGINATION ."="; // handle & - if limitStart is first value, don't use & or page will 404
 		else
-			$baseURL .= "&{$queryVarName}=";
+			$baseURL .= "&" .STR_QUERY_PAGINATION ."=";
 		return $baseURL;
 	}
 
@@ -170,7 +167,7 @@ class ROCKETS_HTML_Pagination
 		/**
 		 * Draw last index
 		 */
-		self::draw_index($baseURL, $pages - 1, $ar['limitStart']);
+		self::draw_index($baseURL, $pages - 1, $limitStart);
 	}
 
 	static private function draw_index($baseURL, $i, $limitStart)
