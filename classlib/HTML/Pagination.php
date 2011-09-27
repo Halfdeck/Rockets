@@ -31,7 +31,7 @@ class ROCKETS_HTML_Pagination
 			echo "<p class='" . self::cssPageCount . "'>No Results Found</p>";
 		}
 		else {
-			echo "<p class='" . self::cssPageCount . "'>Page " .$limitStart + 1 ." of {$pages}</p>";
+			echo "<p class='" . self::cssPageCount . "'>Page " .($limitStart + 1) ." of {$pages}</p>";
 			
 		}
 	}
@@ -80,9 +80,9 @@ class ROCKETS_HTML_Pagination
 		
 		self::draw_pagecount($ar['limitStart'], $pages);
 
-		echo "<div class='{self::cssClearFix}'></div>";
+		echo "<div class='" .self::cssClearFix ."'></div>";
 		
-		echo "<div id='{self::cssIndex}'>";
+		echo "<div id='" .self::cssIndex ."'>";
 
 		self::draw_prev_next_ahrefs($ar['limitStart'], $baseURL, $pages);
 
@@ -133,6 +133,8 @@ class ROCKETS_HTML_Pagination
 	}
 	
 	static private function draw_indexes($baseURL, $limitStart, $pages) {
+		
+		if($pages == 1) return;
 		
 		$max = $limitStart + 4;
 		if ($max < 5)
