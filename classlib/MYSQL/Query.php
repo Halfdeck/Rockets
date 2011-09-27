@@ -50,6 +50,15 @@ class ROCKETS_MYSQL_Query extends ROCKETS_MYSQL_Base {
 		$this->countRows();
 		return $result;
 	}
+	
+	/**
+	 * Get all records from this table
+	 * 
+	 * @return type 
+	 */
+	public function get_all_records() {
+		return self::read("SELECT * FROM {$this->tbl}");
+	}
 
 	/**
 	 * @PACKAGE JOB_EXTENSION_MYSQLTable
