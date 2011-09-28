@@ -13,6 +13,7 @@ class ROCKETS_HTML_Form {
 	const TYPE_INPUT_CHECKBOX = 'checkbox';
 	const TYPE_OPTION = 'option';
     const TYPE_INPUT_TEXT = 'text';
+	const TYPE_INPUT_PASSWORD = 'password';
 
 	/**
 	 * Draw a listbox given an array of values.
