@@ -68,14 +68,8 @@ class ROCKETS_HTML_Select extends ROCKETS_HTML_Form {
             $select_clause .= "		<option value='{$key}' {$selected}>{$val}</option>" .PHP_EOL;
         }
         $select_clause .= "</select>";
-		if(isset($ar['dl'])) {
-			$html = "<dt>{$ar['label']}</dt><dd>{$select_clause}</dd>";
-		}
-		else {
-			$html = $select_clause;
-		}
-		echo $html;
 		
+		echo self::dl_wrap($select_clause, $ar);
     }
 }
 
