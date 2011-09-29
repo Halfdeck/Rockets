@@ -108,6 +108,20 @@ class ROCKETS_HTML_Form {
 		
         return $ar;
     }
+	
+	/**
+	 * Wrap html in DT/DD
+	 * 
+	 * @param type $html
+	 * @param type $options
+	 * @return type 
+	 */
+	static public function dl_wrap($html, $options) {
+		if(isset($options['dl'])) {
+			$html = "<dt>{$options['label']}</dt><dd>{$html}</dd>";
+		}
+		return $html;
+	}
 
 }
 
