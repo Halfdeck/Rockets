@@ -72,7 +72,7 @@ class ROCKETS_MYSQL_TwoPass extends ROCKETS_MYSQL_Query {
 	 * 
 	 * @param string $filename 
 	 */
-	static public function load_global($filename = null)
+	static public function load_global($filename = null, $options = array(null))
 	{
 		if (empty($filename))
 		{
@@ -150,7 +150,7 @@ class ROCKETS_MYSQL_TwoPass extends ROCKETS_MYSQL_Query {
 		else
 			$filename = null;
 
-		self::load_global($filename);
+		self::load_global($filename, $ar);
 
 		$select_clause = $this->get_select_clause_two_pass();
 		$from_clause = $this->get_from_clause_two_pass();
