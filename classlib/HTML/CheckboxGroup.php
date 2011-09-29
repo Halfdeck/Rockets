@@ -50,13 +50,17 @@ class ROCKETS_HTML_CheckboxGroup extends ROCKETS_HTML_Form {
 			$ar['options'] = array('' => $ar['first string']) + $ar['options'];
 		}
 
+		echo "<ul {$classStr}>";
 		foreach ($ar["options"] as $key => $value)
 		{
 			$selected = "";
 			if (isset($ar["checked"][$key]))
 				$selected = self::get_selected_string(self::$input_type);
+			echo "<li>";
 			echo "<input {$classStr} type='" .self::$input_type ."' name='{$ar['name']}[{$key}]' value='{$key}' {$selected}>{$value}" . PHP_EOL;
+			echo "</li>";
 		}
+		echo "</ul>";
 	}
 
 }
