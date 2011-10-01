@@ -99,6 +99,25 @@ Class ROCKETS_String
         else
             return $zip . "-" . $ext;
     }
+	
+	/**
+	 * Merge two strings and return a combined string
+	 * Example: $string1 = "create,delete,edit"; $string2 = "create"; return value => "create,delete,edit"
+	 * 
+	 * @param type $string1
+	 * @param type $string2
+	 * @return type 
+	 */
+	
+	static public function merge_comma_delimited_strings($string1, $string2) 
+	{
+		$ar1 = explode(",", $string1);
+		$ar2 = explode(",", $string2);
+		$combined_ar = array_merge($ar1, $ar2); // combine arrays, produces dupes
+		$combined_ar = array_unique($combined_ar); // get rid of dupe values
+		$result = implode(",", $combined_ar);
+		return $result;
+	}
 
     /**
      * Split phone number into 3 components
