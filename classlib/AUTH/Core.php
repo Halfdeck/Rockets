@@ -249,7 +249,8 @@ abstract class ROCKETS_AUTH_Core {
 				}
 				else
 				{
-					$this->$name = $_SESSION[$name];
+					if(isset($_SESSION[$name])) $this->$name = $_SESSION[$name];
+					else $this->$name = NULL;
 					return $this->$name;
 				}
 		};
