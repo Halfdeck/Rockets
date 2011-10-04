@@ -50,13 +50,14 @@ class ROCKETS_MYSQL_Query extends ROCKETS_MYSQL_Base {
 		$this->countRows();
 		return $result;
 	}
-	
+
 	/**
 	 * Get all records from this table
 	 * 
 	 * @return type 
 	 */
-	public function get_all_records() {
+	public function get_all_records()
+	{
 		return self::read("SELECT * FROM {$this->tbl}");
 	}
 
@@ -72,11 +73,11 @@ class ROCKETS_MYSQL_Query extends ROCKETS_MYSQL_Base {
 	{
 		if ($id == null)
 			return false;
-			
+
 		return self::read("SELECT * FROM {$this->tbl}
 			WHERE {$this->primary_key_fieldname} = '{$id}'");
 	}
-	
+
 	/**
 	 * Gets a record ID, given a field name and value.
 	 * This method assumes that field is a unique field and returns one result
@@ -84,7 +85,7 @@ class ROCKETS_MYSQL_Query extends ROCKETS_MYSQL_Base {
 	 * @param type $field_name
 	 * @param type $value 
 	 */
-	public function get_primary_value_by_unique_field($field_name, $value) 
+	public function get_primary_value_by_unique_field($field_name, $value)
 	{
 		$result = self::read("SELECT {$this->primary_key_fieldname}
 				FROM {$this->tbl} 
@@ -94,7 +95,7 @@ class ROCKETS_MYSQL_Query extends ROCKETS_MYSQL_Base {
 		$row = mysql_fetch_assoc($result);
 		return $row[$this->primary_key_fieldname];
 	}
-	
+
 	/**
 	 * Get count 
 	 * e.g. Users::get_count('job_id', 4) => returns # of users associated with job # 4
@@ -103,20 +104,21 @@ class ROCKETS_MYSQL_Query extends ROCKETS_MYSQL_Base {
 	 * @param type $field_value
 	 * @return type 
 	 */
-	static public function get_count($ar = array(null)) 
+	static public function get_count($ar = array(null))
 	{
 		$tbl = self::constructTableNameByClassName();
-		
+
 		$where_clause = "";
-		foreach($ar as $name => $value) {
+		foreach ($ar as $name => $value)
+		{
 			$where_clause .= " AND  {$name} = \"{$value}\"";
 		}
-		
+
 		$result = self::read("SELECT count(*) as count from {$tbl} WHERE 1 {$where_clause}");
 		$row = mysql_fetch_assoc($result);
 		return $row['count'];
 	}
-	
+
 	/**
 	 * Get a single field value using ID
 	 * e.g. grab a user's phone number using user ID
@@ -125,31 +127,38 @@ class ROCKETS_MYSQL_Query extends ROCKETS_MYSQL_Base {
 	 * @param type $field_name
 	 * @return type 
 	 */
-	static public function get_field_value_by_id($id, $field_name, $options = array(null)) 
+	static public function get_field_value_by_id($id, $field_name, $options = array(null))
 	{
-		if($id == null) return null;
-		
+		if ($id == null)
+			return null;
+
 		$options['id_name'] = (isset($options['id_name'])) ? $options['id_name'] : "id";
-		
+
 		$tbl = self::constructTableNameByClassName();
-		
+
 		$result = self::read("SELECT {$field_name} FROM {$tbl} WHERE {$options['id_name']}={$id} LIMIT 1");
-		if($result && mysql_num_rows($result)>0) {
+		if ($result && mysql_num_rows($result) > 0)
+		{
 			$row = mysql_fetch_assoc($result);
 			return $row[$field_name];
 		}
-		else return null;
+		else
+			return null;
 	}
-	
-	public function get_limit_clause($ar = array(null)) 
+
+	public function get_limit_clause($ar = array(null))
 	{
 		$clause = "";
-		if(!isset($ar['limit']) || !isset($ar['limit']['max_results'])) return null;
-		else {
-			if(isset($ar['limit']['start'])) {
-				$clause .= "LIMIT " .($ar['limit']['start'] * $ar['limit']['max_results']) .",";
+		if (!isset($ar['limit']) || !isset($ar['limit']['max_results']))
+			return null;
+		else
+		{
+			if (isset($ar['limit']['start']))
+			{
+				$clause .= "LIMIT " . ($ar['limit']['start'] * $ar['limit']['max_results']) . ",";
 			}
-			else {
+			else
+			{
 				$clause .= "LIMIT 0, ";
 			}
 			$clause .= "{$ar['limit']['max_results']}";
@@ -217,8 +226,9 @@ class ROCKETS_MYSQL_Query extends ROCKETS_MYSQL_Base {
 				 * If 'default' value is set and no dynamic value is sent in, use the
 				 * default value
 				 */
-				if($checked == null && isset($conditionset['default']) && ROCKETS_Request::get($conditionset['name']) == NULL) {
-					
+				if ($checked == null && isset($conditionset['default']) && ROCKETS_Request::get($conditionset['name']) == NULL)
+				{
+
 					$checked = $conditionset['default'];
 					//echo "generating checked<BR>{$checked}<br>";
 				}
@@ -353,7 +363,8 @@ class ROCKETS_MYSQL_Query extends ROCKETS_MYSQL_Base {
 		}
 		else if ($query_type == self::QUERY_TYPE_IN)
 		{
-			if(BOOL_DEBUG) echo "<h1>processing in {$checked}</h1>";
+			if (BOOL_DEBUG)
+				echo "<h1>processing in {$checked}</h1>";
 			/**
 			 * if filter value is an array, create an "IN (x,y,z)" mysql clause
 			 * e.g. $_REQUEST['zip_codes'] = array(1,2,3,4,5....)
@@ -362,14 +373,14 @@ class ROCKETS_MYSQL_Query extends ROCKETS_MYSQL_Base {
 			{
 				$str = "(" . ROCKETS_String::mysql_get_in_list($_REQUEST[$filter_name]) . ")";
 			}
-			else if(is_array($checked)) 
+			else if (is_array($checked))
 			{
 				$str = "(" . ROCKETS_String::mysql_get_in_list($checked) . ")";
 			}
 			/**
 			 * Single value sent in: e.g. (1)
 			 */
-			else if(isset($_REQUEST[$filter_name]))
+			else if (isset($_REQUEST[$filter_name]))
 			{
 				$str = "({$_REQUEST[$filter_name]})";
 			}

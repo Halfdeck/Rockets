@@ -113,6 +113,120 @@ class ROCKETS_MYSQL_Base {
 	}
 
 	/**
+	 * Retrieve result Meta data
+	 * This is useful for finding out the table name of fields when
+	 * you pull results from more than one table at a time.
+	 * 
+	 * @param <type> $result
+	 * @return Array
+	 */
+	static public function getResultFields($result)
+	{
+		$ar = array();
+		while ($row = mysql_fetch_field($result))
+		{
+			$ar[] = array(
+				'name' => $row->name, // field name
+				'table' => $row->table); // table name
+		}
+		return $ar;
+	}
+
+	/**
+	 * A generic array generation code
+	 * returns an associative array of key=>value pairs, given a mysql result
+	 * 
+	 * Example: make_array($result, "name") => array('bob','joe','mary'..)
+	 * 	make_array($result, "name", "user_id) => array('12311' => 'bob', '1221' => 'joe'...)
+	 * 
+	 * @param type $key_name
+	 * @param type $value_name
+	 * @param type $result
+	 * @return type 
+	 */
+	static public function make_array($result, $key_name, $value_name = null)
+	{
+		$ar = array();
+		/**
+		 * Reset result pointer (in case this method is called more than once)
+		 */
+		mysql_data_seek($result, 0);
+		while ($row = mysql_fetch_array($result))
+		{
+			if (empty($value_name))
+			{
+				/**
+				 * creates array(1,2,3,4,5)
+				 */
+				array_push($ar, $row[$key_name]);
+			}
+			else
+			{
+				/**
+				 * creates associative: array("1"=>"bob","2"=>"joe"...)
+				 */
+				$ar[$row[$key_name]] = $row[$value_name];
+			}
+		}
+		return $ar;
+	}
+
+	/**
+	 * Modified mysql_fetch_object - that uses metadata to bind fields to properties
+	 * when results come from multiple tables
+	 * 
+	 * @param <type> $result
+	 * @param String $classname
+	 * @param array $fieldsMetaData
+	 * @return Object or FALSE on end of result
+	 */
+	static public function bindToObject($result, $classname, Array $fieldsMetaData)
+	{
+		/**
+		 * Put results in an array.
+		 * You can't use mysql_fetch_assoc here because assoc uses array key values, and if key
+		 * values collide (due to pulling from multiple tables) then some values will be lost.
+		 */
+		$row = mysql_fetch_array($result);
+
+		/**
+		 * we're looping through each record. If mysql_fetch_array returns FALSE,
+		 * we're at the end of result set, so stop.
+		 */
+		if ($row === false)
+		{
+			return false;
+		}
+
+		$length = count($fieldsMetaData);
+
+		$o = new $classname; // instantiate a new object
+		$tablename = self::constructTableNameByClassName($classname);
+
+		/**
+		 * Loop through each field => [id],[username],[first_name].....
+		 */
+		for ($i = 0; $i < $length; $i++)
+		{
+			$fieldvalue = $row[$i];
+			/**
+			 * When values come from multiple fields, the primary table values will be "user_id","zip_code"..
+			 * While secondary table values will be "tablename_user_id", "tablename_zip_code"...
+			 */
+			if ($fieldsMetaData[$i]['table'] == $tablename)
+			{
+				$fieldname = $fieldsMetaData[$i]['name'];
+			}
+			else
+			{
+				$fieldname = $fieldsMetaData[$i]['table'] . "_" . $fieldsMetaData[$i]['name'];
+			}
+			$o->$fieldname = $fieldvalue;
+		}
+		return $o;
+	}
+
+	/**
 	 * @DUPLICATE Duplicates ROCKETS_MYSQLTable
 	 * 
 	 * Select statement wrapper - used to generate feedback AND possibly sanitize MYSQL queries for security
