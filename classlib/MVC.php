@@ -6,13 +6,10 @@
  * @author Halfdeck
  */
 class ROCKETS_MVC {
-	/**
-	 * @DUPLICATE
-	 * @todo automate this - lazy-load once on Construct
-	 */
-	const CLASS_MODEL_PREFIX = "JOB_MODEL_";
-	const CLASS_VIEW_PREFIX = "JOB_HTML_";
-	const CLASS_CONTROLLER_PREFIX = "JOB_CONTROLLER_";
+	
+	const PREFIX_MODEL = "_MODEL_";
+	const PREFIX_VIEW = "_HTML_";
+	const PREFIX_CONTROLLER = "_CONTROLLER_";
 	
 	const TYPE_MODEL = 1;
 	const TYPE_VIEW = 2;
@@ -68,11 +65,11 @@ class ROCKETS_MVC {
 		
 		switch($type) {
 			case self::TYPE_CONTROLLER:
-				return self::CLASS_CONTROLLER_PREFIX .ucfirst($directory_name);
+				return PREFIX_APPLICATION_CLASSLIB .self::PREFIX_CONTROLLER .ucfirst($directory_name);
 			case self::TYPE_MODEL:
-				return self::CLASS_MODEL_PREFIX .ucfirst($directory_name);
+				return PREFIX_APPLICATION_CLASSLIB .self::PREFIX_MODEL .ucfirst($directory_name);
 			case self::TYPE_VIEW:
-				return self::CLASS_VIEW_PREFIX .ucfirst($directory_name);
+				return PREFIX_APPLICATION_CLASSLIB .self::PREFIX_VIEW .ucfirst($directory_name);
 			default:
 				return false;
 		}
