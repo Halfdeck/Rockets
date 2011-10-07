@@ -69,8 +69,12 @@ abstract class ROCKETS_AUTH_Core {
 		switch ($_REQUEST[STR_URL_QUERY_STRING]) {
 			/**
 			 * If we're on the Logout page, logout by clearing sessions and cookies.
+			 * Redirect to the login page.
 			 */
 			case FILE_LOGOUT:
+				$this->logout();
+				ROCKETS_HTTP::redirect(RPATH_ROOT . "/" . FILE_LOGIN);
+				break;
 			/**
 			 * If we're on the Register page, logout (clear sessions and cookies)
 			 * Don't redirect: allow user to stay on this page so he/she can register
