@@ -50,6 +50,17 @@ class ROCKETS_Date {
 		list($month, $date, $year) = explode("/", $str);
 		return "{$year}/{$month}/{$date}";
 	}
+	
+	/**
+	 * "Jan 1, 2011 1:30 am" -> "2011/1/1 13:30:00"
+	 * 
+	 * @param type $str 
+	 */
+	static public function mysql_makeDateTime($str) 
+	{
+		$result = strtotime($str);
+		return date("Y-m-d H:i:s", $result);
+	}
 
 	/**
 	 * takes a string like "06/02/2010" and returns "June 2, 2010"
