@@ -15,7 +15,7 @@ class ROCKETS_HTML_Textarea extends ROCKETS_HTML_Form {
 	 */
 	static public function draw($name, $obj, $col, $row)
 	{
-		echo "<textarea name='{$name}' cols='{$col}' rows='{$row}'/>{$obj->$name}</textarea>";
+		echo "<textarea name='{$name}' cols='{$col}' rows='{$row}'>{$obj->$name}</textarea>";
 	}
 
 }
