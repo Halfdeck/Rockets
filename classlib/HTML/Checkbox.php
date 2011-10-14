@@ -25,10 +25,13 @@ class ROCKETS_HTML_Checkbox extends ROCKETS_HTML_Form {
 	static public function draw_obj($name, $obj, $options = array(null))
 	{
 		$input_type = self::TYPE_INPUT_CHECKBOX;
-		$selected = ($obj->$name == true) ? $selected = self::get_selected_string($input_type) : "";
 		
-		$html = "<input type='hidden' name='{$name}' value='false' />" . PHP_EOL;
-		$html .= "<input type='{$input_type}' value='1' name='{$name}' {$selected} />" . PHP_EOL;
+		$value = ($options['value']) ? $options['value'] : 1;
+		$null_value = ($options['null value']) ? $options['null value'] : 'false';
+		$selected = ($obj->$name == $value) ? $selected = self::get_selected_string($input_type) : "";
+		
+		$html = "<input type='hidden' name='{$name}' value='{$null_value}' />" . PHP_EOL;
+		$html .= "<input type='{$input_type}' value='{$value}' name='{$name}' {$selected} />" . PHP_EOL;
 		
 		echo self::dl_wrap($html, $options);
 	}
