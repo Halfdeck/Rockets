@@ -47,8 +47,8 @@ class ROCKETS_Date {
 	static public function mysql_makeDate($str)
 	{
 		if(empty($str)) return null;
-		list($month, $date, $year) = explode("/", $str);
-		return "{$year}/{$month}/{$date}";
+		$time = strtotime($str);
+		return date("Y-m-d", $time);
 	}
 	
 	/**
