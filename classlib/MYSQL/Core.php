@@ -13,32 +13,35 @@
  *
  */
 class ROCKETS_MYSQL_Core {
-    private static $db;
 
-    /**
-     * @global DB_HOST
-     * @global DB_USER
-     * @global DB_PASS
-     * @global DB_NAME
-     * @global BOOL_DEBUG
-     * @global BOOL_EXECUTE
-     */
+	private static $db;
 
-    /**
-     * Connect to MYSQL database
-     */
-    static public function connect() {
-    $db_sock = defined("DB_SOCK")? DB_SOCK: NULL;
-	self::$db = mysql_connect(DB_HOST.$db_sock, DB_USER, DB_PASS);
-	mysql_select_db(DB_NAME, self::$db);
+	/**
+	 * @global DB_HOST
+	 * @global DB_USER
+	 * @global DB_PASS
+	 * @global DB_NAME
+	 * @global BOOL_DEBUG
+	 * @global BOOL_EXECUTE
+	 */
 
-    }
-    /**
-     * Disconnect from MYSQL
-     */
-    static public function disconnect() {
-	mysql_close(self::$db);
-    }
+	/**
+	 * Connect to MYSQL database
+	 */
+	static public function connect()
+	{
+		self::$db = mysql_connect(DB_HOST, DB_USER, DB_PASS);
+		mysql_select_db(DB_NAME, self::$db);
+	}
+
+	/**
+	 * Disconnect from MYSQL
+	 */
+	static public function disconnect()
+	{
+		mysql_close(self::$db);
+	}
+
 }
 
 ?>
