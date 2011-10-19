@@ -31,7 +31,7 @@ class ROCKETS_MYSQL_Core {
 	static public function connect()
 	{
 		$db_sock = defined("DB_SOCK")? DB_SOCK: NULL;
-		self::$db = mysql_connect(DB_HOST, DB_USER, DB_PASS);
+		self::$db = mysql_connect(DB_HOST.$db_sock, DB_USER, DB_PASS);
 		mysql_select_db(DB_NAME, self::$db);
 	}
 
