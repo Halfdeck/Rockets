@@ -91,7 +91,7 @@ class ROCKETS_HTML_Pagination
 		echo "</div>";
 	}
 	
-	static private function get_base_url()
+	static protected function get_base_url()
 	{
 		$url = new ROCKETS_URL;
 
