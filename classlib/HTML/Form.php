@@ -122,6 +122,20 @@ class ROCKETS_HTML_Form {
 		}
 		return $html;
 	}
+	
+	/**
+	 * Similar to dl_wrap()
+	 * 
+	 * @param type $html
+	 * @param type $options 
+	 */
+	static public function li_label_wrap($html, $options) 
+	{
+		if(isset($options['li'])) {
+			$html = "<li><label>{$options['label']}</label>{$html}</li>";
+		}
+		return $html;
+	}
 
 }
 
