@@ -34,8 +34,13 @@ class ROCKETS_HTML_Select extends ROCKETS_HTML_Form {
     static public function draw($ar = array(null))
     {
 		$select_clause = "";
+		$disabled = "";
 		
 		if(isset($ar['display_condition']) && $ar['display_condition'] == FALSE) return;
+		
+		if(isset($ar['disabled'])) {
+			$disabled = "disabled=disabled";
+		}
 		
         if (!isset($_REQUEST[$ar['name']]))
         { // prevent errors
@@ -59,7 +64,7 @@ class ROCKETS_HTML_Select extends ROCKETS_HTML_Form {
             else $ar['options'] = array('' => $ar['first string']) + $ar['options'];
         }
 		
-		$select_clause .=  "<select name='{$ar['name']}' {$classStr}>";
+		$select_clause .=  "<select name='{$ar['name']}' {$classStr} {$disabled}>";
         foreach ($ar["options"] as $key => $val)
         {
             $selected = "";
@@ -69,7 +74,17 @@ class ROCKETS_HTML_Select extends ROCKETS_HTML_Form {
         }
         $select_clause .= "</select>";
 		
-		echo self::dl_wrap($select_clause, $ar);
+		///////////////////////////////////////
+
+		if(isset($ar['dl'])) {
+			return self::dl_wrap($select_clause, $ar);
+		}
+		else if(isset($ar['li'])) {
+			return self::li_label_wrap($select_clause, $ar);
+		}
+		else {
+			return $select_clause;
+		}
     }
 }
 
