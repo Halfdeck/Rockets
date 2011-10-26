@@ -33,7 +33,7 @@ class ROCKETS_HTML_Checkbox extends ROCKETS_HTML_Form {
 		$html = "<input type='hidden' name='{$name}' value='{$null_value}' />" . PHP_EOL;
 		$html .= "<input type='{$input_type}' value='{$value}' name='{$name}' {$selected} />" . PHP_EOL;
 		
-		echo self::dl_wrap($html, $options);
+		return self::dl_wrap($html, $options);
 	}
 
 }
