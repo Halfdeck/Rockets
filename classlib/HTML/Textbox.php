@@ -27,7 +27,13 @@ class ROCKETS_HTML_Textbox extends ROCKETS_HTML_Form
 		
         $html = "<input type='" .self::$input_type ."' name='{$name}' value=\"{$obj->$name}\" {$readonly} {$size} {$id} {$class}/>";
 		
-		echo self::dl_wrap($html, $options);
+		if(isset($options['dl'])) {
+			return self::dl_wrap($html, $options);
+		}
+		else if(isset($options['li'])) {
+			return self::li_label_wrap($html, $options);
+		}
+		else return $html;
     }
 	
 	/**
@@ -49,7 +55,7 @@ class ROCKETS_HTML_Textbox extends ROCKETS_HTML_Form
 		$id = (isset($options['id']) && $options['id'] == TRUE) ? "id='{$options['id']}'" : "";
 		$class = (isset($options['class']) && $options['class'] == TRUE) ? "class='{$options['class']}'" : "";
 		
-        echo "<input {$id} {$class} type='" .self::$input_type ."' name='{$options['name']}' size='{$options['size']}' value='" .ROCKETS_Request::get($options['name']) ."'>";
+        return "<input {$id} {$class} type='" .self::$input_type ."' name='{$options['name']}' size='{$options['size']}' value='" .ROCKETS_Request::get($options['name']) ."'>";
     }
 }
 
