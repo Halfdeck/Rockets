@@ -169,6 +169,7 @@ abstract class ROCKETS_AUTH_Core {
 		if ($username == "" or $password == "" or $this->is_valid($username, $password) == FALSE)
 		{
 			$this->logout();
+			return false;
 		}
 		else
 		{
