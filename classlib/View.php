@@ -340,6 +340,8 @@ class ROCKETS_View extends ROCKETS_MVC
 	 * 
 	 * $fieldname defaults to the group_concat_str property generated using ->group_concat()
 	 * 
+	 * @warning: Must run group_concat() for is_member() to work
+	 * 
 	 * @param type $fieldname
 	 * @param type $value
 	 * @return type 
