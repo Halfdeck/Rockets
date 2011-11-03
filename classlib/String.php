@@ -367,6 +367,16 @@ Class ROCKETS_String
         }
         return $str;
     }
+	
+	/**
+	 * Turn an array of emails into a string
+	 * Example: array('xyz@gmail.com','abc@hotmail.com') => xyz@gmail.com;abc@hotmail.com;...
+	 * @param type $emails 
+	 */
+	static public function email_array_to_string($emails)
+	{
+		return implode(';', $emails);
+	}
 
 }
 
