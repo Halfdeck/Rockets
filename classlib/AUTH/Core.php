@@ -193,7 +193,7 @@ abstract class ROCKETS_AUTH_Core {
 		}
 		elseif (isset($_COOKIE[self::USERNAME]) && isset($_COOKIE[self::PASSWORD]))
 		{
-			if ($this->is_valid($username, $password))
+			if ($this->is_valid($_COOKIE[self::USERNAME], $_COOKIE[self::PASSWORD]))
 			{
 				ROCKETS_HTTP::redirect(FILE_SUCCESS);
 			}
