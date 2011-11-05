@@ -8,7 +8,6 @@
 class ROCKETS_HTML_Textbox extends ROCKETS_HTML_Form 
 {
 	static $input_type = self::TYPE_INPUT_TEXT;
-	const STR_READ_ONLY = "readonly='readonly'";
 	
     /**
      * Auto-draws a textbox INPUT, using a class object
