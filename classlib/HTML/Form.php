@@ -14,6 +14,8 @@ class ROCKETS_HTML_Form {
 	const TYPE_OPTION = 'option';
     const TYPE_INPUT_TEXT = 'text';
 	const TYPE_INPUT_PASSWORD = 'password';
+	
+	const STR_READ_ONLY = "readonly='readonly'";
 
 	/**
 	 * Draw a listbox given an array of values.
