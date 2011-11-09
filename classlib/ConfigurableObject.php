@@ -177,7 +177,7 @@ abstract class ROCKETS_ConfigurableObject
 		$return_str = ob_get_contents();
 		ob_clean();
 		
-		mail(EMAIL_ADMIN, "Script Error on" .$_SERVER['HTTP_HOST'], $return_str);
+		mail(EMAIL_ADMIN, "Script Error on " .$_SERVER['HTTP_HOST'], $return_str);
 		die($return_str);
     }
 
