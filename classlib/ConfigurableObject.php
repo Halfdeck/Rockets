@@ -169,8 +169,16 @@ abstract class ROCKETS_ConfigurableObject
 		 */
 		
 		$ar = debug_backtrace();
+		/**
+		 * Capture error output
+		 */
+		ob_start();
 		eval('?>' . file_get_contents(PATH_TEMPLATES ."/" .FILE_TEMPLATE_DEBUG_BACKTRACE) . '<?');
-		die();
+		$return_str = ob_get_contents();
+		ob_clean();
+		
+		mail(EMAIL_ADMIN, "Script Error on" .$_SERVER['HTTP_HOST'], $return_str);
+		die($return_str);
     }
 
     /**
