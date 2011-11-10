@@ -19,7 +19,7 @@ class ROCKETS_HTML_Textarea extends ROCKETS_HTML_Form {
 		$class = (isset($options['class'])) ? "class='{$options['class']}'" : null;
 		$readonly = (isset($options['read only']) && $options['read only'] == TRUE) ? self::STR_READ_ONLY : "";
 		
-		echo "<textarea name='{$name}' cols='{$col}' rows='{$row}' {$id} {$class} {$readonly}>{$obj->$name}</textarea>";
+		return "<textarea name='{$name}' cols='{$col}' rows='{$row}' {$id} {$class} {$readonly}>{$obj->$name}</textarea>";
 	}
 
 }
