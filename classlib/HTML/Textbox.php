@@ -23,8 +23,9 @@ class ROCKETS_HTML_Textbox extends ROCKETS_HTML_Form
 		$size = (isset($options['size']) && $options['size'] == TRUE) ? "size='{$options['size']}'" : "";
 		$id = (isset($options['id']) && $options['id'] == TRUE) ? "id='{$options['id']}'" : "";
 		$class = (isset($options['class']) && $options['class'] == TRUE) ? "class='{$options['class']}'" : "";
+		$type = (isset($options['type'])) ? "type='{$options['type']}'" : "type='" .self::$input_type ."'";
 		
-        $html = "<input type='" .self::$input_type ."' name='{$name}' value=\"{$obj->$name}\" {$readonly} {$size} {$id} {$class}/>";
+        $html = "<input {$type} name='{$name}' value=\"{$obj->$name}\" {$readonly} {$size} {$id} {$class}/>";
 		
 		if(isset($options['dl'])) {
 			return self::dl_wrap($html, $options);
