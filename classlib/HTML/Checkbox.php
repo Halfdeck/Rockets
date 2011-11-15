@@ -37,6 +37,41 @@ class ROCKETS_HTML_Checkbox extends ROCKETS_HTML_Form {
 	}
 	
 	/**
+	 * Mod of draw_obj - for capturing $_REQUEST and auto filling the checkbox,
+	 * like ROCKETS_HTML_Select::draw() - used in a search form instead of 
+	 * object edit form
+	 * 
+	 * @param type $ar
+	 * @return type 
+	 */
+	static public function draw($ar = array(null))
+	{
+		$html = "";
+		
+		/**
+		 * Attach a label if specified
+		 */
+		if($ar['label']) {
+			$html .= "<label>{$ar['label']}</label>";
+		}
+		
+		$input_type = self::TYPE_INPUT_CHECKBOX;
+		$element = 'INPUT';
+		$name = "name='{$ar['name']}'";
+		$value_hidden = "value='{$ar['options']['null value']}'";
+		$value = "value='{$ar['options']['value']}'";
+		$type_hidden = "type='hidden'";
+		$type = "type='{$input_type}'";
+		$selected = (ROCKETS_Request::get($ar['name']) == $ar['options']['value']) ? 
+				$selected = self::get_selected_string($input_type) : "";
+		
+		$html .= "<{$element} {$type_hidden} {$name} {$value_hidden} />" . PHP_EOL;
+		$html .= "<{$element} {$type} {$value} {$name} {$selected} />" . PHP_EOL;
+		
+		return self::dl_wrap($html, $ar);
+	}
+	
+	/**
 	 * @mod uses boolean value instead of object
 	 * 
 	 * Auto-draws a checkbox input, using an object
