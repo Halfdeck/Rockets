@@ -137,7 +137,7 @@ class ROCKETS_MYSQL_Base {
 	 * returns an associative array of key=>value pairs, given a mysql result
 	 * 
 	 * Example: make_array($result, "name") => array('bob','joe','mary'..)
-	 * 	make_array($result, "name", "user_id) => array('12311' => 'bob', '1221' => 'joe'...)
+	 * 	make_array($result, "name", "user_id") => array('12311' => 'bob', '1221' => 'joe'...)
 	 * 
 	 * @param type $key_name
 	 * @param type $value_name
