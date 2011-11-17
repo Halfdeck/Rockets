@@ -75,11 +75,16 @@ class ROCKETS_Date {
 	/**
 	 * Take a MYSQL date string and convert it into readable form.
 	 * @param <type> $datestr e.g. 2010-07-28 17:39:57
+	 * 
+	 * @note - references $GLOBALS['timezone_diff'] - an optional value that adjusts the displayed date
 	 */
-	public static function createDateStrFromMYSQL($datestr, $format = self::FRMT_DATETIME)
+	public static function createDateStrFromMYSQL($datestr, $format = self::FRMT_DATETIME, $options = array(null))
 	{
 		list($y, $m, $d, $h, $min, $s) = sscanf($datestr, "%d-%d-%d %d:%d:%d");
 		if($y == 0 && $m == 0 && $d == 0) return null;
+		
+		if(isset($GLOBALS['timezone_diff'])) $h += $GLOBALS['timezone_diff'];
+		
 		$time = mktime($h, $min, $s, $m, $d, $y);
 		
 		switch($format) {
