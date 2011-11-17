@@ -339,9 +339,18 @@ class ROCKETS_MYSQL_Base {
 	 *
 	 * @return array associative array, "user_id"=>"full_name"
 	 */
-	public static function get_array()
+	public static function get_array($options = array(null))
 	{
-		$result = self::read("SELECT DISTINCT name, id  FROM " . self::constructTableNameByClassName() . " WHERE 1 ORDER BY name ASC");
+		$name = "name";
+		
+		/**
+		 * 'max_length' option for lengthy names, to keep a listbox from getting too wide
+		 */
+		if(isset($options['max_length'])) {
+			$name = "IF(LENGTH(name)<{$options['max_length']},name,CONCAT(LEFT(name,{$options['max_length']}),'...')) as name";
+		}
+		
+		$result = self::read("SELECT DISTINCT {$name}, id  FROM " . self::constructTableNameByClassName() . " WHERE 1 ORDER BY name ASC");
 
 		if (!$result || mysql_num_rows($result) == 0)
 			return null;
