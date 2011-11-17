@@ -25,7 +25,7 @@ class ROCKETS_HTML_Password extends ROCKETS_HTML_Form
 		$id = (isset($options['id']) && $options['id'] == TRUE) ? "id='{$options['id']}'" : "";
 		$class = (isset($options['class']) && $options['class'] == TRUE) ? "class='{$options['class']}'" : "";
 		
-        echo "<input type='" .self::$input_type ."' name='{$name}' value=\"{$obj->$name}\" {$readonly} {$size} {$id} {$class}/>";
+        return "<input type='" .self::$input_type ."' name='{$name}' value=\"{$obj->$name}\" {$readonly} {$size} {$id} {$class}/>";
     }
 }
 
