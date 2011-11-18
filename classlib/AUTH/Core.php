@@ -47,13 +47,26 @@ abstract class ROCKETS_AUTH_Core {
 
 	protected function logout()
 	{
+		/**
+		 * Destroy session variables
+		 */
+		$_SESSION = array();
+		
+		/**
+		 * Destroy cookies
+		 */
 		foreach (self::$keys as $key)
 		{
-			unset($_SESSION[$key]);
 			setcookie($key, "", time() - self::DECAY, "/");
 		}
-
-		session_unset();
+		
+		/**
+		 * Delete cookie for the session
+		 */
+		if (isset($_COOKIE[session_name()])) { 
+		   setcookie(session_name(), '', time()-42000, '/'); 
+		} 
+		
 		session_destroy();
 
 		$this->logged_in = false;
