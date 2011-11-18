@@ -83,7 +83,24 @@ class ROCKETS_Date {
 		list($y, $m, $d, $h, $min, $s) = sscanf($datestr, "%d-%d-%d %d:%d:%d");
 		if($y == 0 && $m == 0 && $d == 0) return null;
 		
-		if(isset($GLOBALS['timezone_diff'])) $h += $GLOBALS['timezone_diff'];
+		/**
+		 * check optional globals for timezone_diff - this is an offset that isn't
+		 * a pure offset that corresponds with GMT offsets (e.g. Hawaii is -10)
+		 * Instead, its a difference between server GMT offset (e.g. a server in
+		 * Central timezone is -6) and user timezone (e.g. Alaska = -9), so
+		 * timezone_diff would be user offset - server offset = -3
+		 */
+		if(isset($GLOBALS['timezone_diff'])) {
+			/**
+			 * Make sure there are hours/min/seconds information in mysql - otherwise 
+			 * its not timestamp data - we can check this in multiple ways, but
+			 * basically we're looking out for "00:00:00" type info or empty
+			 * values
+			 */
+			if($h + $min + $s > 0) {
+				$h += $GLOBALS['timezone_diff'];
+			}
+		}
 		
 		$time = mktime($h, $min, $s, $m, $d, $y);
 		
