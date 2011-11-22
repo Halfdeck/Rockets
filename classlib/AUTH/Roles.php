@@ -98,7 +98,7 @@ abstract class ROCKETS_AUTH_Roles extends ROCKETS_AUTH_Core {
 	 * @param string $field_name
 	 * @return type 
 	 */
-	public function check_permission($name, $type = JOB_MODEL_Task::TYPE_PAGE, $field_name = null, $permission_type)
+	public function check_permission($name, $type = JOB_MODEL_Task::TYPE_PAGE, $field_name = null, $permission_type, $options = array(null))
 	{
 		/**
 		 * access_rights contain an array of available task descriptions. If item
