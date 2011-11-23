@@ -18,7 +18,7 @@ class ROCKETS_Request {
      * @return type 
      */
     static function get($key) {
-        if(empty($_REQUEST[$key])) return null;
+        if(!isset($_REQUEST[$key])) return null;
         else return $_REQUEST[$key];
     }
 	
