@@ -28,7 +28,7 @@ class ROCKETS_HTML_Button extends ROCKETS_HTML_Form
 		
         $html = "<{$element} {$id} {$class} {$type} {$name}>{$value}</{$element}>";
 		
-		echo self::dl_wrap($html, $options);
+		return self::dl_wrap($html, $options);
     }
 }
 
