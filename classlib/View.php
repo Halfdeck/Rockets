@@ -430,6 +430,24 @@ class ROCKETS_View extends ROCKETS_MVC
         $class = str_replace("HTML", "MODEL", $thisclass);
         return $class;
     }
+	
+	/**
+	 * Takes an array and associates with a View class object. For example,
+	 * given an array('id'=>20, 'name'=>'John Smith'...),
+	 * $o = ...HTML_User::load_array($row) will create $o, and $o->name will
+	 * return 'John Smith.'. Purpose of this method is to be able to apply
+	 * transmuters to raw data, so $o->birth_date will return a formatted
+	 * date.
+	 */
+	static public function load_array(Array $row) 
+	{
+		$classname = get_called_class();
+		$o = new $classname;
+		foreach($row as $key => $value) {
+			$o->$key = $value;
+		}
+		return $o;
+	}
 
     /**
      * <p>Load record and populate properties.
