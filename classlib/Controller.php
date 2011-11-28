@@ -95,7 +95,7 @@ class ROCKETS_Controller extends ROCKETS_MVC
 	 * 
 	 * @param type $str_url_query_string 
 	 */
-	public function load_page($str_url_query_string)
+	static public function load_page($str_url_query_string)
 	{
 		/**
 		 * @global $c - JOB_CAPMAIL_Auth - in /frame/index.php
