@@ -24,6 +24,9 @@ class ROCKETS_Controller extends ROCKETS_MVC
 	const ACTION_TYPE_LIST =4;
 	const ACTION_TYPE_CREATE = 5;
 
+	const LAYOUT_LIGHTBOX = 'lightbox';
+	const KEY_LAYOUT = 'layout';
+	
 	protected $action_strings = array(
 		1 => 'insert',
 		2 => 'delete',
@@ -202,7 +205,14 @@ class ROCKETS_Controller extends ROCKETS_MVC
 	public function do_insert()
 	{
 		$this->model->insert();
-		ROCKETS_HTTP::redirect(RPATH_ROOT . "{$this->directory_name}/list/");
+		
+		/**
+		 * If the page isn't a lightbox, redirect to List view
+		 */
+		if(ROCKETS_Request::get(self::KEY_LAYOUT) != self::LAYOUT_LIGHTBOX) 
+		{
+			ROCKETS_HTTP::redirect(RPATH_ROOT . "{$this->directory_name}/list/");
+		}
 	}
 
 	/**
