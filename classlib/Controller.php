@@ -207,10 +207,16 @@ class ROCKETS_Controller extends ROCKETS_MVC
 		$this->model->insert();
 		
 		/**
-		 * If the page isn't a lightbox, redirect to List view
+		 * If the page is lightbox don't redirect
 		 */
-		if(ROCKETS_Request::get(self::KEY_LAYOUT) != self::LAYOUT_LIGHTBOX) 
+		if(ROCKETS_Request::get(self::KEY_LAYOUT) == self::LAYOUT_LIGHTBOX) 
 		{
+			// do nothing
+		}
+		else {
+			/**
+			 * redirect to List view
+			 */
 			ROCKETS_HTTP::redirect(RPATH_ROOT . "{$this->directory_name}/list/");
 		}
 	}
