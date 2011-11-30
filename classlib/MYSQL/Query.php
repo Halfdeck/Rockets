@@ -124,6 +124,8 @@ class ROCKETS_MYSQL_Query extends ROCKETS_MYSQL_Base {
 	 * e.g. grab a user's phone number using user ID
 	 * 
 	 * @param type $id
+	 * @param type $id_name - setting this to something other than ID will let you
+	 * use other fields other than primary key
 	 * @param type $field_name
 	 * @return type 
 	 */
