@@ -72,7 +72,7 @@ abstract class ROCKETS_ConfigurableObject
      *
      * @param array $ar
      */
-    private function loadClassProperties($ar = array(null))
+    protected function loadClassProperties($ar = array(null))
     {
         //var_dump(get_object_vars(get_class($this)));
         if (!$ar)
