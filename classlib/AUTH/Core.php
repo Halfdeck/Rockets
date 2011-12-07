@@ -49,7 +49,7 @@ abstract class ROCKETS_AUTH_Core {
 	 * 
 	 * @var type 
 	 */
-	protected $cookie_name_prefix = "";
+	static protected $cookie_name_prefix = "";
 
 	protected function logout()
 	{
@@ -63,7 +63,7 @@ abstract class ROCKETS_AUTH_Core {
 		 */
 		foreach (self::$keys as $key)
 		{
-			setcookie($this->cookie_name_prefix .$key, "", time() - self::DECAY, "/");
+			setcookie(self::$cookie_name_prefix .$key, "", time() - self::DECAY, "/");
 		}
 		
 		/**
@@ -136,11 +136,11 @@ abstract class ROCKETS_AUTH_Core {
 		{
 			if ($key == self::PASSWORD)
 			{
-				$_SESSION[$this->cookie_name_prefix .$key] = md5($value);
+				$_SESSION[self::$cookie_name_prefix .$key] = md5($value);
 			}
 			else
 			{
-				$_SESSION[$this->cookie_name_prefix .$key] = $value;
+				$_SESSION[self::$cookie_name_prefix .$key] = $value;
 			}
 			if (isset($_POST[self::REMEMBER_ME]))
 			{
@@ -148,7 +148,7 @@ abstract class ROCKETS_AUTH_Core {
 				 * remember me checked, so remember info in a cookie
 				 * Add additional member to cookie array as per requirement
 				 */
-				setcookie($this->cookie_name_prefix .$key, $value, time() + self::DECAY, "/");
+				setcookie(self::$cookie_name_prefix .$key, $value, time() + self::DECAY, "/");
 			}
 		}
 	}
@@ -176,7 +176,7 @@ abstract class ROCKETS_AUTH_Core {
 	{
 		foreach ($_SESSION as $key => $value)
 		{
-			$key = str_replace($this->cookie_name_prefix, "", $key); // strip prefix from $key (e.g. _xyz_username => username)
+			$key = str_replace(self::$cookie_name_prefix, "", $key); // strip prefix from $key (e.g. _xyz_username => username)
 			$this->$key = $value;
 		}
 	}
@@ -205,15 +205,15 @@ abstract class ROCKETS_AUTH_Core {
 	public function is_logged_in()
 	{
 		/** if username and password are saved in sessions, user is logged in * */
-		if (isset($_SESSION[$this->cookie_name_prefix .self::USERNAME]) AND isset($_SESSION[$this->cookie_name_prefix .self::PASSWORD]))
+		if (isset($_SESSION[self::$cookie_name_prefix .self::USERNAME]) AND isset($_SESSION[self::$cookie_name_prefix .self::PASSWORD]))
 		{
 			$this->logged_in = true;
 			$this->load_properties_by_session();
 			return true;
 		}
-		elseif (isset($_COOKIE[$this->cookie_name_prefix .self::USERNAME]) && isset($_COOKIE[$this->cookie_name_prefix .self::PASSWORD]))
+		elseif (isset($_COOKIE[self::$cookie_name_prefix .self::USERNAME]) && isset($_COOKIE[self::$cookie_name_prefix .self::PASSWORD]))
 		{
-			if ($this->is_valid($_COOKIE[$this->cookie_name_prefix .self::USERNAME], $_COOKIE[$this->cookie_name_prefix .self::PASSWORD]))
+			if ($this->is_valid($_COOKIE[self::$cookie_name_prefix .self::USERNAME], $_COOKIE[self::$cookie_name_prefix .self::PASSWORD]))
 			{
 				ROCKETS_HTTP::redirect(FILE_SUCCESS);
 			}
@@ -238,8 +238,8 @@ abstract class ROCKETS_AUTH_Core {
 	 */
 	static public function get_user_id()
 	{
-		if (isset($_SESSION[$this->cookie_name_prefix .self::USER_ID]))
-			return $_SESSION[$this->cookie_name_prefix .self::USER_ID];
+		if (isset($_SESSION[self::$cookie_name_prefix .self::USER_ID]))
+			return $_SESSION[self::$cookie_name_prefix .self::USER_ID];
 		else
 			return null;
 	}
@@ -251,8 +251,8 @@ abstract class ROCKETS_AUTH_Core {
 	 */
 	static public function get_username()
 	{
-		if (isset($_SESSION[$this->cookie_name_prefix .self::USERNAME]))
-			return $_SESSION[$this->cookie_name_prefix .self::USERNAME];
+		if (isset($_SESSION[self::$cookie_name_prefix .self::USERNAME]))
+			return $_SESSION[self::$cookie_name_prefix .self::USERNAME];
 		else
 			return null;
 	}
