@@ -30,7 +30,7 @@ abstract class ROCKETS_AUTH_Core {
 	/**
 	 * keys to store sessions and cookies.
 	 */
-	private static $keys = array
+	protected static $keys = array
 		(
 		'username',
 		'password',
