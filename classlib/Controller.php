@@ -25,6 +25,8 @@ class ROCKETS_Controller extends ROCKETS_MVC
 	const ACTION_TYPE_CREATE = 5;
 
 	const LAYOUT_LIGHTBOX = 'lightbox';
+	const LAYOUT_AJAX = 'ajax';
+	
 	const KEY_LAYOUT = 'layout';
 	
 	protected $action_strings = array(
@@ -209,7 +211,7 @@ class ROCKETS_Controller extends ROCKETS_MVC
 		/**
 		 * If the page is lightbox don't redirect
 		 */
-		if(ROCKETS_Request::get(self::KEY_LAYOUT) == self::LAYOUT_LIGHTBOX) 
+		if(ROCKETS_Request::get(self::KEY_LAYOUT) == self::LAYOUT_AJAX) 
 		{
 			// do nothing
 		}
@@ -228,8 +230,13 @@ class ROCKETS_Controller extends ROCKETS_MVC
 	{
 		$this->model->delete();
 		
+		/**
+		 * Redirect unless the request came from a lightbox
+		 */
+		if(ROCKETS_Request::get(self::KEY_LAYOUT) != self::LAYOUT_AJAX) {
+			ROCKETS_HTTP::redirect($_SERVER['HTTP_REFERER']);
+		}
 		//ROCKETS_HTTP::redirect(RPATH_ROOT . "{$this->directory_name}/list/");
-		ROCKETS_HTTP::redirect($_SERVER['HTTP_REFERER']);
 	}
 
 	/**
