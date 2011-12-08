@@ -543,6 +543,8 @@ class ROCKETS_MYSQL_Query extends ROCKETS_MYSQL_Base {
 	 */
 	public function delete($ar = array())
 	{
+		$index_value = null;
+
 		/**
 		 * If $ar is empty, use $_REQUEST
 		 * function empty() is used here because $ar is set to an array() if nothing is sent in, and it will never be null
