@@ -115,7 +115,7 @@ abstract class ROCKETS_AUTH_Roles extends ROCKETS_AUTH_Core {
 		 */
 		if($permission_type == NULL) $permission_type = self::$permissions['read'];
 		
-		//echo $name ." " .$field_name ." " .$this->access_rights[$name][$type][$field_name] ." {$permission_type}<br>";
+	//	echo "NAME: {$name} FIELDNAME: {$field_name} " .$this->access_rights[$name][$type][$field_name] ." PERMISSION TYPE: {$permission_type}<br>";
 		/**
 		 * Is readable
 		 */
