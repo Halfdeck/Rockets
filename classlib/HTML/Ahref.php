@@ -21,6 +21,11 @@ class ROCKETS_HTML_Ahref extends ROCKETS_HTML_Form
      */
     static public function draw($options = array(null))
     {
+		/**
+		 * If anchor text is empty, don't bothering drawing
+		 */
+		if(empty($options['value'])) return null;
+		
 		$element = self::ELEMENT;
 		$attributes = array(
 			'href','id','class','target','name','rel'
