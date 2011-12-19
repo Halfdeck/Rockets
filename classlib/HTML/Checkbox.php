@@ -30,9 +30,10 @@ class ROCKETS_HTML_Checkbox extends ROCKETS_HTML_Form {
 		$null_value = (isset($options['null value'])) ? $options['null value'] : 'false';
 		$selected = ($obj->$name == $value) ? $selected = self::get_selected_string($input_type) : "";
 		$title = (isset($options['title'])) ? "title='{$options['title']}'" : null;
+		$disabled = (isset($options['disabled'])) ? "disabled='disabled'" : null;
 		
 		$html = "<input type='hidden' name='{$name}' value='{$null_value}' />" . PHP_EOL;
-		$html .= "<input type='{$input_type}' value='{$value}' name='{$name}' {$selected} {$title}/>" . PHP_EOL;
+		$html .= "<input type='{$input_type}' value='{$value}' name='{$name}' {$selected} {$title} {$disabled}/>" . PHP_EOL;
 		
 		return self::dl_wrap($html, $options);
 	}
