@@ -25,6 +25,8 @@ class ROCKETS_HTML_CheckboxGroup extends ROCKETS_HTML_Form {
 	 */
 	static public function draw(Array $ar)
 	{
+		$html = "";
+		
 		if (!isset($_REQUEST[$ar['name']]))
 		{ // prevent errors
 			$_REQUEST[$ar['name']] = "";
@@ -50,7 +52,7 @@ class ROCKETS_HTML_CheckboxGroup extends ROCKETS_HTML_Form {
 			$ar['options'] = array('' => $ar['first string']) + $ar['options'];
 		}
 
-		echo "<ul {$classStr}>";
+		$html .= "<ul {$classStr}>";
 		foreach ($ar["options"] as $key => $value)
 		{
 			$selected = "";
@@ -64,11 +66,12 @@ class ROCKETS_HTML_CheckboxGroup extends ROCKETS_HTML_Form {
 			else
 				$classStr = "";
 			
-			echo "<li>";
-			echo "<input {$classStr} type='" .self::$input_type ."' name='{$ar['name']}[{$key}]' value='{$key}' {$selected}><label>{$value}</label>" . PHP_EOL;
-			echo "</li>";
+			$html .= "<li>";
+			$html .= "<input {$classStr} type='" .self::$input_type ."' name='{$ar['name']}[{$key}]' value='{$key}' {$selected}><label>{$value}</label>" . PHP_EOL;
+			$html .= "</li>";
 		}
-		echo "</ul>";
+		$html .= "</ul>";
+		return $html;
 	}
 
 }
