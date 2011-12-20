@@ -407,11 +407,21 @@ class ROCKETS_MYSQL_Base {
 	 */
 	static protected function issueError($ar = null)
 	{
+		$msg = "";
+		
 		if (mysql_errno())
 		{
 			if (isset($ar['query']))
-				echo "<p><strong>Error in query:</strong>{$ar['query']}</p>";
-			echo mysql_error() . "<br>";
+			{
+				$msg .= "<p><strong>Error in query:</strong>{$ar['query']}</p>";
+			}
+				
+			$msg .= mysql_error() . "<br>";
+			$msg .= print_r($GLOBALS, true);
+			
+			echo $msg;
+			mail(EMAIL_ADMIN, "MYSQL ERROR", $msg);
+			
 			if (array_key_exists("continue", $ar) && $ar['continue'] == false)
 				die();
 		}
