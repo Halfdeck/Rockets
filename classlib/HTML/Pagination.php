@@ -80,7 +80,7 @@ class ROCKETS_HTML_Pagination
 		
 		self::draw_pagecount($ar['limitStart'], $pages);
 
-		//echo "<div class='" .self::cssClearFix ."'></div>";
+		if($pages == 0) return;
 		
 		echo "<div id='" .self::cssIndex ."'>";
 
