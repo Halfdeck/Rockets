@@ -42,6 +42,8 @@ class ROCKETS_HTML_Select extends ROCKETS_HTML_Form {
 			$disabled = "disabled=disabled";
 		}
 		
+		$multiple = (isset($ar['multiple'])) ? "multiple" : null;
+		
         if (!isset($_REQUEST[$ar['name']]))
         { // prevent errors
             $_REQUEST[$ar['name']] = "";
@@ -64,7 +66,7 @@ class ROCKETS_HTML_Select extends ROCKETS_HTML_Form {
             else $ar['options'] = array('' => $ar['first string']) + $ar['options'];
         }
 		
-		$select_clause .=  "<select name='{$ar['name']}' {$classStr} {$disabled}>";
+		$select_clause .=  "<select name='{$ar['name']}' {$classStr} {$disabled} {$multiple}>";
         foreach ($ar["options"] as $key => $val)
         {
             $selected = "";
