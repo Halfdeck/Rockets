@@ -48,9 +48,23 @@ class ROCKETS_HTML_Select extends ROCKETS_HTML_Form {
         { // prevent errors
             $_REQUEST[$ar['name']] = "";
         }
-
+		
+		/**
+		 * If there's no checked value, reference request
+		 */
         if (empty($ar['checked']))
-            $ar['checked'] = $_REQUEST[$ar['name']];
+		{
+			/**
+			 * If REQUEST is empty but there's a default value, use that
+			 */
+			if(empty($_REQUEST[$ar['name']]) && isset($ar['default']))
+			{
+				$ar['checked'] =$ar['default'];
+			}
+			else {
+				$ar['checked'] = $_REQUEST[$ar['name']];
+			}
+		}
 
         /**
          * Optional class string - for custom styling
