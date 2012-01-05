@@ -18,6 +18,18 @@ class ROCKETS_Session
             $_SESSION[$key] = $value;
         }
     }
+	
+	/**
+     * An empty check on the request key
+     * Used to clean up if(empty($_REQUEST... codes
+     * 
+     * @param type $key
+     * @return type 
+     */
+    static function get($key) {
+        if(!isset($_SESSION[$key])) return null;
+        else return $_SESSION[$key];
+    }
 
 }
 
