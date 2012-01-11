@@ -138,7 +138,7 @@ class ROCKETS_MYSQL_Query extends ROCKETS_MYSQL_Base {
 
 		$tbl = self::constructTableNameByClassName();
 
-		$result = self::read("SELECT {$field_name} FROM {$tbl} WHERE {$options['id_name']}={$id} LIMIT 1");
+		$result = self::read("SELECT {$field_name} FROM {$tbl} WHERE {$options['id_name']}='{$id}' LIMIT 1");
 		if ($result && mysql_num_rows($result) > 0)
 		{
 			$row = mysql_fetch_assoc($result);
