@@ -238,6 +238,18 @@ class ROCKETS_Controller extends ROCKETS_MVC
 		}
 		//ROCKETS_HTTP::redirect(RPATH_ROOT . "{$this->directory_name}/list/");
 	}
+	
+	/**
+	 * Check for unique data - used for validating data before record insertion.
+	 * AJAX query form example: store/check_unique/?value=store_name&fieldname=Savemart
+	 * @return 'unique' or primary key value of a record that already exists
+	 */
+	public function do_check_unique()
+	{
+		$result = $this->model->isUnique(ROCKETS_Request::get('value'), ROCKETS_Request::get('fieldname'), $this->model->primary_key_fieldname);
+		if($result == false) echo "unique";
+		else echo $result;
+	}
 
 	/**
 	 * auto-draw interal URLs.
