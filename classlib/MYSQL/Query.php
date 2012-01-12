@@ -610,6 +610,28 @@ class ROCKETS_MYSQL_Query extends ROCKETS_MYSQL_Base {
 		}
 		return $ar;
 	}
+	
+	/**
+	 * Check if value is unique - used for validation before a new record is inserted
+	 * example: isUnique("John Doe", 'full_name', 'user_id')
+	 * 
+	 * @param string $unique_value
+	 * @param string $fieldname
+	 * @param string $primary_key
+	 * @return boolean true if there's no match in the database, false otherwise
+	 */
+	public function isUnique($unique_value, $fieldname = 'name', $primary_key = 'id')
+	{
+		$result = self::read("SELECT {$primary_key} FROM " . self::constructTableNameByClassName() . " WHERE {$fieldname}='{$unique_value}'");
+		if ($result && mysql_num_rows($result) > 0)
+		{
+			$row = mysql_fetch_assoc($result);
+			return $row[$primary_key];
+		} else
+		{
+			return false;
+		}
+	}
 
 }
 
