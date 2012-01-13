@@ -403,7 +403,26 @@ class ROCKETS_ADMIN_File extends ROCKETS_ConfigurableObject
             return $size . " GB";
         }
     }
-
+	
+	/**
+	 * Clean up filename so it doesn't break anything
+	 * 
+	 * @param type $filename
+	 * @return type 
+	 */
+	static public function sanitize_filename($filename)
+	{
+		/**
+		 * remove #, which breaks urls when someone wants to load it in a browser.
+		 * example: .../uploads/65233 proof_#34.pdf -> browser truncates to /uploads/65233 proof_
+		 */
+		$filename = str_replace("#"," ",$filename);
+		/**
+		 * Remove starting/trailing spaces
+		 */
+		$filename = trim($filename);
+		return $filename;
+	}
 }
 
 ?>
