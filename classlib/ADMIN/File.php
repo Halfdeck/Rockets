@@ -416,7 +416,7 @@ class ROCKETS_ADMIN_File extends ROCKETS_ConfigurableObject
 		 * remove #, which breaks urls when someone wants to load it in a browser.
 		 * example: .../uploads/65233 proof_#34.pdf -> browser truncates to /uploads/65233 proof_
 		 */
-		$filename = str_replace("#"," ",$filename);
+		$filename = str_replace("#","",$filename);
 		/**
 		 * Remove starting/trailing spaces
 		 */
