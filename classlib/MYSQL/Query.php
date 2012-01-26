@@ -628,7 +628,7 @@ class ROCKETS_MYSQL_Query extends ROCKETS_MYSQL_Base {
 	 */
 	public function isUnique($unique_value, $fieldname = 'name', $primary_key = 'id')
 	{
-		$result = self::read("SELECT {$primary_key} FROM " . self::constructTableNameByClassName() . " WHERE {$fieldname}='{$unique_value}'");
+		$result = self::read("SELECT {$primary_key} FROM " . self::constructTableNameByClassName() . " WHERE {$fieldname}=\"{$unique_value}\"");
 		if ($result && mysql_num_rows($result) > 0)
 		{
 			$row = mysql_fetch_assoc($result);
