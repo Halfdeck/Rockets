@@ -17,6 +17,7 @@ class ROCKETS_Controller extends ROCKETS_MVC
 	protected $directory_name;
 	protected $action;
 	protected $view_classname;
+	protected $model_name;
 
 	const ACTION_TYPE_INSERT = 1;
 	const ACTION_TYPE_DELETE = 2;
@@ -136,17 +137,32 @@ class ROCKETS_Controller extends ROCKETS_MVC
 		 */
 		if (class_exists($class_name) == FALSE)
 		{
-			$this_class_name = get_class();
+			//$this_class_name = get_class();
+			$this_class_name = get_called_class();
 			eval("class {$class_name} extends {$this_class_name} {};");
 		}
 
 		$o = new $class_name;
 		
+		$o->model_name = self::get_model_name_singular($directory_name);
 		$o->directory_name = $directory_name;
 		$o->action = $path_info['filename'];
-
+		//echo "activateD";
 		$action_method = "do_" . $o->action;
+		if($o->permission_check() == false) {
+			//echo "access not permitted";
+			return false; // pre page load check (e.g. permission checking)
+		}
 		$o->$action_method();
+	}
+	
+	/**
+	 * Base optional permission checking pre page load.
+	 * Usage: extension of this class should optionally override this method.
+	 * @return type 
+	 */
+	public function permission_check() {
+		return true;
 	}
 	
 	public function do_json() 
