@@ -53,17 +53,24 @@ class ROCKETS_Controller extends ROCKETS_MVC
 	{
 		$extension = "php";
 		
-		if(isset($options['layout'])) {
-			if($options['layout'] == 'lightbox') {
-				$extension = "ltbx";
-			}
-		}
-		
 		if($custom_action_string) {
 			$action_string = $custom_action_string;
 		}
 		else {
 			$action_string = $this->action_strings[$action_type];
+		}
+		
+		if(isset($options['layout'])) {
+			if($options['layout'] == 'lightbox') {
+				$extension = "ltbx";
+			}
+			/**
+			 * CSV template filename pattern: xyz.csv.php
+			 */
+			else if($options['layout'] == 'csv')
+			{
+				$extension = "csv.{$extension}";
+			}
 		}
 		
 		$path = PATH_PAGES . "{$this->directory_name}/{$action_string}.{$extension}";
