@@ -446,7 +446,7 @@ class ROCKETS_MYSQL_Query extends ROCKETS_MYSQL_Base {
 	 * ));
 	 * @param type $ar 
 	 */
-	public function update($ar = array())
+	public function insert_data($ar = array())
 	{
 		$this->insert(array(
 			'data' => $ar,
