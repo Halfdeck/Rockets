@@ -435,6 +435,23 @@ class ROCKETS_MYSQL_Query extends ROCKETS_MYSQL_Base {
 			return null;
 		}
 	}
+	
+	/**
+	 * A mod of insert, where calling function prepares the data. insert()
+	 * does alot of data generation on its own - which isn't always necessary
+	 * 
+	 * Usage: $o->update(array(
+	 *	'id' => 4,
+	 *  'name' => 'xyz',...
+	 * ));
+	 * @param type $ar 
+	 */
+	public function update($ar = array())
+	{
+		$this->insert(array(
+			'data' => $ar,
+		));
+	}
 
 	/**
 	 * @DUPLICATE Duplicates ROCKETS_MYSQLTable
