@@ -23,7 +23,7 @@ class ROCKETS_HTML_Button extends ROCKETS_HTML_Form
 		$class = (isset($options['class']) && $options['class'] == TRUE) ? "class='{$options['class']}'" : "";
 		$type = (isset($options['type'])) ? "type='{$options['type']}'" : "type='button'";
 		$name = "name='{$options['name']}'";
-		$element = 'BUTTON';
+		$element = 'button';
 		$value = $options['value'];
 		
         $html = "<{$element} {$id} {$class} {$type} {$name}>{$value}</{$element}>";

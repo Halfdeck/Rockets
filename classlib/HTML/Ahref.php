@@ -7,7 +7,7 @@
  */
 class ROCKETS_HTML_Ahref extends ROCKETS_HTML_Form 
 {	
-	const ELEMENT = 'A';
+	const ELEMENT = 'a';
 	
     /**
      * Auto-draws a link
