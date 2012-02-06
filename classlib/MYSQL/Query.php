@@ -402,7 +402,7 @@ class ROCKETS_MYSQL_Query extends ROCKETS_MYSQL_Base {
 			}
 			else
 			{
-				$str = "{$_REQUEST[$filter_name]}";
+				$str = mysql_real_escape_string("{$_REQUEST[$filter_name]}");
 			}
 		}
 
