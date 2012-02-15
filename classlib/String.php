@@ -378,6 +378,19 @@ Class ROCKETS_String
 		return implode(';', $emails);
 	}
 
+	/**
+	 * Extract first name from full name:
+	 * 
+	 * Example: get_first_name("Joe shmoe") => "Joe"
+	 * 
+	 * @param type $full_name
+	 * @return type 
+	 */
+	static public function get_first_name($full_name)
+	{
+		$names = explode(" ",trim($full_name));
+		return $names[0];
+	}
 }
 
 ?>
