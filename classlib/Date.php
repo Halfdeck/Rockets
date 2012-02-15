@@ -32,6 +32,11 @@ class ROCKETS_Date {
 	 */
 	const FRMT_DATE_NO_YEAR = 4;
 	/**
+	 * 1/10
+	 */
+	const FRMT_DATE_NO_YEAR_SHORT = 5;
+	
+	/**
 	 *
 	 * @global TIMEZONE - default time zone constant - required
 	 */
@@ -115,6 +120,8 @@ class ROCKETS_Date {
 				return date("g:i A", $time);
 			case self::FRMT_DATE_NO_YEAR:
 				return date("M j", $time);
+			case self::FRMT_DATE_NO_YEAR_SHORT:
+				return date("n/j", $time);
 			default:
 				return null;
 		}
