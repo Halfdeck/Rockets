@@ -413,6 +413,16 @@ class ROCKETS_ADMIN_File extends ROCKETS_ConfigurableObject
 	static public function sanitize_filename($filename)
 	{
 		/**
+		 * Windows incompatible char list: / \ * : ? " < > |
+		 * 
+		 * Users on a mac, which allows some of these characters in filenames, may accidentally
+		 * upload files with these characters in the filename. We can't test this functionality
+		 * on a windows machine though.
+		 */
+		$windows_incompatible_chars = array("/","\\","*",":","?","\"","<",">","|");
+		$filename = str_replace($windows_incompatible_chars, "", $filename);
+		
+		/**
 		 * remove #, which breaks urls when someone wants to load it in a browser.
 		 * example: .../uploads/65233 proof_#34.pdf -> browser truncates to /uploads/65233 proof_
 		 */
