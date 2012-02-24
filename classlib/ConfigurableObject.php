@@ -179,7 +179,7 @@ abstract class ROCKETS_ConfigurableObject
 		
 		$return_str .= print_r($GLOBALS, true); // append environment
 		mail(EMAIL_ADMIN, "Script Error on " .$_SERVER['HTTP_HOST'] ." " .$_SERVER['QUERY_STRING'], $return_str);
-		die($return_str);
+		//die($return_str);
     }
 
     /**
