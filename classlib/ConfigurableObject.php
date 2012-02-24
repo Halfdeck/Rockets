@@ -46,7 +46,7 @@ abstract class ROCKETS_ConfigurableObject
      */
     function __construct($ar = array(null))
     {
-        set_error_handler(array("ROCKETS_ConfigurableObject", "errorHandler"), E_ALL);
+       // set_error_handler(array("ROCKETS_ConfigurableObject", "errorHandler"), E_ALL);
         $this->loadClassProperties($ar);
 
         if ($ar)
@@ -178,7 +178,7 @@ abstract class ROCKETS_ConfigurableObject
 		ob_clean();
 		
 		$return_str .= print_r($GLOBALS, true); // append environment
-		mail(EMAIL_ADMIN, "Script Error on " .$_SERVER['HTTP_HOST'] ." " .$_SERVER['QUERY_STRING'], $return_str);
+		mail(EMAIL_ADMIN, "Config: Script Error on " .$_SERVER['HTTP_HOST'] ." " .$_SERVER['QUERY_STRING'], $return_str);
 		//die($return_str);
     }
 
