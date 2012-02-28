@@ -86,7 +86,7 @@ abstract class ROCKETS_AUTH_Core {
 	public function validate()
 	{
 		switch ($_REQUEST[STR_URL_QUERY_STRING]) {
-			/**
+		/**
 			 * If we're on the Logout page, logout by clearing sessions and cookies.
 			 * Redirect to the login page.
 			 */
@@ -105,6 +105,7 @@ abstract class ROCKETS_AUTH_Core {
 			 * If we're on the login page, run ->login();
 			 */
 			case FILE_LOGIN:
+			case "/" .FILE_LOGIN:
 				$this->login();
 				break;
 			/**
