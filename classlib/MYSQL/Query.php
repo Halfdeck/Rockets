@@ -637,6 +637,7 @@ class ROCKETS_MYSQL_Query extends ROCKETS_MYSQL_Base {
 	/**
 	 * Check if value is unique - used for validation before a new record is inserted
 	 * example: isUnique("John Doe", 'full_name', 'user_id')
+	 * @note this counterintuitively returns FALSE on true because the calling JS needs the return value
 	 * 
 	 * @param string $unique_value
 	 * @param string $fieldname
