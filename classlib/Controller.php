@@ -122,8 +122,14 @@ class ROCKETS_Controller extends ROCKETS_MVC
 		 */
 		if(self::is_controller_path($path_info) == FALSE) 
 		{
-			include(PATH_PAGES ."/{$str_url_query_string}");
-			return;
+			if(file_exists(PATH_PAGES ."/{$str_url_query_string}")) {
+				include(PATH_PAGES ."/{$str_url_query_string}");
+				return;
+			}
+			else {
+				ROCKETS_HTTP::notFound();
+				return false;
+			}
 		}
 		
 		$class_name = self::get_classname($directory_name, self::TYPE_CONTROLLER);
