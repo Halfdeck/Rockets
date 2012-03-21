@@ -43,7 +43,11 @@ class ROCKETS_HTTP
             return false;
         return true;
     }
-
+	
+	static public function notFound()
+	{
+		header("HTTP/1.0 404 Not Found");
+	}
 }
 
 ?>
