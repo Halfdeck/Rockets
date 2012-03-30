@@ -80,7 +80,9 @@ class ROCKETS_HTML_Select extends ROCKETS_HTML_Form {
             else $ar['options'] = array('' => $ar['first string']) + $ar['options'];
         }
 		
-		$select_clause .=  "<select name='{$ar['name']}' {$classStr} {$disabled} {$multiple}>";
+		$title = (isset($ar['title'])) ? "title=\"" .htmlspecialchars($ar['title']) ."\"" : null;
+		
+		$select_clause .=  "<select name='{$ar['name']}' {$classStr} {$disabled} {$multiple} {$title}>";
         foreach ($ar["options"] as $key => $val)
         {
             $selected = "";

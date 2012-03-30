@@ -28,7 +28,7 @@ class ROCKETS_HTML_Ahref extends ROCKETS_HTML_Form
 		
 		$element = self::ELEMENT;
 		$attributes = array(
-			'href','id','class','target','name','rel'
+			'href','id','class','target','name','rel','title',
 		);
 		
 		$attributes_html = self::get_attributes($options, $attributes);
@@ -46,7 +46,7 @@ class ROCKETS_HTML_Ahref extends ROCKETS_HTML_Form
 		{
 			if(isset($options[$attribute]))
 			{
-				$return_html .= " {$attribute}='{$options[$attribute]}'";
+				$return_html .= " {$attribute}=\"" .htmlspecialchars($options[$attribute]) ."\"";
 			}
 		}
 		return $return_html;
