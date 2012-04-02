@@ -342,6 +342,7 @@ class ROCKETS_MYSQL_Base {
 	public static function get_array($options = array(null))
 	{
 		$name = "name";
+		$clause_where = "";
 		
 		/**
 		 * 'max_length' option for lengthy names, to keep a listbox from getting too wide
@@ -350,7 +351,18 @@ class ROCKETS_MYSQL_Base {
 			$name = "IF(LENGTH(name)<{$options['max_length']},name,CONCAT(LEFT(name,{$options['max_length']}),'...')) as name";
 		}
 		
-		$result = self::read("SELECT DISTINCT {$name}, id  FROM " . self::constructTableNameByClassName() . " WHERE 1 ORDER BY name ASC");
+		/**
+		 * Added a 'condition' option which can be specified to restrict the result set
+		 */
+		if(isset($options['condition']))
+		{
+			foreach($options['condition'] as $fieldname => $value) {
+				$value = mysql_real_escape_string($value);
+				$clause_where .= "AND {$fieldname} = '{$value}'";
+			}
+		}
+		
+		$result = self::read("SELECT DISTINCT {$name}, id  FROM " . self::constructTableNameByClassName() . " WHERE 1 {$clause_where} ORDER BY name ASC");
 
 		if (!$result || mysql_num_rows($result) == 0)
 			return null;
