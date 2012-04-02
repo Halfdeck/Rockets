@@ -46,7 +46,11 @@ class ROCKETS_HTML_Ahref extends ROCKETS_HTML_Form
 		{
 			if(isset($options[$attribute]))
 			{
-				$return_html .= " {$attribute}=\"" .htmlspecialchars($options[$attribute]) ."\"";
+				if($attribute != 'href')
+				{
+					$options[$attribute] = htmlspecialchars($options[$attribute]);
+				}
+				$return_html .= " {$attribute}=\"" .$options[$attribute] ."\"";
 			}
 		}
 		return $return_html;
