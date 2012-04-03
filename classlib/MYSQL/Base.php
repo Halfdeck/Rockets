@@ -358,8 +358,35 @@ class ROCKETS_MYSQL_Base {
 		{
 			foreach($options['condition'] as $fieldname => $value) {
 				$value = mysql_real_escape_string($value);
-				$clause_where .= "AND {$fieldname} = '{$value}'";
+				$clause_where .= " AND {$fieldname} = '{$value}'";
 			}
+		}
+		
+		/**
+		 * Added an 'OR condition' option which can be specified to restrict the result set
+		 * because or conditions can mention the same field twice, the format is:
+		 * 'OR condition' => array(
+		 *	  array("fieldname" => "value"),
+		 *    array("fieldname" => "value"),
+		 * )
+		 */
+		if(isset($options['OR condition']))
+		{
+			$clause_where_or = "";
+			$first = true;
+			
+			foreach($options['OR condition'] as $item) {
+				list($fieldname,$value) = each($item);
+				$value = mysql_real_escape_string($value);
+				if(!$first) 
+				{
+					$clause_where_or .= " OR ";
+				}
+				$first = false;
+				$clause_where_or .= "{$fieldname} = '{$value}'";
+			}
+			
+			$clause_where .= " AND ({$clause_where_or})";
 		}
 		
 		$result = self::read("SELECT DISTINCT {$name}, id  FROM " . self::constructTableNameByClassName() . " WHERE 1 {$clause_where} ORDER BY name ASC");
