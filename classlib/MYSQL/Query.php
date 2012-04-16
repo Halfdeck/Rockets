@@ -448,7 +448,7 @@ class ROCKETS_MYSQL_Query extends ROCKETS_MYSQL_Base {
 	 */
 	public function insert_data($ar = array())
 	{
-		$this->insert(array(
+		self::insert(array(
 			'data' => $ar,
 		));
 	}
