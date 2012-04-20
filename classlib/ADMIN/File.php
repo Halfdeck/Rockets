@@ -124,8 +124,8 @@ class ROCKETS_ADMIN_File extends ROCKETS_ConfigurableObject
      */
     public function write($ar = null)
     {
-        $fp = fopen($ar['targetPath'], "w");
-        self::errorHandler($fp);
+		$ar['mode'] = (isset($ar['mode'])) ? $ar['mode'] : "w";
+        $fp = fopen($ar['targetPath'], $ar['mode']);
         fwrite($fp, $ar['content'], strlen($ar['content']));
         fclose($fp);
     }
