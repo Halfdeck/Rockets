@@ -95,46 +95,50 @@ class ROCKETS_HTML_Cron extends ROCKETS_ConfigurableObject {
 	 */
 	public function show($msg)
 	{
+		$html = "";
+		
 		if (self::$DEBUG)
 		{
 			if ($this->invis)
-				echo "<!--";
+				$html .= "<!--";
 			else
-				echo "<span style='color:{$this->color};{$this->css_style}'>";
+				$html .= "<span style='color:{$this->color};{$this->css_style}'>";
 
-			echo "[{$msg}] ";
+			$html .= "[{$msg}] ";
 			$diff = number_format($this->cron->getInterim(), $this->precision);
 
 			if ($this->mode == self::MODE_TIME_ELAPSED)
 			{
-				echo "Execution time: " . number_format($this->cron->getTime(), $this->precision) . " seconds\n ";
+				$html .= "Execution time: " . number_format($this->cron->getTime(), $this->precision) . " seconds\n ";
 				if ($this->show_mem_usage)
-					echo "Memory Usage: " . $this->cron->getPeakUsage() . " bytes\n";
+					$html .= "Memory Usage: " . $this->cron->getPeakUsage() . " bytes\n";
 			}
 			else if ($this->mode == self::MODE_TIME_DIFF)
 			{
 				if ($diff > 0 || $this->suppression == false)
 				{
-					echo "Time Diff: {$diff} seconds\n ";
+					$html .= "Time Diff: {$diff} seconds\n ";
 					if ($this->show_mem_usage)
-						echo "Memory Usage: " . $this->cron->getPeakUsage() . " bytes\n";
+						$html .= "Memory Usage: " . $this->cron->getPeakUsage() . " bytes\n";
 				}
 			} else
 			{
 				if ($diff > 0 || $this->suppression == false)
 				{
-					echo "Execution time: " . number_format($this->cron->getTime(), $this->precision) . " seconds\n "
+					$html .= "Execution time: " . number_format($this->cron->getTime(), $this->precision) . " seconds\n "
 					. "Time Diff: {$diff} seconds\n ";
 					if ($this->show_mem_usage)
-						echo "Memory Usage: " . $this->cron->getPeakUsage() . " bytes\n";
+						$html .= "Memory Usage: " . $this->cron->getPeakUsage() . " bytes\n";
 				}
 			}
 
 			if ($this->invis)
-				echo "-->";
+				$html .= "-->";
 			else
-				echo "</span><br>";
+				$html .= "</span><br>";
 		}
+		
+		return $html;
 	}
 
 }
