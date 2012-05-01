@@ -24,16 +24,38 @@ class ROCKETS_HTML_Checkbox extends ROCKETS_HTML_Form {
 	 */
 	static public function draw_obj($name, $obj, $options = array(null))
 	{
+		$html = "";
 		$input_type = self::TYPE_INPUT_CHECKBOX;
 		
 		$value = (isset($options['value'])) ? $options['value'] : 1;
 		$null_value = (isset($options['null value'])) ? $options['null value'] : 'false';
-		$selected = ($obj->$name == $value) ? $selected = self::get_selected_string($input_type) : "";
+		
+		/**
+		 * Modified this method so it can take objects OR a plain value
+		 */
+		if(is_object($obj))
+		{
+			$selected = ($obj->$name == $value) ? $selected = self::get_selected_string($input_type) : "";
+		}
+		else {
+			$selected = ($obj == $value) ? $selected = self::get_selected_string($input_type) : "";
+		}
+
 		$title = (isset($options['title'])) ? "title='{$options['title']}'" : null;
 		$disabled = (isset($options['disabled'])) ? "disabled='disabled'" : null;
 		$title = (isset($options['title'])) ? "title='" .htmlspecialchars($options['title']) ."'" : null;
 		
-		$html = "<input type='hidden' name='{$name}' value='{$null_value}' />" . PHP_EOL;
+		/**
+		 * Set no_hidden_input to true to not draw the hidden input - especially
+		 * useful for displaying checkboxes on search forms.
+		 */
+		if(isset($options['no_hidden_input']) && $options['no_hidden_input'] == true) 
+		{
+			
+		} else {
+			$html .= "<input type='hidden' name='{$name}' value='{$null_value}' />" . PHP_EOL;
+		}
+		
 		$html .= "<input type='{$input_type}' value='{$value}' name='{$name}' {$selected} {$title} {$disabled} {$title}/>" . PHP_EOL;
 		
 		return self::dl_wrap($html, $options);
