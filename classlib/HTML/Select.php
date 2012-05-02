@@ -80,6 +80,24 @@ class ROCKETS_HTML_Select extends ROCKETS_HTML_Form {
             else $ar['options'] = array('' => $ar['first string']) + $ar['options'];
         }
 		
+		/**
+		 * Unset option: used to add -1 value to a list of options, for checking unset values
+		 * when default unset value is -1, instead of NULL (which requires a different query structure
+		 * to check.
+		 * 
+		 * Example: 'unset option' => array(-1, 'Unassigned User')
+		 */
+		if (isset($ar['unset option']))
+		{
+			list($unset_key,$unset_value) = $ar['unset option'];
+			
+			$GLOBALS['unitTest']::logResult(array(
+				'message' => "{$unset_key} {$unset_value}",
+			));
+
+			$ar['options'][$unset_key] = $unset_value;
+		}
+		
 		$title = (isset($ar['title'])) ? "title=\"" .htmlspecialchars($ar['title']) ."\"" : null;
 		
 		$select_clause .=  "<select name='{$ar['name']}' {$classStr} {$disabled} {$multiple} {$title}>";
