@@ -30,6 +30,17 @@ class ROCKETS_Session
         if(!isset($_SESSION[$key])) return null;
         else return $_SESSION[$key];
     }
+	
+	/**
+	 * Save data in a session
+	 * 
+	 * @param type $key
+	 * @param type $value 
+	 */
+	static function set($key, $value)
+	{
+		$_SESSION[$key] = $value;
+	}
 
 }
 
