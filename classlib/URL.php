@@ -102,13 +102,24 @@ class ROCKETS_URL {
 	 * Retrieve base domain name
 	 * Example: subdomain.cnn.com => cnn.com
 	 * This assumes we're not dealing with complex TLDs, like guardian.eu.uk
+	 * It also assumes we are dealing with urls that contain a subdomain
 	 * 
 	 * @param type $host 
 	 */
 	static public function getBaseDomainFromHost($host)
 	{
 		$url = explode(".",$host); // subdomain.cnn.com => array("subdomain","cnn","com")
-		$length = count($url);   // length = 3
+		$length = count($url);  
+		/**
+		 * If length < 3 return null
+		 * length = 3: subdomain.example.com
+		 * length = 2: example.com
+		 * length = 1: localhost:80
+		 */
+		if($length < 3)
+		{
+			return null;
+		}
 		return $url[$length-2] ."." .$url[$length-1]; // returns "cnn.com"
 	}
 
