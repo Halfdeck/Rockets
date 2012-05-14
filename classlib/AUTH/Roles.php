@@ -34,7 +34,7 @@ abstract class ROCKETS_AUTH_Roles extends ROCKETS_AUTH_Core {
 	
 	public function __construct()
 	{
-		
+		parent::__construct();
 	}
 
 
