@@ -54,6 +54,10 @@ abstract class ROCKETS_AUTH_Core {
 	public function __construct() {
 		
 	}
+
+	static public function get_cookie_name_prefix() {
+		return self::$cookie_name_prefix;
+	}
 	
 	protected function logout()
 	{
