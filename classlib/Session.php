@@ -32,6 +32,34 @@ class ROCKETS_Session
     }
 	
 	/**
+	 * Get prefixed session value.
+	 * Prefixes are used to add scope to session variables.
+	 * Prefix is defined in ROCKETS_AUTH_Core
+	 * 
+	 * @param type $key
+	 * @return type 
+	 */
+	static function get_prefixed($key)
+	{
+		if(!isset($_SESSION[ROCKETS_AUTH_Core::get_cookie_name_prefix() .$key]))
+		{
+			return null;
+		}
+        else {
+			return $_SESSION[ROCKETS_AUTH_Core::get_cookie_name_prefix() .$key];
+		}
+	}
+	
+	/**
+	 * Unset, with prefix
+	 * @param type $key 
+	 */
+	static function delete($key)
+	{
+		unset($_SESSION[ROCKETS_AUTH_Core::get_cookie_name_prefix() .$_SERVER['SERVER_PORT'] ."_" .$GLOBALS['c']->user_id .'_bookmark']);
+	}
+	
+	/**
 	 * Save data in a session
 	 * 
 	 * @param type $key
