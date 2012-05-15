@@ -69,6 +69,18 @@ class ROCKETS_Session
 	{
 		$_SESSION[$key] = $value;
 	}
+	
+	/**
+	 * 
+	 * Prefix session key with a prefix to scope the variable.
+	 * 
+	 * @param type $key
+	 * @param type $value 
+	 */
+	static function set_prefixed($key, $value)
+	{
+		$_SESSION[ROCKETS_AUTH_Core::get_cookie_name_prefix() .$key] = $value;
+	}
 
 }
 
