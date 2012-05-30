@@ -20,6 +20,21 @@ class ROCKETS_Session
     }
 	
 	/**
+	 * Save $_POST in $_SESSION, which is useful when dealing with multiple page
+	 * submission pages
+     */
+    static public function post_to_session()
+	{
+		if (isset($_POST))
+		{
+			foreach ($_POST as $key => $value)
+			{
+				self::set_prefixed($key, $value);
+			}
+		}
+	}
+	
+	/**
      * An empty check on the request key
      * Used to clean up if(empty($_REQUEST... codes
      * 
