@@ -131,7 +131,7 @@ class ROCKETS_MYSQL_Base {
 		}
 		return $ar;
 	}
-
+	
 	/**
 	 * A generic array generation code
 	 * returns an associative array of key=>value pairs, given a mysql result
@@ -139,33 +139,41 @@ class ROCKETS_MYSQL_Base {
 	 * Example: make_array($result, "name") => array('bob','joe','mary'..)
 	 * 	make_array($result, "name", "user_id") => array('12311' => 'bob', '1221' => 'joe'...)
 	 * 
+	 * $append option:
+	 * 
+	 * make_array($result, "name", "user_id", array(1211 => "joe", 2 => "mary")) =>
+	 * array("12311" => 'bob','1211'=> 'joe', '2' => 'mary')
+	 * 
 	 * @param type $key_name
 	 * @param type $value_name
 	 * @param type $result
 	 * @return type 
 	 */
-	static public function make_array($result, $key_name, $value_name = null)
+	static public function make_array($result, $key_name, $value_name, $append_list = array())
 	{
 		$ar = array();
-		/**
-		 * Reset result pointer (in case this method is called more than once)
-		 */
-		mysql_data_seek($result, 0);
-		while ($row = mysql_fetch_array($result))
+		
+		if(mysql_num_rows($result) > 0)
 		{
-			if (empty($value_name))
+			/**
+			 * Reset result pointer (in case this method is called more than once)
+			 */
+			mysql_data_seek($result, 0);
+		
+			while ($row = mysql_fetch_array($result))
 			{
-				/**
-				 * creates array(1,2,3,4,5)
-				 */
-				array_push($ar, $row[$key_name]);
+				$ar = ROCKETS_Arrray::add_item($key_name, $value_name, $ar);
 			}
-			else
+		}
+
+		/**
+		 * Optional append list, that adds predetermined values to the list
+		 */
+		if(isset($append_list))
+		{
+			foreach($append_list as $row)
 			{
-				/**
-				 * creates associative: array("1"=>"bob","2"=>"joe"...)
-				 */
-				$ar[$row[$key_name]] = $row[$value_name];
+				$ar = ROCKETS_Arrray::add_item($key_name, $value_name, $ar);
 			}
 		}
 		return $ar;
