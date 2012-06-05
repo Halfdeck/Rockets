@@ -162,7 +162,7 @@ class ROCKETS_MYSQL_Base {
 		
 			while ($row = mysql_fetch_array($result))
 			{
-				$ar = ROCKETS_Arrray::add_item($key_name, $value_name, $ar);
+				$ar = ROCKETS_Array::add_item($key_name, $value_name, $ar);
 			}
 		}
 
