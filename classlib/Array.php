@@ -5,7 +5,7 @@
  *
  * @author Halfdeck
  */
-class ROCKETS_Arrray {
+class ROCKETS_Array {
 
 	/**
 	 * Add an item to an array. Called by Model::make_array()
