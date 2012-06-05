@@ -20,7 +20,7 @@ class ROCKETS_Array {
 	 * @param type $ar
 	 * @return type 
 	 */
-	static public function add_item($key_name, $value_name, $ar)
+	static public function add_item($key_name, $value_name, $ar, $row)
 	{
 		if (empty($value_name))
 		{
