@@ -81,7 +81,7 @@ abstract class ROCKETS_AUTH_Core {
 		   setcookie(session_name(), '', time()-42000, '/'); 
 		} 
 		
-		session_unset();
+//		session_unset();
 		session_destroy();
 
 		$this->logged_in = false;
