@@ -58,7 +58,7 @@ class ROCKETS_MYSQL_Query extends ROCKETS_MYSQL_Base {
 	 */
 	public function get_all_records()
 	{
-		return self::read("SELECT * FROM {$this->tbl}");
+		return self::read("SELECT * FROM {$this->tbl} ORDER BY name");
 	}
 
 	/**
