@@ -159,7 +159,16 @@ class ROCKETS_Controller extends ROCKETS_MVC
 			//echo "access not permitted";
 			return false; // pre page load check (e.g. permission checking)
 		}
-		$o->$action_method();
+		
+		try {
+			$o->$action_method();
+		}
+		catch (Exception $e)
+		{
+			echo JOB_EXTENSION_JSON::error($e->getMessage());
+			return false;
+		}
+		
 	}
 	
 	/**
