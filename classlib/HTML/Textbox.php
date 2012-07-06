@@ -57,7 +57,7 @@ class ROCKETS_HTML_Textbox extends ROCKETS_HTML_Form
 		$id = (isset($options['id']) && $options['id'] == TRUE) ? "id='{$options['id']}'" : "";
 		$class = (isset($options['class']) && $options['class'] == TRUE) ? "class='{$options['class']}'" : "";
 		
-        return "<input {$id} {$class} type='" .self::$input_type ."' name='{$options['name']}' size='{$options['size']}' value='" .ROCKETS_Request::get($options['name']) ."'/>";
+        return "<input {$id} {$class} type='" .self::$input_type ."' name='{$options['name']}' size='{$options['size']}' value=\"" .htmlspecialchars((ROCKETS_Request::get($options['name']))) ."\"/>";
     }
 }
 
