@@ -35,6 +35,7 @@ class ROCKETS_HTML_Select extends ROCKETS_HTML_Form {
     {
 		$select_clause = "";
 		$disabled = "";
+		$matched = false; // this variable tracks if value matches an item in the listbox
 		
 		if(isset($ar['display_condition']) && $ar['display_condition'] == FALSE) return;
 		
@@ -100,15 +101,31 @@ class ROCKETS_HTML_Select extends ROCKETS_HTML_Form {
 		
 		$title = (isset($ar['title'])) ? "title=\"" .htmlspecialchars($ar['title']) ."\"" : null;
 		
-		$select_clause .=  "<select name='{$ar['name']}' {$classStr} {$disabled} {$multiple} {$title}>";
+		$options_clause = "";
+		
         foreach ($ar["options"] as $key => $val)
         {
             $selected = "";
             if ($key == $ar["checked"])
-                $selected = " selected='selected'";
-            $select_clause .= "		<option value='{$key}' {$selected}>{$val}</option>" .PHP_EOL;
+			{
+				$selected = " selected='selected'";
+				$matched = true;
+			}
+                
+            $options_clause .= "		<option value='{$key}' {$selected}>{$val}</option>" .PHP_EOL;
         }
-        $select_clause .= "</select>";
+		
+		if(isset($ar['disable_if_no_match']))
+		{
+			if($matched == false)
+			{
+				$readonly_value = (isset($ar['readonly_value'])) ? $ar['readonly_value'] : "---";
+				$disabled = "disabled=disabled";
+				$options_clause .= "		<option value='-1' selected='selected'>{$readonly_value}</option>" .PHP_EOL;
+			}
+		}
+		
+		$select_clause .=  "<select name='{$ar['name']}' {$classStr} {$disabled} {$multiple} {$title}>{$options_clause}</select>";
 		
 		///////////////////////////////////////
 
