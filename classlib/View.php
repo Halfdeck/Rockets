@@ -495,6 +495,23 @@ class ROCKETS_View extends ROCKETS_MVC
          */
         return mysql_fetch_object($result, get_called_class());
     }
+	
+	/**
+	 * Function that converts numbers into money format
+	 * 
+	 * @param type $name
+	 * @return type 
+	 */
+	public function money($name)
+	{
+		if(empty($this->$name))
+		{
+			return null;
+		}
+		else {
+			return ROCKETS_Number::getMoney($this->$name, true);
+		}
+	}
 }
 
 ?>
