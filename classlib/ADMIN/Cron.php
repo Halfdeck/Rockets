@@ -16,7 +16,7 @@ class ROCKETS_ADMIN_Cron extends ROCKETS_ConfigurableObject {
     /** true/false: set this to TRUE to activate cron job timer */
     private static $timerSet = true;
     /** number of seconds before cron job dies */
-    private static $cronMaxSeconds = CRON_MAX_SECONDS;
+    protected static $cronMaxSeconds = CRON_MAX_SECONDS;
     /** $time_start is the execution time when this class was instantiated. */
     private $time_start;
     /** Timer bookmark - used for calculating time used in sections of a page */
