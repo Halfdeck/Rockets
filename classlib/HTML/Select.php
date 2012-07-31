@@ -103,17 +103,20 @@ class ROCKETS_HTML_Select extends ROCKETS_HTML_Form {
 		
 		$options_clause = "";
 		
-        foreach ($ar["options"] as $key => $val)
-        {
-            $selected = "";
-            if ($key == $ar["checked"])
+		if(isset($ar["options"]))
+		{
+			foreach ($ar["options"] as $key => $val)
 			{
-				$selected = " selected='selected'";
-				$matched = true;
+				$selected = "";
+				if ($key == $ar["checked"])
+				{
+					$selected = " selected='selected'";
+					$matched = true;
+				}
+
+				$options_clause .= "		<option value='{$key}' {$selected}>{$val}</option>" .PHP_EOL;
 			}
-                
-            $options_clause .= "		<option value='{$key}' {$selected}>{$val}</option>" .PHP_EOL;
-        }
+		}
 		
 		if(isset($ar['disable_if_no_match']))
 		{
