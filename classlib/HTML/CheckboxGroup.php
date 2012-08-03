@@ -46,13 +46,15 @@ class ROCKETS_HTML_CheckboxGroup extends ROCKETS_HTML_Form {
 			$classStr = "class='{$ar['class']}'";
 		else
 			$classStr = "";
+		
+		$idStr = (isset($ar['id'])) ? "id='{$ar['id']}'" : null;
 
 		if (isset($ar['first string']))
 		{
 			$ar['options'] = array('' => $ar['first string']) + $ar['options'];
 		}
 
-		$html .= "<ul {$classStr}>";
+		$html .= "<ul {$classStr} {$idStr}>";
 		foreach ($ar["options"] as $key => $value)
 		{
 			$selected = "";
