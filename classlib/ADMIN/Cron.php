@@ -70,12 +70,19 @@ class ROCKETS_ADMIN_Cron extends ROCKETS_ConfigurableObject {
     }
 
     /**
-     * Get peak usage
-     * @return float peak usage
-     */
-    public function getPeakUsage() {
-	return number_format(memory_get_peak_usage(true));
-    }
+	 * Get peak usage
+	 * @return float peak usage
+	 */
+	public function getPeakUsage($options = array())
+	{
+		if(isset($options['raw']) && $options['raw'] == true)
+		{
+			return memory_get_peak_usage(true);
+		}
+		else {
+			return number_format(memory_get_peak_usage(true));
+		}
+	}
 }
 
 ?>
