@@ -52,8 +52,10 @@ class ROCKETS_HTML_Select extends ROCKETS_HTML_Form {
 		
 		/**
 		 * If there's no checked value, reference request
+		 * Checking using isset() instead of empty() because empty()
+		 * loses 0 values.
 		 */
-        if (empty($ar['checked']))
+        if (!isset($ar['checked']))
 		{
 			/**
 			 * If REQUEST is empty but there's a default value, use that
@@ -108,7 +110,16 @@ class ROCKETS_HTML_Select extends ROCKETS_HTML_Form {
 			foreach ($ar["options"] as $key => $val)
 			{
 				$selected = "";
-				if ($key == $ar["checked"])
+				
+				/**
+				 * Make sure comparisons are accurate. === somehow doesn't
+				 * work with some of the non-empty items
+				 */
+				if($key == "0" && $ar['checked'] != "0")
+				{
+					
+				}
+				else if ($key == $ar["checked"])
 				{
 					$selected = " selected='selected'";
 					$matched = true;
