@@ -11,6 +11,7 @@ class ROCKETS_HTML_Form {
 	const IT_TEXT = 1;
 	
 	const TYPE_INPUT_CHECKBOX = 'checkbox';
+	const TYPE_INPUT_RADIO = 'radio';
 	const TYPE_OPTION = 'option';
     const TYPE_INPUT_TEXT = 'text';
 	const TYPE_INPUT_PASSWORD = 'password';
