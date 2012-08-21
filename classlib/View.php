@@ -512,6 +512,14 @@ class ROCKETS_View extends ROCKETS_MVC
 			return ROCKETS_Number::getMoney($this->$name, true);
 		}
 	}
+	
+	public function number($name)
+	{
+		if($this->$name == 0) return null;
+		else {
+			return ROCKETS_Number::numberFormat($this->$name);
+		}
+	}
 }
 
 ?>
