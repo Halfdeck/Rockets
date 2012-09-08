@@ -116,7 +116,11 @@ class ROCKETS_URL {
 		 * length = 2: example.com
 		 * length = 1: localhost:80
 		 */
-		if($length < 3)
+		if($length == 2)
+		{
+			return $host; // returns "cnn.com"
+		}
+		else if($length < 3)
 		{
 			return null;
 		}
