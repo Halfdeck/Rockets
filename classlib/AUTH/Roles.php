@@ -115,11 +115,11 @@ abstract class ROCKETS_AUTH_Roles extends ROCKETS_AUTH_Core {
 		 */
 		if($permission_type == NULL) $permission_type = self::$permissions['read'];
 		
-	//	echo "NAME: {$name} FIELDNAME: {$field_name} " .$this->access_rights[$name][$type][$field_name] ." PERMISSION TYPE: {$permission_type}<br>";
 		/**
 		 * Is readable
+		 * "!" is a negative right, which negates all rights for that permission
 		 */
-		if (strstr($this->access_rights[$name][$type][$field_name], $permission_type))
+		if (strstr($this->access_rights[$name][$type][$field_name], $permission_type) && strstr($this->access_rights[$name][$type][$field_name], "!". $permission_type) == false)
 		{
 			return true;
 		}
@@ -168,8 +168,14 @@ abstract class ROCKETS_AUTH_Roles extends ROCKETS_AUTH_Core {
 	 */
 	static function merge_rights_strings($string1, $string2)
 	{
+		
 		return ROCKETS_String::merge_comma_delimited_strings($string1, $string2);
 	}
+	
+//	static function remove_negative_rights(&$rightsMatrix)
+//	{
+//
+//	}
 }
 
 ?>
