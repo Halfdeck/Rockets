@@ -280,6 +280,32 @@ class ROCKETS_Date {
 		$age = $diff / 31556926;
 		return floor($age); 
 	}
+	
+	/**
+	 * If a date is in European format, return it in MM/DD/YYYY format
+	 * else return FALSE
+	 * 
+	 * @param type $date
+	 * @return type 
+	 */
+	static public function get_european_date($date)
+	{
+		if(strstr($date, "-") == FALSE)
+		{
+			return false;
+		}
+		
+		list($y, $m, $d) = explode('-', $date);
+
+		if(checkdate($m, $d, $y))
+		{
+			return "{$m}/{$d}/{$y}";
+		}
+		else
+		{
+			return false;
+		}
+	}
 }
 
 ?>
