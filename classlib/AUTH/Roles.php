@@ -120,9 +120,10 @@ abstract class ROCKETS_AUTH_Roles extends ROCKETS_AUTH_Core {
 		 * "!" is a negative right, which negates all rights for that permission
 		 */
 		
-		$permissions = explode(",", $this->access_rights[$name][$type][$field_name]);
+		//$permissions = explode(",", $this->access_rights[$name][$type][$field_name]);
 		//if (strstr($this->access_rights[$name][$type][$field_name], $permission_type) && strstr($this->access_rights[$name][$type][$field_name], "!". $permission_type) == false)
-		if(in_array($permission_type, $permissions) && !in_array("!" .$permission_type, $permissions))
+		//if(in_array($permission_type, $permissions) && !in_array("!" .$permission_type, $permissions))
+		if (strstr($this->access_rights[$name][$type][$field_name], $permission_type) && strstr($this->access_rights[$name][$type][$field_name], "!". $permission_type) == false)
 		{
 			return true;
 		}
