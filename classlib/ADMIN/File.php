@@ -427,11 +427,38 @@ class ROCKETS_ADMIN_File extends ROCKETS_ConfigurableObject
 		 * example: .../uploads/65233 proof_#34.pdf -> browser truncates to /uploads/65233 proof_
 		 */
 		$filename = str_replace("#","_",$filename);
+		
+		/**
+		 * Restrict characters used to only ascii chars
+		 */
+		$filename = self::strip_utf($filename);
+		
 		/**
 		 * Remove starting/trailing spaces
 		 */
 		$filename = trim($filename);
 		return $filename;
+	}
+	
+	/**
+	 * Get rid of non-ascii characters from input, which can corrupt filenames.
+	 * 
+	 * @param string $string
+	 * @return string 
+	 */
+	static function strip_utf($string)
+	{
+		$replacement = " ";
+
+		for ($i = 0; $i < strlen($string); $i++)
+		{
+			if (ord($string[$i]) > 127)
+			{
+				$string[$i] = $replacement;
+			}
+		}
+
+		return $string;
 	}
 }
 
