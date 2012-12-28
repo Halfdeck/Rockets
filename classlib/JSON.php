@@ -39,7 +39,7 @@ class ROCKETS_JSON {
 			/**
 			 * Prevent memory allocation failure
 			 */
-			if(memory_get_usage() > ROCKETS_PHP_MEMORY_LIMIT_THRESHOLD)
+			if(memory_get_usage() > ROCKETS_PHP_MEMORY_THRESHOLD)
 			{
 				mail(EMAIL_ADMIN, "Job Board Notice: Mysql_result_unencoded memory exceeded", print_r($GLOBALS, true));
 				break;
