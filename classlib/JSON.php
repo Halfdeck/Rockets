@@ -36,6 +36,15 @@ class ROCKETS_JSON {
 		$rows = array();
 		while ($row = mysql_fetch_array($result))
 		{
+			/**
+			 * Prevent memory allocation failure
+			 */
+			if(memory_get_usage() > ROCKETS_PHP_MEMORY_LIMIT_THRESHOLD)
+			{
+				mail(EMAIL_ADMIN, "Job Board Notice: Mysql_result_unencoded memory exceeded", print_r($GLOBALS, true));
+				break;
+			}
+									
 			$rows[] = $row;
 		}
 		return $rows;
