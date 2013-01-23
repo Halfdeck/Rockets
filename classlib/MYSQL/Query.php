@@ -528,7 +528,7 @@ class ROCKETS_MYSQL_Query extends ROCKETS_MYSQL_Base {
 				}
 			}
 
-			$mysql_fields .= "{$key}";
+			$mysql_fields .= "`{$key}`";
 			if($value == null) 
 				$mysql_vals .= "null";
 			else 
@@ -538,9 +538,9 @@ class ROCKETS_MYSQL_Query extends ROCKETS_MYSQL_Base {
 			if ($key != $this->primary_key_fieldname)
 			{
 				if($value == null)
-					$mysql_update .= "{$key}=null";
+					$mysql_update .= "`{$key}`=null";
 				else
-					$mysql_update .= "{$key}=\"{$value}\"";
+					$mysql_update .= "`{$key}`=\"{$value}\"";
 				$d++;
 			}
 		}
