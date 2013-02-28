@@ -224,7 +224,7 @@ class ROCKETS_View extends ROCKETS_MVC
 		 */
 		$classname = PREFIX_APPLICATION_CLASSLIB .self::PREFIX_VIEW . "{$name}";
 
-		if (class_exists($classname))
+		if (self::class_exists_sensitive($classname))
 		{
 			$this->$name = new $classname($this);
 			$this->$name = $this->fill_result($this->$name);
@@ -530,6 +530,20 @@ class ROCKETS_View extends ROCKETS_MVC
 	public function formatted_date($name, $format)
 	{
 		return ROCKETS_Date::createDateStrFromMYSQL($this->$name, $format);
+	}
+	
+	/**
+	 * Case sensitive version of class_exists
+	 * 
+	 * @param type $classname
+	 * @return type
+	 */
+	static function class_exists_sensitive($classname) 
+	{
+		/**
+		 * We check class_exists first to do a simple check .. to minimize executed code
+		 */
+		return ( class_exists($classname) && in_array($classname, get_declared_classes()) );
 	}
 }
 
