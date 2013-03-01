@@ -520,6 +520,17 @@ class ROCKETS_View extends ROCKETS_MVC
 			return ROCKETS_Number::numberFormat($this->$name);
 		}
 	}
+	
+	/**
+	 *
+	 * @param type $name
+	 * @param type $format ROCKETS_Date::FRMT_...
+	 * @return type 
+	 */
+	public function formatted_date($name, $format)
+	{
+		return ROCKETS_Date::createDateStrFromMYSQL($this->$name, $format);
+	}
 }
 
 ?>
