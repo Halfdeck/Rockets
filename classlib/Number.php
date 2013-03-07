@@ -45,6 +45,19 @@ class ROCKETS_Number {
 		$int = $int / $divider;
 		return number_format($int, $digits_after_decimal);
 	}
+	
+	/**
+	 * Method that takes a money strings and turns it into a float
+	 * 
+	 * @param type $str
+	 * @return type
+	 */
+	public static function moneyToFloat($str)
+	{
+		$replacements = array("$",",");
+		$str = str_replace($replacements, "", $str);
+		return $str;
+	}
 
 }
 
