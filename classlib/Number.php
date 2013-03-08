@@ -48,6 +48,7 @@ class ROCKETS_Number {
 	
 	/**
 	 * Method that takes a money strings and turns it into a float
+	 * If resulting string is not numeric, returns false
 	 * 
 	 * @param type $str
 	 * @return type
@@ -56,7 +57,14 @@ class ROCKETS_Number {
 	{
 		$replacements = array("$",",");
 		$str = str_replace($replacements, "", $str);
-		return $str;
+		
+		if(is_numeric($str))
+		{
+			return $str;
+		}
+		else {
+			return false;
+		}
 	}
 
 }
