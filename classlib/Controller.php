@@ -274,7 +274,11 @@ class ROCKETS_Controller extends ROCKETS_MVC
 		if(ROCKETS_Request::get(self::KEY_LAYOUT) != self::LAYOUT_AJAX) {
 			ROCKETS_HTTP::redirect($_SERVER['HTTP_REFERER']);
 		}
-		//ROCKETS_HTTP::redirect(RPATH_ROOT . "{$this->directory_name}/list/");
+
+		echo json_encode(array(
+			'result' => 'success',
+			'message' => "Deleted"
+		));
 	}
 	
 	/**
