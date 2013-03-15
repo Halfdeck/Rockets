@@ -452,6 +452,20 @@ class ROCKETS_MYSQL_Query extends ROCKETS_MYSQL_Base {
 			'data' => $ar,
 		));
 	}
+	
+	public function validate_fields($fields)
+	{
+		foreach($fields as $field => $value)
+		{
+			if(isset($this->fields[$field]['Null']) && $this->fields[$field]['Null'] == 'NO')
+			{
+				if(empty($value))
+				{
+					throw new Exception("[{$field}] cannot be empty.");
+				}
+			}
+		}
+	}
 
 	/**
 	 * @DUPLICATE Duplicates ROCKETS_MYSQLTable
@@ -494,6 +508,8 @@ class ROCKETS_MYSQL_Query extends ROCKETS_MYSQL_Base {
 		{
 			$ar = $this->generate_fieldValue(); // automatically fetch table fieldnames and link with $_REQUEST
 		}
+		
+		$this->validate_fields($ar);
 
 		$mysql_fields = "";
 		$mysql_vals = "";

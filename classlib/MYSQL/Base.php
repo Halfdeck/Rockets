@@ -27,6 +27,8 @@ class ROCKETS_MYSQL_Base {
 	public $foreign_keys;
 	public $parent;
 
+	public $fields;
+	
 	/**
 	 * @MOD set to private to force lazy-loading during insert/delete, etc
 	 *  
@@ -101,7 +103,7 @@ class ROCKETS_MYSQL_Base {
 
 		while ($field = mysql_fetch_assoc($tableFields))
 		{
-
+			$this->fields[$field['Field']] = $field;
 			$field_array[] = $field['Field'];
 			if ($field['Key'] == 'PRI')
 			{
