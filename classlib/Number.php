@@ -66,6 +66,33 @@ class ROCKETS_Number {
 			return false;
 		}
 	}
+	
+	/**
+	 * Checks if a given input is a valid number or not.
+	 * 
+	 * @param type $str
+	 * @param type $fieldname
+	 * @return boolean
+	 * @throws Exception
+	 */
+	public static function is_valid_number($str, $fieldname)
+	{
+		if($str == NULL)
+		{
+			throw new Exception("{$fieldname} can't be blank.");
+		}
+		else if(is_numeric($str) == false)
+		{
+			throw new Exception("{$fieldname} must be a number.");
+		}
+		else if($str == 0)
+		{
+			throw new Exception("{$fieldname} can't be zero.");
+		}
+		else {
+			return true;
+		}
+	}
 
 }
 
