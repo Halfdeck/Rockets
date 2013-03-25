@@ -162,6 +162,37 @@ abstract class ROCKETS_AUTH_Core {
 			}
 		}
 	}
+	
+	/**
+	 * Create session and if user selects "remember me", save cookies
+	 * Password is md5 encrypted
+	 * 
+	 * TODO: 3/25 [refactor] This method should be combined with create_sessions(). Alternatively, make the above method public
+	 * 
+	 * @param type $options 
+	 */
+	static public function create_sessions_public($options = array(null))
+	{
+		foreach ($options as $key => $value)
+		{
+			if ($key == self::PASSWORD)
+			{
+				$_SESSION[self::$cookie_name_prefix .$key] = md5($value);
+			}
+			else
+			{
+				$_SESSION[self::$cookie_name_prefix .$key] = $value;
+			}
+			if (isset($_POST[self::REMEMBER_ME]))
+			{
+				/**
+				 * remember me checked, so remember info in a cookie
+				 * Add additional member to cookie array as per requirement
+				 */
+				setcookie(self::$cookie_name_prefix .$key, $value, time() + self::DECAY, "/");
+			}
+		}
+	}
 
 	/**
 	 * Exact implementation is application specific
