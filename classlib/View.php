@@ -515,7 +515,7 @@ class ROCKETS_View extends ROCKETS_MVC
 	
 	public function number($name)
 	{
-		if($this->$name == 0) return null;
+		if($this->$name == 0) return 0;
 		else {
 			return ROCKETS_Number::numberFormat($this->$name);
 		}
