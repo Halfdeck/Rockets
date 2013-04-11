@@ -75,6 +75,17 @@ class ROCKETS_Session
 	}
 	
 	/**
+	 * A default session clearing method
+	 * 
+	 * @param type $key
+	 */
+	static function clear($key)
+	{
+		unset($_SESSION[$key]);
+	}
+	
+	
+	/**
 	 * Save data in a session
 	 * 
 	 * @param type $key
