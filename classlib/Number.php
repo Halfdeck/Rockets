@@ -81,25 +81,34 @@ class ROCKETS_Number {
 		{
 			throw new Exception("{$fieldname} can't be blank.");
 		}
-		else if(is_numeric($str) == false)
+		
+		if(is_numeric($str) == false)
 		{
 			throw new Exception("{$fieldname} must be a number.");
 		}
-		else if($str === 0 && !isset($options['allow zero']))
+		
+		if($str == 0)
 		{
-			throw new Exception("{$fieldname} can't be zero.");
+			if(!isset($options['allow zero']))
+			{
+				throw new Exception("{$fieldname} can't be zero.");
+			}
+			else {
+				return true;
+			}
 		}
-		else if(isset($options["positive"]) && $str < 0)
+		
+		if(isset($options["positive"]) && $str < 0)
 		{
 			throw new Exception("{$fieldname} must be a positive number.");
 		}
-		else if(isset($options["integer"]) && is_int($str) == false)
+		
+		if(isset($options["integer"]) && is_int(filter_var($str, FILTER_VALIDATE_INT)) == false)
 		{
 			throw new Exception("{$fieldname} must be an integer.");
 		}
-		else {
-			return true;
-		}
+		
+		return true;
 	}
 
 }
