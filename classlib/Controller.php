@@ -324,6 +324,18 @@ class ROCKETS_Controller extends ROCKETS_MVC
 				return ucwords($title); // => "Edit Envelope Type"
 		}
 	}
+	
+	/**
+	 * Allow external code to modify $this->directory_name
+	 * 
+	 * Added to allow for unit testing
+	 * 
+	 * @param type $directory_name
+	 */
+	public function set_directory_name($directory_name)
+	{
+		$this->directory_name = $directory_name;
+	}
 
 }
 
