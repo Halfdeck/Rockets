@@ -77,21 +77,38 @@ class ROCKETS_Number {
 	 */
 	public static function is_valid_number($str, $fieldname, $options = array())
 	{
-		if($str == NULL)
+		if($str === NULL || $str === '')
 		{
 			throw new Exception("{$fieldname} can't be blank.");
 		}
-		else if(is_numeric($str) == false)
+		
+		if(is_numeric($str) == false)
 		{
 			throw new Exception("{$fieldname} must be a number.");
 		}
-		else if($str == 0 && !isset($options['allow zero']))
+		
+		if($str == 0)
 		{
-			throw new Exception("{$fieldname} can't be zero.");
+			if(!isset($options['allow zero']))
+			{
+				throw new Exception("{$fieldname} can't be zero.");
+			}
+			else {
+				return true;
+			}
 		}
-		else {
-			return true;
+		
+		if(isset($options["positive"]) && $str < 0)
+		{
+			throw new Exception("{$fieldname} must be a positive number.");
 		}
+		
+		if(isset($options["integer"]) && is_int(filter_var($str, FILTER_VALIDATE_INT)) == false)
+		{
+			throw new Exception("{$fieldname} must be an integer.");
+		}
+		
+		return true;
 	}
 
 }
