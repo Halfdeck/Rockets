@@ -77,7 +77,7 @@ class ROCKETS_Number {
 	 */
 	public static function is_valid_number($str, $fieldname, $options = array())
 	{
-		if($str == NULL)
+		if($str === NULL || $str === '')
 		{
 			throw new Exception("{$fieldname} can't be blank.");
 		}
@@ -85,9 +85,17 @@ class ROCKETS_Number {
 		{
 			throw new Exception("{$fieldname} must be a number.");
 		}
-		else if($str == 0 && !isset($options['allow zero']))
+		else if($str === 0 && !isset($options['allow zero']))
 		{
 			throw new Exception("{$fieldname} can't be zero.");
+		}
+		else if(isset($options["positive"]) && $str < 0)
+		{
+			throw new Exception("{$fieldname} must be a positive number.");
+		}
+		else if(isset($options["integer"]) && is_int($str) == false)
+		{
+			throw new Exception("{$fieldname} must be an integer.");
 		}
 		else {
 			return true;
